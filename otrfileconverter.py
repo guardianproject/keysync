@@ -9,5 +9,6 @@ from base64 import b64decode
 from otr_private_keys import OTRPrivateKeys
 
 # TODO get Adium account IDs from ~/Library/Application\ Support/Adium\ 2.0/Users/Default/Accounts.plist
+# TODO use python-potr's convertkey.py to convert old libotr files
 
 print OTRPrivateKeys.parse(sys.argv[1])
