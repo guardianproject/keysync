@@ -49,7 +49,7 @@ class OTRPrivateKeys():
 
         try:
             sexpr = sexp.parseString(testotr)
-            return sexpr.asList()
+            return sexpr.asList()[0][1:-1]
         except ParseFatalException, pfe:
             print "Error:", pfe.msg
             print line(pfe.loc,t)
