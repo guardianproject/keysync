@@ -19,13 +19,25 @@ Adium:
   libpurple-Jabber, etc.
 
 Pidgin
+ GNU/Linux
   ~/.purple/otr.private_key
   ~/.purple/otr.fingerprints
+ Windows
+  ~/Application Data/.purple/otr.private_key
+  ~/Application Data/.purple/otr.fingerprints
 
   Uses the standard libotr files and overall file format for
   otr.private_key and otr.fingerprints. Account IDs are used directly
   in the libotr files. XMPP/Jabber Account IDs include the "Resource"
   e.g. me@jabber.org/Resource or me@jabber.org/Pidgin.
+
+irssi
+  ~/.irssi/otr/otr.key
+  ~/.irssi/otr/otr.fp
+
+  Uses the standard libotr file format and files, but names the files
+  differently, basically abbreviated versions of the libotr names.
+  Account IDs are used directly in the libotr files.
 
 otr4j
 -----
@@ -38,8 +50,15 @@ Gibberbot:
   are each individual properties.
 
 Jitsi:
+ GNU/Linux
   ~/.jitsi/sip-communicator.properties
+  ~/.jitsi/contactlist.xml
+ Mac OS X
   ~/Library/Application Support/Jitsi/sip-communicator.properties
+  ~/Library/Application Support/Jitsi/contactlist.xml
+ Windows
+  ~/Application Data/Jitsi/sip-communicator.properties
+  ~/Application Data/Jitsi/contactlist.xml
 
   All app settings are stored in a single Java .properties file,
   including OTR information. Private keys, public key fingerprints,
