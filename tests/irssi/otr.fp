@@ -1,0 +1,2 @@
+bigbear	test@example.org	IRC	fffffffffffffcdfdddddeeeeee8aaaaaad00000	
+goldy	test@example.org	IRC	0000111122223444455566666777778889990aab	
