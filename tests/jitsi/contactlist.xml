@@ -74,6 +74,10 @@
                         <display-name>guardianproject@gmail.com</display-name>
                         <contact account-id="Jabber:gptest@jabber.org@jabber.org" address="guardianproject@gmail.com" parent-proto-group-uid="General"/>
                     </meta-contact>
+                    <meta-contact uid="132165151782230273569">
+                        <display-name>gptest@limun.org</display-name>
+                        <contact account-id="Jabber:gptest@jabber.org@jabber.org" address="gptest@limun.org" parent-proto-group-uid="General"/>
+                    </meta-contact>
                 </child-contacts>
             </group>
         </subgroups>
@@ -97,6 +101,10 @@
         <meta-contact uid="132149977981022232149">
                 <display-name>hans@eds.org</display-name>
                 <contact account-id="Jabber:gptest@jabber.org@jabber.org" address="hans@eds.org" parent-proto-group-uid="ContactListRoot"/>
+            </meta-contact>
+            <meta-contact uid="132165147022421660199">
+                <display-name>gptest@limum.org</display-name>
+                <contact account-id="Jabber:gptest@jabber.org@jabber.org" address="gptest@limum.org" parent-proto-group-uid="ContactListRoot"/>
             </meta-contact>
         </child-contacts>
     </group>
