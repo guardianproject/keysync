@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<sip-communicator>
+    <group name="RootMetaContactGroup" uid="RootMetaContactGroup">
+        <proto-groups/>
+        <subgroups>
+            <group name="Family" uid="13105294955878181313">
+                <proto-groups>
+                    <proto-group account-id="SIP:gptest@sip.antisip.com" parent-proto-group-uid="RootGroup.uid" uid="Family.uid"/>
+                </proto-groups>
+                <subgroups/>
+                <child-contacts>
+                    <meta-contact uid="13105295102895175842">
+                        <display-name>wifey</display-name>
+                        <contact account-id="SIP:gptest@sip.antisip.com" address="wifey@sip.antisip.com" parent-proto-group-uid="Family.uid">
+                            <persistent-data>xcap.resolved=false;</persistent-data>
+                        </contact>
+                    </meta-contact>
+                </child-contacts>
+            </group>
+        <group name="Buddies" uid="13177414806718749092">
+                <proto-groups>
+                    <proto-group account-id="Google Talk:guardianproject@gmail.com@talk.google.com" parent-proto-group-uid="ContactListRoot" uid="Buddies"/>
+                </proto-groups>
+                <subgroups/>
+                <child-contacts>
+                    <meta-contact uid="131774148067210481156">
+                        <display-name>gptest@jabber.org</display-name>
+                        <contact account-id="Google Talk:guardianproject@gmail.com@talk.google.com" address="gptest@jabber.org" parent-proto-group-uid="Buddies"/>
+                    </meta-contact>
+                    <meta-contact uid="13177415552546833173">
+                        <display-name>nathanfreitas@gmail.com</display-name>
+                        <contact account-id="Google Talk:guardianproject@gmail.com@talk.google.com" address="nathanfreitas@gmail.com" parent-proto-group-uid="Buddies"/>
+                    </meta-contact>
+                <meta-contact uid="132148038285921761200">
+                        <display-name>fakename(mac.com)@aol.com</display-name>
+                        <contact account-id="Google Talk:guardianproject@gmail.com@talk.google.com" address="fakename(mac.com)@aol.com" parent-proto-group-uid="Buddies"/>
+                    </meta-contact>
+                    <meta-contact uid="132148045260510443545">
+                        <display-name>hans@eds.org</display-name>
+                        <contact account-id="Google Talk:guardianproject@gmail.com@talk.google.com" address="hans@eds.org" parent-proto-group-uid="Buddies"/>
+                    </meta-contact>
+                </child-contacts>
+            </group>
+            <group name="Freelance" uid="131774148067916173857">
+                <proto-groups>
+                    <proto-group account-id="Google Talk:guardianproject@gmail.com@talk.google.com" parent-proto-group-uid="ContactListRoot" uid="Freelance"/>
+                </proto-groups>
+                <subgroups/>
+                <child-contacts/>
+            </group>
+        <group name="General" uid="132149960731827317807">
+                <proto-groups>
+                    <proto-group account-id="Jabber:gptest@jabber.org@jabber.org" parent-proto-group-uid="ContactListRoot" uid="General"/>
+                </proto-groups>
+                <subgroups/>
+                <child-contacts>
+                    <meta-contact uid="13214996073185100961">
+                        <display-name>gp.test@jabber.org</display-name>
+                        <contact account-id="Jabber:gptest@jabber.org@jabber.org" address="gp.test@jabber.org" parent-proto-group-uid="General"/>
+                    </meta-contact>
+                    <meta-contact uid="132149960731825665208">
+                        <display-name>gptest@jabber.ccc.de</display-name>
+                        <contact account-id="Jabber:gptest@jabber.org@jabber.org" address="gptest@jabber.ccc.de" parent-proto-group-uid="General"/>
+                    </meta-contact>
+                    <meta-contact uid="132149960731933528392">
+                        <display-name>gptestlaptop@jabber.org</display-name>
+                        <contact account-id="Jabber:gptest@jabber.org@jabber.org" address="gptestlaptop@jabber.org" parent-proto-group-uid="General"/>
+                    </meta-contact>
+                    <meta-contact uid="132149960731912932686">
+                        <display-name>guardiantest@jabber.org</display-name>
+                        <contact account-id="Jabber:gptest@jabber.org@jabber.org" address="guardiantest@jabber.org" parent-proto-group-uid="General"/>
+                    </meta-contact>
+                    <meta-contact uid="132149960731927604992">
+                        <display-name>guardianproject@gmail.com</display-name>
+                        <contact account-id="Jabber:gptest@jabber.org@jabber.org" address="guardianproject@gmail.com" parent-proto-group-uid="General"/>
+                    </meta-contact>
+                </child-contacts>
+            </group>
+        </subgroups>
+        <child-contacts>
+            <meta-contact uid="131774148064011794088">
+                <display-name>Wifey</display-name>
+                <contact account-id="Google Talk:guardianproject@gmail.com@talk.google.com" address="wifey@gmail.com" parent-proto-group-uid="ContactListRoot"/>
+            </meta-contact>
+            <meta-contact uid="13177414806455426730">
+                <display-name>horrendous@gmail.com</display-name>
+                <contact account-id="Google Talk:guardianproject@gmail.com@talk.google.com" address="horrendous@gmail.com" parent-proto-group-uid="ContactListRoot"/>
+            </meta-contact>
+            <meta-contact uid="131774148065815630291">
+                <display-name>gptest@jabber.com</display-name>
+                <contact account-id="Google Talk:guardianproject@gmail.com@talk.google.com" address="gptest@jabber.com" parent-proto-group-uid="ContactListRoot"/>
+            </meta-contact>
+            <meta-contact uid="131774148067014593690">
+                <display-name>maximum@googlemail.com</display-name>
+                <contact account-id="Google Talk:guardianproject@gmail.com@talk.google.com" address="maximum@googlemail.com" parent-proto-group-uid="ContactListRoot"/>
+            </meta-contact>
+        <meta-contact uid="132149977981022232149">
+                <display-name>hans@eds.org</display-name>
+                <contact account-id="Jabber:gptest@jabber.org@jabber.org" address="hans@eds.org" parent-proto-group-uid="ContactListRoot"/>
+            </meta-contact>
+        </child-contacts>
+    </group>
+</sip-communicator>
