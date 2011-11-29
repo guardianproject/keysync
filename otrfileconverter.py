@@ -5,6 +5,7 @@ import sys
 import os
 from pyparsing import *
 from base64 import b64decode
+from Crypto.PublicKey import DSA
 #import pprint
 
 from otr_private_key import OTRPrivateKeys
@@ -30,7 +31,24 @@ elif filename == 'otr.private_key':
                 if element[0] == "name":
                     print "Name: ",
                     print element[1]
-                if element[0] == "protocol":
+                elif element[0] == "protocol":
                     print "Protocol: ",
                     print element[1]
-    #        print key
+                elif element[0] == "private-key":
+                    if element[1][0] == 'dsa':
+                        print "Key: "
+                        for num in element[1][1:6]:
+                            if num[0] == 'y':
+                                y = num[1]
+                            elif num[0] == 'g':
+                                g = num[1]
+                            elif num[0] == 'p':
+                                p = num[1]
+                            elif num[0] == 'q':
+                                q = num[1]
+                            elif num[0] == 'x':
+                                x = num[1]
+                            print '\t' + num[0],
+                            print num[1]
+                        dsa = DSA.construct((y, g, p, q, x))
+                        print dsa.publickey()
