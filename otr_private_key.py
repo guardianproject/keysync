@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.6
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 from pyparsing import *
@@ -17,7 +17,8 @@ class OTRPrivateKeys():
         return t[1]
 
     @staticmethod
-    def parse(filename):
+    def parse_sexp(data):
+        '''parse sexp/S-expression format and return a python list'''
         # define punctuation literals
         LPAR, RPAR, LBRK, RBRK, LBRC, RBRC, VBAR = map(Suppress, "()[]{}|")
 
@@ -42,15 +43,47 @@ class OTRPrivateKeys():
         sexpList = Group(LPAR + ZeroOrMore(sexp) + RPAR)
         sexp << ( string_ | sexpList )
 
-        f = open(filename, 'r')
-        testotr = ""
-        for line in f.readlines():
-            testotr += line
-
         try:
-            sexpr = sexp.parseString(testotr)
-            return sexpr.asList()[0][1:-1]
+            sexpr = sexp.parseString(data)
+            return sexpr.asList()[0][1:]
         except ParseFatalException, pfe:
             print "Error:", pfe.msg
             print line(pfe.loc,t)
             print pfe.markInputline()
+
+    @staticmethod
+    def parse(data):
+        '''parse the otr.private_key S-Expression and return an OTR dict'''
+
+        keys = []
+        sexplist = OTRPrivateKeys.parse_sexp(data)
+        for key in sexplist:
+            if key[0] == "account":
+                keydict = {}
+                for element in key:
+                    if element[0] == "name":
+                        name, resource = element[1].split('/')
+                        keydict['name'] = name
+                        keydict['resource'] = resource
+                    elif element[0] == "protocol":
+                        keydict['protocol'] = element[1]
+                    elif element[0] == "private-key":
+                        if element[1][0] == 'dsa':
+                            keydict['type'] = 'dsa';
+                            for num in element[1][1:6]:
+                                keydict[num[0]] = num[1]
+                keys.append(keydict)
+        return keys
+
+
+if __name__ == "__main__":
+    import sys
+    import pprint
+
+    pp = pprint.PrettyPrinter(indent=4)
+
+    f = open(sys.argv[1], 'r')
+    testotr = ""
+    for line in f.readlines():
+        testotr += line
+    pp.pprint(OTRPrivateKeys.parse(testotr))
