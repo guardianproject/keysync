@@ -63,3 +63,33 @@ Jitsi:
   All app settings are stored in a single Java .properties file,
   including OTR information. Private keys, public key fingerprints,
   and verification status are each individual properties.
+
+keyczar
+-------
+
+KeyCzar stores keys in JSON files with two different formats: 0.5b and
+0.6b.  It uses a special base64 encoding with a URL-safe alphabet:
+  - replaces +
+  _ replaces /
+
+http://code.google.com/p/keyczar/wiki/DsaPrivateKey
+http://code.google.com/p/keyczar/wiki/DsaPublicKey
+
+ 0.6b
+  public:
+    "q": The DSA subprime
+    "p": The DSA prime
+    "g": The DSA base
+    "y": The DSA public key exponent
+    "size" : The size of the modulus in bits
+  private:
+    "publicKey": The JSON representation of the corresponding DsaPublicKey
+    "x": The secret exponent of this private key
+    "size" : The size of the modulus in bits
+
+ 0.5b
+  public:
+     "x509": A WebSafeBase64 encoded X509 representation
+  private:
+     "pkcs8": A WebSafeBase64 encoded PKCS#8 representation of the private key
+     "publicKey": A WebSafeBase64 encoding of the key's corresponding DsaPublicKey
