@@ -3,6 +3,23 @@ This project is for converting the various OTR file formats between
 each other.  We are focusing on two major versions: libotr format and
 otr4j, and then a few variants of those major formats.
 
+=======
+INSTALL
+=======
+
+This script needs a few python libs to work:
+
+ Debian: 
+    apt-get install python-crypto python-pyparsing
+    (and pyjavaproperties is a new package not yet in Debian)
+
+ Fink: 
+    fink install pycrypto-py27 pyparsing-py27 pyjavaproperties-py27
+
+=======
+FORMATS
+=======
+
 libotr
 ------
 
