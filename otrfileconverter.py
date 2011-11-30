@@ -3,10 +3,13 @@
 
 import sys
 import os
+import struct
+import base64
+import string
 from pyparsing import *
-from base64 import b64decode
 from Crypto.PublicKey import DSA
-#import pprint
+
+import util
 
 from otr_private_key import OTRPrivateKeys
 
@@ -36,8 +39,10 @@ elif filename == 'otr.private_key':
                     print element[1]
                 elif element[0] == "private-key":
                     if element[1][0] == 'dsa':
+                        keydict = {}
                         print "Key: "
                         for num in element[1][1:6]:
+                            keydict[num[0]] = num[1]
                             if num[0] == 'y':
                                 y = num[1]
                             elif num[0] == 'g':
@@ -50,5 +55,9 @@ elif filename == 'otr.private_key':
                                 x = num[1]
                             print '\t' + num[0],
                             print num[1]
-                        dsa = DSA.construct((y, g, p, q, x))
-                        print dsa.publickey()
+                        #dsa = DSA.construct((y, g, p, q, x))
+                        #print dsa.publickey()
+                        print "-------------------- DSA x509 --------------------"
+                        print util.ExportDsaX509(keydict)
+                        print "-------------------- DSA PKCS#8 --------------------"
+                        print util.ExportDsaPkcs8(keydict)
