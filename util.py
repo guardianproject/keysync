@@ -1,4 +1,3 @@
-#!/usr/bin/python2.4
 #
 # Copyright 2008 Google Inc.
 #
@@ -15,12 +14,15 @@
 # limitations under the License.
 
 """
-Utility functions for keyczar package.
+Utility functions for keyczar package modified to use standard base64
+format that is commonly used for OTR keys.
 
 @author: arkajit.dey@gmail.com (Arkajit Dey)
+@author: hans@eds.org (Hans-Christoph Steiner)
 """
-
 import base64
+
+
 import math
 import os
 try:
@@ -311,7 +313,7 @@ def Encode(s):
   @return: Base64 representation of s.
   @rtype: string
   """
-  return base64.urlsafe_b64encode(str(s)).replace("=", "")
+  return base64.b64encode(str(s)).replace("=", "")
 
 
 def Decode(s):
@@ -338,7 +340,7 @@ def Decode(s):
     s += "=="
   elif d == 3:
     s += "="
-  return base64.urlsafe_b64decode(s)
+  return base64.b64decode(s)
 
 def WriteFile(data, loc):
   """
