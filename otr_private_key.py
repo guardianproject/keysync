@@ -71,10 +71,10 @@ class OtrPrivateKeys():
                     if element[0] == "name":
                         if element[1].find('/') > -1:
                             name, resource = element[1].split('/')
-                            keydict['name'] = name
-                            keydict['resource'] = resource
+                            keydict['name'] = name.strip()
+                            keydict['resource'] = resource.strip()
                         else:
-                            keydict['name'] = element[1]
+                            keydict['name'] = element[1].strip()
                             keydict['resource'] = ''
                     elif element[0] == "protocol":
                         keydict['protocol'] = element[1]

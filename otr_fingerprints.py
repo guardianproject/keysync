@@ -14,14 +14,14 @@ class OtrFingerprints():
             keydict = {}
             if row[1].find('/') > -1:
                 name, resource = row[1].split('/')
-                keydict['name'] = name
-                keydict['resource'] = resource
+                keydict['name'] = name.strip()
+                keydict['resource'] = resource.strip()
             else:
-                keydict['name'] = row[1]
+                keydict['name'] = row[1].strip()
                 keydict['resource'] = ''
-            keydict['protocol'] = row[2]
-            keydict['fingerprint'] = row[3]
-            keydict['verification'] = row[4]
+            keydict['protocol'] = row[2].strip()
+            keydict['fingerprint'] = row[3].strip()
+            keydict['verification'] = row[4].strip()
             keys.append(keydict)
         return keys
 
