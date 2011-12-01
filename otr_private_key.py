@@ -62,9 +62,13 @@ class OTRPrivateKeys():
                 keydict = {}
                 for element in key:
                     if element[0] == "name":
-                        name, resource = element[1].split('/')
-                        keydict['name'] = name
-                        keydict['resource'] = resource
+                        if element[1].find('/') > -1:
+                            name, resource = element[1].split('/')
+                            keydict['name'] = name
+                            keydict['resource'] = resource
+                        else:
+                            keydict['name'] = element[1]
+                            keydict['resource'] = ''
                     elif element[0] == "protocol":
                         keydict['protocol'] = element[1]
                     elif element[0] == "private-key":
