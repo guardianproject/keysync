@@ -7,7 +7,6 @@ import struct
 import base64
 import string
 from pyparsing import *
-from Crypto.PublicKey import DSA
 
 import util
 
@@ -31,6 +30,8 @@ elif filename == 'sip-communicator.properties':
 elif filename == 'otr.private_key':
     keys = OTRPrivateKeys.parse(otrdata)
     for key in keys:
+        print "\n\n-------------------- fingerprint --------------------"
+        print key['fingerprint']
         print "-------------------- DSA x509 --------------------"
         print util.ExportDsaX509(key)
         print "-------------------- DSA PKCS#8 --------------------"

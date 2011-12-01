@@ -10,11 +10,11 @@ INSTALL
 This script needs a few python libs to work:
 
  Debian: 
-    apt-get install python-crypto python-pyparsing
+    apt-get install python-crypto python-pyparsing python-otr
     (and pyjavaproperties is a new package not yet in Debian)
 
  Fink: 
-    fink install pycrypto-py27 pyparsing-py27 pyjavaproperties-py27
+    fink install pycrypto-py27 pyparsing-py27 pyjavaproperties-py27 python-potr-py27
 
 =======
 FORMATS

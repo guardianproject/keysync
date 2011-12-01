@@ -3,6 +3,7 @@
 
 from pyparsing import *
 from base64 import b64decode
+from potr.crypt import DSAKey
 
 class OTRPrivateKeys():
 
@@ -76,6 +77,9 @@ class OTRPrivateKeys():
                             keydict['type'] = 'dsa';
                             for num in element[1][1:6]:
                                 keydict[num[0]] = num[1]
+                keytuple = (keydict['y'], keydict['g'], keydict['p'], keydict['q'], keydict['x'])
+                dsakey = DSAKey(keytuple)
+                keydict['fingerprint'] = dsakey.cfingerprint()
                 keys.append(keydict)
         return keys
 
