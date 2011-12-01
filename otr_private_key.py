@@ -5,7 +5,7 @@ from pyparsing import *
 from base64 import b64decode
 from potr.crypt import DSAKey
 
-class OTRPrivateKeys():
+class OtrPrivateKeys():
 
     @staticmethod
     def verifyLen(t):
@@ -25,16 +25,16 @@ class OTRPrivateKeys():
 
         decimal = Word("123456789",nums).setParseAction(lambda t: int(t[0]))
         bytes = Word(printables)
-        raw = Group(decimal.setResultsName("len") + Suppress(":") + bytes).setParseAction(OTRPrivateKeys.verifyLen)
+        raw = Group(decimal.setResultsName("len") + Suppress(":") + bytes).setParseAction(OtrPrivateKeys.verifyLen)
         token = Word(alphanums + "-./_:*+=")
         base64_ = Group(Optional(decimal,default=None).setResultsName("len") + VBAR 
             + OneOrMore(Word( alphanums +"+/=" )).setParseAction(lambda t: b64decode("".join(t)))
-            + VBAR).setParseAction(OTRPrivateKeys.verifyLen)
+            + VBAR).setParseAction(OtrPrivateKeys.verifyLen)
 
         hexadecimal = ("#" + OneOrMore(Word(hexnums)) + "#")\
                         .setParseAction(lambda t: int("".join(t[1:-1]),16))
         qString = Group(Optional(decimal,default=None).setResultsName("len") + 
-                                dblQuotedString.setParseAction(removeQuotes)).setParseAction(OTRPrivateKeys.verifyLen)
+                                dblQuotedString.setParseAction(removeQuotes)).setParseAction(OtrPrivateKeys.verifyLen)
         simpleString = raw | token | base64_ | hexadecimal | qString
 
         display = LBRK + simpleString + RBRK
@@ -53,11 +53,17 @@ class OTRPrivateKeys():
             print pfe.markInputline()
 
     @staticmethod
-    def parse(data):
+    def parse(filename):
         '''parse the otr.private_key S-Expression and return an OTR dict'''
 
+        f = open(filename, 'r')
+        data = ""
+        for line in f.readlines():
+            data += line
+        f.close()
+
         keys = []
-        sexplist = OTRPrivateKeys.parse_sexp(data)
+        sexplist = OtrPrivateKeys.parse_sexp(data)
         for key in sexplist:
             if key[0] == "account":
                 keydict = {}
@@ -89,9 +95,4 @@ if __name__ == "__main__":
     import pprint
 
     pp = pprint.PrettyPrinter(indent=4)
-
-    f = open(sys.argv[1], 'r')
-    testotr = ""
-    for line in f.readlines():
-        testotr += line
-    pp.pprint(OTRPrivateKeys.parse(testotr))
+    pp.pprint(OtrPrivateKeys.parse(sys.argv[1]))
