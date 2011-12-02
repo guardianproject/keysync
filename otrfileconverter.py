@@ -13,6 +13,7 @@ import util
 from otr_private_key import OtrPrivateKeys
 from otr_fingerprints import OtrFingerprints
 from gibberbotproperties import GibberbotProperties
+from adiumproperties import AdiumProperties
 
 # TODO get Adium account IDs from ~/Library/Application\ Support/Adium\ 2.0/Users/Default/Accounts.plist
 # TODO use python-potr's convertkey.py to convert old libotr files
@@ -41,36 +42,11 @@ elif os.path.exists(os.path.join(appdir, 'otr.private_key')) \
     if os.path.exists(os.path.join(appdir, 'Accounts.plist')):
         isadium = True
     elif os.path.exists(os.path.join(appdir, 'accounts.xml')):
-        isadium = True
+        ispidgin = True
 elif os.path.exists(os.path.join(appdir, 'otr.key')) \
     and os.path.exists(os.path.join(appdir, 'otr.fp')):
     islibotr = True
     isirssi = True
-
-if islibotr:
-    print 'Reading libotr format'
-    keys = OtrPrivateKeys.parse(os.path.join(appdir, 'otr.private_key'))
-    pprint.pprint(keys)
-    for key in keys:
-        print '========================================================================'
-        print "-------------------- fingerprint --------------------"
-        print key['fingerprint']
-        print "-------------------- DSA x509 --------------------"
-        print util.ExportDsaX509(key)
-        print "-------------------- DSA PKCS#8 --------------------"
-        print util.ExportDsaPkcs8(key)
-    print '========================================================================'
-    fingerprints = OtrFingerprints.parse(os.path.join(appdir, 'otr.fingerprints'))
-    pprint.pprint(fingerprints)
-    for fp in fingerprints:
-        print "-------------------- fingerprint --------------------"
-        print fp['name'],
-        print ': ',
-        print fp['fingerprint']
-    GibberbotProperties.write(keys + fingerprints, '.')
-
-if isotr4j:
-    print 'Reading otr4j format'
 
 if isjitsi:
     print 'Reading Jitsi files: '
@@ -80,5 +56,14 @@ elif isirssi:
     print 'Reading irssi files: '
 elif isadium:
     print 'Reading Adium files: '
-elif ispidgin:
-    print 'Reading Pidgin files: '
+    keys = AdiumProperties.parse(appdir)
+    pprint.pprint(keys)
+    GibberbotProperties.write(keys, '.')
+elif islibotr:
+    print 'Reading libotr files: '
+    keys = OtrPrivateKeys.parse(os.path.join(appdir, 'otr.private_key'))
+    keys += OtrFingerprints.parse(os.path.join(appdir, 'otr.fingerprints'))
+    pprint.pprint(keys)
+    GibberbotProperties.write(keys, '.')
+elif isotr4j:
+    print 'Reading otr4j format'
