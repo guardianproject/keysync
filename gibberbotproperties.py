@@ -34,7 +34,7 @@ class GibberbotProperties():
         p = pyjavaproperties.Properties()
         for key in keys:
             if 'x' in key:
-                p.setProperty(key['name'] + '.privateKey', util.ExportDsaX509(key))
+                p.setProperty(key['name'] + '.publicKey', util.ExportDsaX509(key))
             if 'y' in key:
                 p.setProperty(key['name'] + '.privateKey', util.ExportDsaPkcs8(key))
             if 'verification' in key and key['verification'] != None:
