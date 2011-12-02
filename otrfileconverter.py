@@ -6,6 +6,7 @@ import os
 import struct
 import base64
 import string
+import pprint
 from pyparsing import *
 
 import util
@@ -16,29 +17,67 @@ from otr_fingerprints import OtrFingerprints
 # TODO get Adium account IDs from ~/Library/Application\ Support/Adium\ 2.0/Users/Default/Accounts.plist
 # TODO use python-potr's convertkey.py to convert old libotr files
 
-otrfile = sys.argv[1]
-filename = os.path.basename(otrfile)
+islibotr = False
+isotr4j = False
 
-if filename == 'otr_keystore':
-    print 'Reading a Gibberbot file: '
-elif filename == 'sip-communicator.properties':
-    print 'Reading a Jitsi file: '
-elif filename == 'otr.private_key' or filename == 'otr.key':
-    print 'Reading a libotr private key file'
-    keys = OtrPrivateKeys.parse(otrfile)
+isjitsi = False
+isgibberbot = False
+isirssi = False
+isadium = False
+ispidgin = False
+
+appdir = os.path.dirname(sys.argv[1])
+
+if os.path.exists(os.path.join(appdir, 'otr_keystore')):
+    isotr4j = True
+    isgibberbot = True
+elif os.path.exists(os.path.join(appdir, 'sip-communicator.properties')) \
+    and os.path.exists(os.path.join(appdir, 'contactlist.xml')):
+    isotr4j = True
+    isjitsi = True
+elif os.path.exists(os.path.join(appdir, 'otr.private_key')) \
+    and os.path.exists(os.path.join(appdir, 'otr.fingerprints')):
+    islibotr = True
+    if os.path.exists(os.path.join(appdir, 'Accounts.plist')):
+        isadium = True
+    elif os.path.exists(os.path.join(appdir, 'accounts.xml')):
+        isadium = True
+elif os.path.exists(os.path.join(appdir, 'otr.key')) \
+    and os.path.exists(os.path.join(appdir, 'otr.fp')):
+    islibotr = True
+    isirssi = True
+
+if islibotr:
+    print 'Reading libotr format'
+    keys = OtrPrivateKeys.parse(os.path.join(appdir, 'otr.private_key'))
+    pprint.pprint(keys)
     for key in keys:
+        print '========================================================================'
         print "-------------------- fingerprint --------------------"
         print key['fingerprint']
         print "-------------------- DSA x509 --------------------"
         print util.ExportDsaX509(key)
         print "-------------------- DSA PKCS#8 --------------------"
         print util.ExportDsaPkcs8(key)
-elif filename == 'otr.fingerprints' or filename == 'otr.fp':
-    print 'Reading a libotr private key file'
-    keys = OtrFingerprints.parse(otrfile)
-    for key in keys:
+    print '========================================================================'
+    fingerprints = OtrFingerprints.parse(os.path.join(appdir, 'otr.fingerprints'))
+    pprint.pprint(fingerprints)
+    for fp in fingerprints:
         print "-------------------- fingerprint --------------------"
-        print key['name'],
+        print fp['name'],
         print ': ',
-        print key['fingerprint']
+        print fp['fingerprint']
 
+if isotr4j:
+    print 'Reading otr4j format'
+
+if isjitsi:
+    print 'Reading Jitsi files: '
+elif isgibberbot:
+    print 'Reading a Gibberbot file: '
+elif isirssi:
+    print 'Reading irssi files: '
+elif isadium:
+    print 'Reading Adium files: '
+elif ispidgin:
+    print 'Reading Pidgin files: '
