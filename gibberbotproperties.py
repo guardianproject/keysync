@@ -1,13 +1,16 @@
 #!/usr/bin/env python2.6
 # -*- coding: utf-8 -*-
 
-from pyjavaproperties import Properties
+import os
+import pyjavaproperties
+import util
 
 class GibberbotProperties():
 
     @staticmethod
     def parse(filename):
-        p = Properties()
+        '''parse the given file into the standard keydict'''
+        p = pyjavaproperties.Properties()
         p.load(open(filename))
         ret = []
         for item in p.items():
@@ -25,7 +28,21 @@ class GibberbotProperties():
                 ret.append(('private-key', id, item[1]))
         return ret
 
-
+    @staticmethod
+    def write(keys, savedir):
+        '''given a list of keydicts, generate a gibberbot file'''
+        p = pyjavaproperties.Properties()
+        for key in keys:
+            if 'x' in key:
+                p.setProperty(key['name'] + '.privateKey', util.ExportDsaX509(key))
+            if 'y' in key:
+                p.setProperty(key['name'] + '.privateKey', util.ExportDsaPkcs8(key))
+            if 'verification' in key and key['verification'] != None:
+                p.setProperty(key['name'] + '.' + key['fingerprint'] + '.publicKey.verified',
+                              'true')
+        f = open(os.path.join(savedir, 'otr_keystore'), 'w')
+        p.store(f)
+        print p
 
 #------------------------------------------------------------------------------#
 # for testing from the command line:

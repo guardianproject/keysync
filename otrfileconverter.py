@@ -10,9 +10,9 @@ import pprint
 from pyparsing import *
 
 import util
-
 from otr_private_key import OtrPrivateKeys
 from otr_fingerprints import OtrFingerprints
+from gibberbotproperties import GibberbotProperties
 
 # TODO get Adium account IDs from ~/Library/Application\ Support/Adium\ 2.0/Users/Default/Accounts.plist
 # TODO use python-potr's convertkey.py to convert old libotr files
@@ -67,6 +67,7 @@ if islibotr:
         print fp['name'],
         print ': ',
         print fp['fingerprint']
+    GibberbotProperties.write(keys + fingerprints, '.')
 
 if isotr4j:
     print 'Reading otr4j format'
