@@ -15,7 +15,7 @@ from otr_fingerprints import OtrFingerprints
 from gibberbotproperties import GibberbotProperties
 from adiumproperties import AdiumProperties
 
-# TODO get Adium account IDs from ~/Library/Application\ Support/Adium\ 2.0/Users/Default/Accounts.plist
+# TODO convert protocol names to a standard format, i.e. prpl-jabber vs. libpurple-Jabber
 # TODO use python-potr's convertkey.py to convert old libotr files
 
 islibotr = False
@@ -48,22 +48,20 @@ elif os.path.exists(os.path.join(appdir, 'otr.key')) \
     islibotr = True
     isirssi = True
 
-if isjitsi:
-    print 'Reading Jitsi files: '
-elif isgibberbot:
-    print 'Reading a Gibberbot file: '
-elif isirssi:
-    print 'Reading irssi files: '
-elif isadium:
+if isadium:
     print 'Reading Adium files: '
     keys = AdiumProperties.parse(appdir)
-    pprint.pprint(keys)
-    GibberbotProperties.write(keys, '.')
+elif isirssi:
+    print 'Reading irssi files: '
+    keys = OtrPrivateKeys.parse(os.path.join(appdir, 'otr.key'))
+    keys += OtrFingerprints.parse(os.path.join(appdir, 'otr.fp'))
 elif islibotr:
     print 'Reading libotr files: '
     keys = OtrPrivateKeys.parse(os.path.join(appdir, 'otr.private_key'))
     keys += OtrFingerprints.parse(os.path.join(appdir, 'otr.fingerprints'))
-    pprint.pprint(keys)
-    GibberbotProperties.write(keys, '.')
 elif isotr4j:
     print 'Reading otr4j format'
+
+if keys:
+    pprint.pprint(keys)
+    GibberbotProperties.write(keys, '.')
