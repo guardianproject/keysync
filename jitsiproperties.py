@@ -1,8 +1,10 @@
-#!/usr/bin/env python2.6
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from pyjavaproperties import Properties
 import re
+from pyjavaproperties import Properties
+
+import util
 
 # the accounts, private/public keys, and fingerprints are in sip-communicator.properties
 # the contacts list is in contactlist.xml
@@ -20,23 +22,28 @@ class JitsiProperties():
         p.load(open(filename))
         ret = []
         for item in p.items():
-            key = item[0]
-            if re.match('net\.java\.sip\.communicator\.impl\.protocol\.jabber\.acc[0-9]+\.ACCOUNT_UID', key):
-                id = JitsiProperties._parse_account_uid(item[1])
-                prop_key = ('net.java.sip.communicator.plugin.otr.'
-                            + re.sub('[^a-zA-Z0-9_]', '_', item[1]))
+            propkey = item[0]
+            if re.match('net\.java\.sip\.communicator\.impl\.protocol\.jabber\.acc[0-9]+\.ACCOUNT_UID', propkey):
+                keydict = {}
+                keydict['protocol'] = 'prpl-jabber'
+                keydict['name'] = JitsiProperties._parse_account_uid(item[1])
 
-                private_key_prop_key = prop_key + '_privateKey'
-                private_key = p.getProperty(private_key_prop_key)
-                ret.append(('private-key', id, 'prpl-jabber', private_key))
-
-                public_key_prop_key = prop_key + '_publicKey'
-                public_key = p.getProperty(public_key_prop_key)
-                ret.append(('public-key', id, 'prpl-jabber', public_key))
-            elif (re.match('net\.java\.sip\.communicator\.plugin\.otr\..*_publicKey', key) and not
-                  re.match('net\.java\.sip\.communicator\.plugin\.otr\.(Jabber_|Google_Talk_)', key)):
-                prop = '.'.join(key.split('.')[-1].split('_')[0:-1])
-                ret.append(('fingerprint', prop, item[1]))
+                propkey_base = ('net.java.sip.communicator.plugin.otr.'
+                                + re.sub('[^a-zA-Z0-9_]', '_', item[1]))
+                keydict['private-key'] = p.getProperty(propkey_base + '_privateKey')
+                keydict['public_key'] = p.getProperty(propkey_base + '_publicKey')
+                ret.append(keydict)
+            elif (re.match('net\.java\.sip\.communicator\.plugin\.otr\..*_publicKey.verified', propkey)):
+                print propkey
+                keydict = {}
+                keydict['name'] = '.'.join(propkey.split('.')[-1].split('_')[0:-1])
+                keydict['verification'] = 'verified'
+            elif (re.match('net\.java\.sip\.communicator\.plugin\.otr\..*_publicKey', propkey) and not
+                  re.match('net\.java\.sip\.communicator\.plugin\.otr\.(Jabber_|Google_Talk_)', propkey)):
+                keydict = {}
+                keydict['name'] = '.'.join(propkey.split('.')[-1].split('_')[0:-1])
+                keydict['public-key'] = item[1]
+                ret.append(keydict)
         return ret
 
 
