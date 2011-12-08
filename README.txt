@@ -9,12 +9,16 @@ INSTALL
 
 This script needs a few python libs to work:
 
- Debian: 
-    apt-get install python-crypto python-pyparsing python-otr
-    (and pyjavaproperties is a new package not yet in Debian)
+ Debian/Ubuntu/Mint: 
+    apt-get install python-crypto python-pyparsing python-gnupginterface
+    
+    There are two packages not yet in Debian, you can get them from our
+	PPA: https://launchpad.net/~guardianproject/+archive/ppa then install:
+	apt-get install python-potr python-pyjavaproperties
 
  Fink: 
-    fink install pycrypto-py27 pyparsing-py27 pyjavaproperties-py27 python-potr-py27
+    fink install pycrypto-py27 pyparsing-py27 pyjavaproperties-py27 \
+                      python-potr-py27 gnupg-interface-py27
 
 =======
 FORMATS
@@ -64,7 +68,10 @@ Gibberbot:
 
   All OTR information is stored in a single Java .properties
   file. Private keys, public key fingerprints, and verification status
-  are each individual properties.
+  are each individual properties.  This format also includes the
+  storage of the remote public keys, unlike libotr.  otr4j
+  implementations load the remote public key from the store rather
+  than always getting it from the OTR session.
 
 Jitsi:
  GNU/Linux
