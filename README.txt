@@ -10,7 +10,8 @@ INSTALL
 This script needs a few python libs to work:
 
  Debian/Ubuntu/Mint: 
-    apt-get install python-crypto python-pyparsing python-gnupginterface
+    sudo apt-get install python-crypto python-pyparsing \
+    python-gnupginterface python-pyasn1
     
     There are two packages not yet in Debian, you can get them from our
 	PPA: https://launchpad.net/~guardianproject/+archive/ppa then install:
@@ -19,6 +20,18 @@ This script needs a few python libs to work:
  Fink: 
     fink install pycrypto-py27 pyparsing-py27 pyjavaproperties-py27 \
                       python-potr-py27 gnupg-interface-py27
+
+=====
+USAGE
+=====
+
+Currently, the code allows for reading multiple file formats into a
+python dictionary form.  The only export method currently activated is
+for Gibberbot format in a file called otr_keystore.  To use, point the
+'otrfileconverter.py' script to the directory that contains the OTR
+files, i.e.:
+
+  ./otrfileconverter.py ~/.pidgin
 
 =======
 FORMATS
