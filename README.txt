@@ -19,7 +19,7 @@ This script needs a few python libs to work:
 
  Fink: 
     fink install pycrypto-py27 pyparsing-py27 pyjavaproperties-py27 \
-                      python-potr-py27 gnupg-interface-py27
+        python-potr-py27 gnupg-interface-py27 pyasn1-py27
 
 =====
 USAGE
@@ -130,3 +130,17 @@ http://code.google.com/p/keyczar/wiki/DsaPublicKey
   private:
      "pkcs8": A WebSafeBase64 encoded PKCS#8 representation of the private key
      "publicKey": A WebSafeBase64 encoding of the key's corresponding DsaPublicKey
+
+
+ZRTP
+----
+
+A ZID record stores (caches) ZID (ZRTP ID) specific data that helps
+ZRTP to achives its key continuity feature. Please refer to the ZRTP
+specification to get detailed information about the ZID.
+
+ ZRTP key types:
+  2048 bit Diffie-Helman values
+  3072 bit Diffie-Helman values
+  256 bit Diffie-Helman elliptic curve
+  384 bit Diffie-Helman elliptic curve 
