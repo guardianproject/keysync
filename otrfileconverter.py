@@ -64,4 +64,4 @@ elif isotr4j:
 
 if keys:
     pprint.pprint(keys)
-    GibberbotProperties.write(keys, '.')
+    GibberbotProperties.write(keys, 'output')
