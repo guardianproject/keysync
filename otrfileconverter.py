@@ -65,3 +65,4 @@ elif isotr4j:
 if keys:
     pprint.pprint(keys)
     GibberbotProperties.write(keys, 'output')
+    OtrFingerprints.write(keys, os.path.join('output', 'otr.fingerprints'))
