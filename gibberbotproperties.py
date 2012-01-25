@@ -27,7 +27,8 @@ class GibberbotProperties():
                 ret.append(('verified', id, fingerprint))
             if key.endswith('.privateKey'):
                 id = '.'.join(key.split('.')[0:-1])
-                ret.append(('private-key', id, item[1]))
+                ret.append(('private-key', id,
+                            util.ParsePkcs8(item[1].replace('\\n', ''))))
         return ret
 
     @staticmethod
