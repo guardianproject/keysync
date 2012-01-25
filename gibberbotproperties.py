@@ -5,6 +5,8 @@ import os
 import pyjavaproperties
 import util
 
+# TODO parse private keys
+
 class GibberbotProperties():
 
     @staticmethod
@@ -42,7 +44,6 @@ class GibberbotProperties():
                               'true')
         f = open(os.path.join(savedir, 'otr_keystore'), 'w')
         p.store(f)
-        print p
 
 #------------------------------------------------------------------------------#
 # for testing from the command line:

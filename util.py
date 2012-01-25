@@ -20,9 +20,8 @@ format that is commonly used for OTR keys.
 @author: arkajit.dey@gmail.com (Arkajit Dey)
 @author: hans@eds.org (Hans-Christoph Steiner)
 """
+
 import base64
-
-
 import math
 import os
 try:
@@ -304,9 +303,6 @@ def Encode(s):
   """
   Return Base64 encoding of s. Suppress padding characters (=).
 
-  Uses URL-safe alphabet: - replaces +, _ replaces /. Will convert s of type
-  unicode to string type first.
-
   @param s: string to encode as Base64
   @type s: string
 
@@ -319,9 +315,6 @@ def Encode(s):
 def Decode(s):
   """
   Return decoded version of given Base64 string. Ignore whitespace.
-
-  Uses URL-safe alphabet: - replaces +, _ replaces /. Will convert s of type
-  unicode to string type first.
 
   @param s: Base64 string to decode
   @type s: string

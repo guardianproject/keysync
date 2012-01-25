@@ -24,8 +24,6 @@ class OtrFingerprints():
         tsv = csv.writer(open(filename, 'w'), delimiter='\t')
         for key in keys:
             if 'fingerprint' in key:
-                print 'ROW ROW ROW'
-                print key
                 # TODO look up accounts to associate remote accounts to
                 row = ['PLACEHOLDER', key['name'], key['protocol'], key['fingerprint']]
                 if 'verification' in key and key['verification'] != None:

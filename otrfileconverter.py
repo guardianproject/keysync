@@ -15,6 +15,7 @@ from otr_fingerprints import OtrFingerprints
 from gibberbotproperties import GibberbotProperties
 from adiumproperties import AdiumProperties
 
+# TODO merge duplicates in the final keys
 # TODO convert protocol names to a standard format, i.e. prpl-jabber vs. libpurple-Jabber
 # TODO use python-potr's convertkey.py to convert old libotr files
 

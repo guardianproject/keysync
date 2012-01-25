@@ -20,6 +20,10 @@ class AdiumProperties():
                     key['name'] = account['UID']
         return keys
 
+    @staticmethod
+    def write():
+        pass
+
 
 if __name__ == '__main__':
 
