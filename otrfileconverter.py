@@ -66,3 +66,4 @@ if keys:
     pprint.pprint(keys)
     GibberbotProperties.write(keys, 'output')
     OtrFingerprints.write(keys, os.path.join('output', 'otr.fingerprints'))
+    OtrPrivateKeys.write(keys, os.path.join('output', 'otr.private_keys'))

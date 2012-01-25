@@ -90,6 +90,26 @@ class OtrPrivateKeys():
         return keys
 
 
+    @staticmethod
+    def write(keys, filename):
+        privkeys = '(privkeys\n'
+        for key in keys:
+            if 'y' in key:
+                dsa = '    (p #' + ('%0258X' % key['p']) + '#)\n'
+                dsa += '    (q #' + ('%042X' % key['q']) + '#)\n'
+                dsa += '    (g #' + ('%0258X' % key['g']) + '#)\n'
+                dsa += '    (y #' + ('%0256X' % key['y']) + '#)\n'
+                dsa += '    (x #' + ('%042X' % key['x']) + '#)\n'
+                contents = ('  (name "' + key['name'] + '")\n' +
+                             '  (protocol ' + key['protocol'] + ')\n' +
+                             '  (private-key\n   (dsa\n' + dsa + '   )\n  )\n')
+                privkeys += ' (account\n' + contents + ' )\n'
+        privkeys += ')\n'
+        f = open(filename, 'w')
+        f.write(privkeys)
+        f.close()
+        #print privkeys
+
 if __name__ == "__main__":
     import sys
     import pprint
