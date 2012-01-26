@@ -5,7 +5,7 @@ import os
 import pyjavaproperties
 import util
 
-# TODO parse public keys
+# TODO parse public keys into fingerprints
 
 class GibberbotProperties():
 
@@ -28,7 +28,6 @@ class GibberbotProperties():
             if keydata.endswith('.privateKey'):
                 id = '.'.join(keydata.split('.')[0:-1])
                 parsed.append(('private-key', id, item[1]))
-        print parsed
         # create blank keys for all IDs
         keydict = dict()
         for keydata in parsed:
@@ -38,29 +37,33 @@ class GibberbotProperties():
                 keydict[name]['name'] = name
                 keydict[name]['protocol'] = 'prpl-jabber'
             if keydata[0] == 'private-key':
-                print 'private-key'
+                #print 'private-key: ' + name + ' | ',
                 cleaned = keydata[2].replace('\\n', '')
-                print 'cleaned: ',
-                print cleaned
                 numdict = util.ParsePkcs8(cleaned)
-                print numdict
-                keydict[name] = dict(keydict[name].items() + numdict.items())
+                for num in ('q', 'p', 'g', 'x'):
+                    keydict[name][num] = numdict[num]
             elif keydata[0] == 'verified':
                 keydict[name]['verification'] = 'verified'
+                keydict[name]['fingerprint'] = keydata[2]
             elif keydata[0] == 'public-key':
+                #print 'public-key: ' + name + ' | ',
+                cleaned = keydata[2].replace('\\n', '')
+                numdict = util.ParseX509(cleaned)
+                for num in ('q', 'p', 'g', 'y'):
+                    keydict[name][num] = numdict[num]
                 keydict[name]['fingerprint'] = 'PLACEHOLDER'
-                print 'public-key: ' + name
-        print keydict.values()
-        return list(keydict.values())
+                #dsakey = DSAKey(keytuple)
+                #keydict['fingerprint'] = dsakey.cfingerprint()
+        return keydict.values()
 
     @staticmethod
     def write(keys, savedir):
         '''given a list of keydicts, generate a gibberbot file'''
         p = pyjavaproperties.Properties()
         for key in keys:
-            if 'x' in key:
-                p.setProperty(key['name'] + '.publicKey', util.ExportDsaX509(key))
             if 'y' in key:
+                p.setProperty(key['name'] + '.publicKey', util.ExportDsaX509(key))
+            if 'x' in key:
                 p.setProperty(key['name'] + '.privateKey', util.ExportDsaPkcs8(key))
             if 'verification' in key and key['verification'] != None:
                 p.setProperty(key['name'] + '.' + key['fingerprint'] + '.publicKey.verified',
