@@ -5,7 +5,7 @@ import os
 import pyjavaproperties
 import util
 
-# TODO parse private keys
+# TODO parse public keys
 
 class GibberbotProperties():
 
@@ -14,22 +14,44 @@ class GibberbotProperties():
         '''parse the given file into the standard keydict'''
         p = pyjavaproperties.Properties()
         p.load(open(filename))
-        ret = []
+        parsed = []
         for item in p.items():
-            key = item[0]
-            if key.endswith('.publicKey'):
-                id = '.'.join(key.split('.')[0:-1])
-                ret.append(('public-key', id, item[1]))
-            if key.endswith('.publicKey.verified'):
-                keylist = key.split('.')
+            keydata = item[0]
+            if keydata.endswith('.publicKey'):
+                id = '.'.join(keydata.split('.')[0:-1])
+                parsed.append(('public-key', id, item[1]))
+            if keydata.endswith('.publicKey.verified'):
+                keylist = keydata.split('.')
                 fingerprint = keylist[-3]
                 id = '.'.join(keylist[0:-3])
-                ret.append(('verified', id, fingerprint))
-            if key.endswith('.privateKey'):
-                id = '.'.join(key.split('.')[0:-1])
-                ret.append(('private-key', id,
-                            util.ParsePkcs8(item[1].replace('\\n', ''))))
-        return ret
+                parsed.append(('verified', id, fingerprint))
+            if keydata.endswith('.privateKey'):
+                id = '.'.join(keydata.split('.')[0:-1])
+                parsed.append(('private-key', id, item[1]))
+        print parsed
+        # create blank keys for all IDs
+        keydict = dict()
+        for keydata in parsed:
+            name = keydata[1]
+            if not name in keydict:
+                keydict[name] = dict()
+                keydict[name]['name'] = name
+                keydict[name]['protocol'] = 'prpl-jabber'
+            if keydata[0] == 'private-key':
+                print 'private-key'
+                cleaned = keydata[2].replace('\\n', '')
+                print 'cleaned: ',
+                print cleaned
+                numdict = util.ParsePkcs8(cleaned)
+                print numdict
+                keydict[name] = dict(keydict[name].items() + numdict.items())
+            elif keydata[0] == 'verified':
+                keydict[name]['verification'] = 'verified'
+            elif keydata[0] == 'public-key':
+                keydict[name]['fingerprint'] = 'PLACEHOLDER'
+                print 'public-key: ' + name
+        print keydict.values()
+        return list(keydict.values())
 
     @staticmethod
     def write(keys, savedir):
