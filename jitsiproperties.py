@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
+import platform
 import re
 from pyjavaproperties import Properties
 
@@ -11,6 +13,13 @@ import util
 
 class JitsiProperties():
 
+    if platform.system() == 'Darwin':
+        path = os.path.expanduser('~/Library/Application Support/Jitsi')
+    elif platform.system() == 'Windows':
+        path = os.path.expanduser('~/Application Data/Jitsi')
+    else:
+        path = os.path.expanduser('~/.jitsi')
+
     @staticmethod
     def _parse_account_uid(uidstring):
         username, domain, server = uidstring.split(':')[1].split('@')
@@ -18,6 +27,7 @@ class JitsiProperties():
 
     @staticmethod
     def parse(filename):
+        # TODO switch this to settingsdir like the others
         p = Properties()
         p.load(open(filename))
         ret = []
@@ -51,6 +61,9 @@ class JitsiProperties():
 #------------------------------------------------------------------------------#
 # for testing from the command line:
 def main(argv):
+
+    print 'Jitsi stores its files in ' + JitsiProperties.path
+
     p = JitsiProperties.parse('tests/jitsi/sip-communicator.properties')
     print '----------------------------------------'
     for item in p:

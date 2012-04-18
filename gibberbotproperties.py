@@ -9,6 +9,8 @@ import util
 
 class GibberbotProperties():
 
+    path = '/data/data/info.guardianproject.otr.app.im/files/otr_keystore'
+
     @staticmethod
     def parse(filename):
         '''parse the given file into the standard keydict'''
@@ -74,6 +76,9 @@ class GibberbotProperties():
 #------------------------------------------------------------------------------#
 # for testing from the command line:
 def main(argv):
+
+    print 'Gibberbot stores its files in ' + GibberbotProperties.path
+
     p = GibberbotProperties.parse('tests/gibberbot/otr_keystore')
     print '----------------------------------------'
     for item in p:

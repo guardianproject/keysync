@@ -9,8 +9,12 @@ from otr_fingerprints import OtrFingerprints
 
 class AdiumProperties():
 
+    path = os.path.expanduser('~/Library/Application Support/Adium 2.0/Users/Default')
+
     @staticmethod
-    def parse(settingsdir):
+    def parse(settingsdir=None):
+        if settingsdir == None:
+            settingsdir = AdiumProperties.path
         keys = OtrPrivateKeys.parse(os.path.join(settingsdir, 'otr.private_key'))
         keys += OtrFingerprints.parse(os.path.join(settingsdir, 'otr.fingerprints'))
         accounts = plistlib.readPlist(os.path.join(settingsdir, 'Accounts.plist'))['Accounts']
@@ -28,6 +32,8 @@ class AdiumProperties():
 if __name__ == '__main__':
 
     import pprint
+
+    print 'Adium stores its files in ' + AdiumProperties.path
 
     l = AdiumProperties.parse('tests/adium')
     pprint.pprint(l)
