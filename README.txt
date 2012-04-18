@@ -77,7 +77,7 @@ otr4j
 -----
 
 Gibberbot:
-  /data/data/info.guardianproject.otr.im.app/files/otr_keystore
+  /data/data/info.guardianproject.otr.app.im/files/otr_keystore
 
   All OTR information is stored in a single Java .properties
   file. Private keys, public key fingerprints, and verification status
