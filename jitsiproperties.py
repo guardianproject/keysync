@@ -26,10 +26,11 @@ class JitsiProperties():
         return username + '@' + domain
 
     @staticmethod
-    def parse(filename):
-        # TODO switch this to settingsdir like the others
+    def parse(settingsdir=None):
+        if settingsdir == None:
+            settingsdir = JitsiProperties.path
         p = Properties()
-        p.load(open(filename))
+        p.load(open(os.path.join(settingsdir, 'sip-communicator.properties')))
         ret = []
         for item in p.items():
             propkey = item[0]
@@ -64,7 +65,7 @@ def main(argv):
 
     print 'Jitsi stores its files in ' + JitsiProperties.path
 
-    p = JitsiProperties.parse('tests/jitsi/sip-communicator.properties')
+    p = JitsiProperties.parse('tests/jitsi')
     print '----------------------------------------'
     for item in p:
         print item
