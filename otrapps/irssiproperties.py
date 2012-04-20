@@ -34,7 +34,7 @@ if __name__ == '__main__':
     if len(sys.argv) == 2:
         settingsdir = sys.argv[1]
     else:
-        settingsdir = 'tests/irssi'
+        settingsdir = '../tests/irssi'
 
     l = IrssiProperties.parse(settingsdir)
     pprint.pprint(l)

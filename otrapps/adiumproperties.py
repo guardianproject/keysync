@@ -42,6 +42,6 @@ if __name__ == '__main__':
     if len(sys.argv) == 2:
         settingsdir = sys.argv[1]
     else:
-        settingsdir = 'tests/adium'
+        settingsdir = '../tests/adium'
     l = AdiumProperties.parse(settingsdir)
     pprint.pprint(l)

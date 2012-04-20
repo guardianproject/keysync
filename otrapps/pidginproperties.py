@@ -37,7 +37,7 @@ if __name__ == '__main__':
     if len(sys.argv) == 2:
         settingsdir = sys.argv[1]
     else:
-        settingsdir = 'tests/pidgin'
+        settingsdir = '../tests/pidgin'
 
     l = PidginProperties.parse(settingsdir)
     pprint.pprint(l)

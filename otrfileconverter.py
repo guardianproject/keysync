@@ -9,11 +9,11 @@ import string
 import pprint
 from pyparsing import *
 
-import util
-from otr_private_key import OtrPrivateKeys
-from otr_fingerprints import OtrFingerprints
-from gibberbotproperties import GibberbotProperties
-from adiumproperties import AdiumProperties
+import otrapps.util
+from otrapps.otr_private_key import OtrPrivateKeys
+from otrapps.otr_fingerprints import OtrFingerprints
+from otrapps.gibberbotproperties import GibberbotProperties
+from otrapps.adiumproperties import AdiumProperties
 
 # TODO merge duplicates in the final keys
 # TODO convert protocol names to a standard format, i.e. prpl-jabber vs. libpurple-Jabber

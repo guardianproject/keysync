@@ -69,7 +69,7 @@ def main(argv):
     if len(sys.argv) == 2:
         settingsdir = sys.argv[1]
     else:
-        settingsdir = 'tests/jitsi'
+        settingsdir = '../tests/jitsi'
 
     p = JitsiProperties.parse(settingsdir)
     print '----------------------------------------'
