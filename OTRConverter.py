@@ -49,11 +49,21 @@ class App(Tk):
                                            command=self.select_app)
         self.option.configure(bg=fromcolor, relief=RAISED, width=20)
         self.option.pack(side=TOP)
-        #self.option["menu"].add_command()...
+        self.option['menu'].add_separator()
+        self.option['menu'].add_command(label='Selected Folder...',
+                                        command=self.select_folder)
 
-        self.inputfilelabel = Label(self.fromframe, text=self.getpath(optionslist[0]),
-                               bg=fromcolor)
-        self.inputfilelabel.pack()
+        self.fromfolder = StringVar()
+        self.fromfolder.set(self.getpath(optionslist[0]))
+        self.fromentry = Entry(self.fromframe, highlightbackground=fromcolor,
+                               textvariable=self.fromfolder,
+                               state='readonly')
+        self.fromentry.pack(side=LEFT, expand=True, fill=X)
+        self.fromchoosebutton = Button(self.fromframe, text='Choose...',
+                                       highlightbackground=fromcolor,
+                                       command=self.choose_fromfolder,
+                                       state='disabled')
+        self.fromchoosebutton.pack(side=LEFT)
 
         self.toframe = LabelFrame(master, text='to:',
                         bg=tocolor, padx=5, pady=5)
@@ -76,10 +86,15 @@ class App(Tk):
 
     def select_app(self, app=None):
         self.fromfolder.set(self.getpath(app))
+        self.fromentry.configure(state='readonly')
+        self.fromchoosebutton.configure(state='disabled')
 
-    def select_folder(self, app=None):
-        self.fromfolder.set(self.getpath(app))
+    def select_folder(self):
+        self.fromapp.set('Select Folder...')
+        self.fromentry.configure(state='normal')
+        self.fromchoosebutton.configure(state='normal')
 
+    def choose_fromfolder(self):
         dirname = tkFileDialog.askdirectory(initialdir=self.fromfolder.get(),
                                             title='Please select a directory')
         if len(dirname) > 0:
