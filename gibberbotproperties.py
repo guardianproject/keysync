@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 import pyjavaproperties
 import util
 
@@ -79,7 +80,12 @@ def main(argv):
 
     print 'Gibberbot stores its files in ' + GibberbotProperties.path
 
-    p = GibberbotProperties.parse('tests/gibberbot/otr_keystore')
+    if len(sys.argv) == 2:
+        settingsfile = sys.argv[1]
+    else:
+        settingsfile = 'tests/gibberbot/otr_keystore'
+
+    p = GibberbotProperties.parse(settingsfile)
     print '----------------------------------------'
     for item in p:
         print item

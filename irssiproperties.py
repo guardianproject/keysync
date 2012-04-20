@@ -3,6 +3,7 @@
 
 import os
 import platform
+import sys
 import plistlib
 
 from otr_private_key import OtrPrivateKeys
@@ -30,5 +31,10 @@ if __name__ == '__main__':
 
     print 'Irssi stores its files in ' + IrssiProperties.path
 
-    l = IrssiProperties.parse('tests/irssi')
+    if len(sys.argv) == 2:
+        settingsdir = sys.argv[1]
+    else:
+        settingsdir = 'tests/irssi'
+
+    l = IrssiProperties.parse(settingsdir)
     pprint.pprint(l)

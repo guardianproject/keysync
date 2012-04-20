@@ -4,6 +4,7 @@
 import os
 import platform
 import re
+import sys
 from pyjavaproperties import Properties
 
 import util
@@ -65,7 +66,12 @@ def main(argv):
 
     print 'Jitsi stores its files in ' + JitsiProperties.path
 
-    p = JitsiProperties.parse('tests/jitsi')
+    if len(sys.argv) == 2:
+        settingsdir = sys.argv[1]
+    else:
+        settingsdir = 'tests/jitsi'
+
+    p = JitsiProperties.parse(settingsdir)
     print '----------------------------------------'
     for item in p:
         print item

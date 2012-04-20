@@ -3,6 +3,7 @@
 
 import os
 import platform
+import sys
 import plistlib
 
 from otr_private_key import OtrPrivateKeys
@@ -33,5 +34,10 @@ if __name__ == '__main__':
 
     print 'Pidgin stores its files in ' + PidginProperties.path
 
-    l = PidginProperties.parse('tests/pidgin')
+    if len(sys.argv) == 2:
+        settingsdir = sys.argv[1]
+    else:
+        settingsdir = 'tests/pidgin'
+
+    l = PidginProperties.parse(settingsdir)
     pprint.pprint(l)

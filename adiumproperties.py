@@ -3,6 +3,7 @@
 
 import os
 import plistlib
+import sys
 
 from otr_private_key import OtrPrivateKeys
 from otr_fingerprints import OtrFingerprints
@@ -29,7 +30,7 @@ class AdiumProperties():
 
     @staticmethod
     def write():
-        pass
+        print 'AdiumProperties.write() is not implemented'
 
 
 if __name__ == '__main__':
@@ -38,5 +39,9 @@ if __name__ == '__main__':
 
     print 'Adium stores its files in ' + AdiumProperties.path
 
-    l = AdiumProperties.parse('tests/adium')
+    if len(sys.argv) == 2:
+        settingsdir = sys.argv[1]
+    else:
+        settingsdir = 'tests/adium'
+    l = AdiumProperties.parse(settingsdir)
     pprint.pprint(l)
