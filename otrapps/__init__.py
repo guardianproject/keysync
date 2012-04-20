@@ -1,3 +1,2 @@
 
-# TODO http://docs.python.org/tutorial/modules.html#packages
-#__all__ = []
+__all__ = ['adium', 'gibberbot', 'irssi', 'jitsi', 'pidgin', ]

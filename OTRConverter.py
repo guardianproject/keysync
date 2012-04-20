@@ -5,11 +5,11 @@ import os
 from Tkinter import *
 import tkFileDialog
 
-from otrapps.adiumproperties import AdiumProperties
-from otrapps.gibberbotproperties import GibberbotProperties
-from otrapps.jitsiproperties import JitsiProperties
-from otrapps.irssiproperties import IrssiProperties
-from otrapps.pidginproperties import PidginProperties
+from otrapps.adium import AdiumProperties
+from otrapps.gibberbot import GibberbotProperties
+from otrapps.jitsi import JitsiProperties
+from otrapps.irssi import IrssiProperties
+from otrapps.pidgin import PidginProperties
 
 class MenuBar(Menu):
 
