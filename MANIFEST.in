@@ -1,0 +1,5 @@
+include README.txt
+include LICENSE.txt
+include otrfileconverter
+include otrfileconverter-gui
+recursive-include tests
