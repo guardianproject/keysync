@@ -68,6 +68,8 @@ class GibberbotProperties():
                 p.setProperty(key['name'] + '.publicKey', util.ExportDsaX509(key))
             if 'x' in key:
                 p.setProperty(key['name'] + '.privateKey', util.ExportDsaPkcs8(key))
+            if 'fingerprint' in key:
+                p.setProperty(key['name'] + '.fingerprint', key['fingerprint'])
             if 'verification' in key and key['verification'] != None:
                 p.setProperty(key['name'] + '.' + key['fingerprint'] + '.publicKey.verified',
                               'true')
