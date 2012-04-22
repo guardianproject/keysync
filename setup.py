@@ -4,7 +4,7 @@
 from distutils.core import setup
 
 setup(name='otrfileconverter',
-      version='0.0.0',
+      version='0.0.1',
       description='converts OTR keys between the different IM programs',
       author='Hans-Christoph Steiner',
       author_email='hans@eds.org',
