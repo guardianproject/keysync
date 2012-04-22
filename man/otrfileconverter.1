@@ -1,0 +1,71 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.TH otrfileconverter 1 "2012 Apr 21"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+otrfileconverter \- convert OTR key info between different formats
+.SH SYNOPSIS
+.B otrfileconverter
+.RI [options]
+.RI [path]
+.br
+.SH DESCRIPTION
+This manual page documents briefly the
+.B otrfileconverter
+command.
+.PP
+.\" TeX users may be more comfortable with the \fB<whatever>\fP and
+.\" \fI<whatever>\fP escape sequences to invode bold face and italics,
+.\" respectively.
+\fBotrfileconverter\fP is a program for converting the various OTR
+file formats between each other.  We are focusing on two major
+versions: libotr format and otr4j, and then a few variants of those
+major formats.
+
+It reads Adium, IRSSI, Jitsi, and Pidgin formats and converts to
+Gibberbot format.  It will produce an 'otr_keystore' file, that
+Gibberbot can use directly.  To install that file using adb, do:
+
+.nf
+adb push otr_keystore \\
+    /data/data/info.guardianproject.otr.app.im/files/otr_keystore
+.fi
+
+.SH WARNING!
+This is very alpha software, do not rely on it for strong identity
+verification.  It is unlikely to mess up so bad as to produce
+compromised private keys, but anything is possible.  Also, keep in
+mind that program is handling your private OTR keys, so make sure that
+you don't leave the That said, testing and feedback is greatly
+appreciated, so we can get it to the point where we can trust it.
+.SH OPTIONS
+One and only one option must be specified.  The option chooses which
+app's files will be converted to Gibberbot format.
+.TP
+.B \-\-adium
+Read files from Adium
+.TP
+.B \-\-irssi
+Read files from IRSSI
+.TP
+.B \-\-jitsi
+Read files from Jitsi
+.TP
+.B \-\-pidgin
+Read files from Pidgin
+.SH AUTHOR
+otrfileconverter was written by Hans-Christoph Steiner <hans@eds.org>.
+.PP

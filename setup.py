@@ -11,6 +11,7 @@ setup(name='otrfileconverter',
       url='https://github.com/guardianproject/otrfileconverter',
       packages=['otrapps'],
       scripts=['otrfileconverter', 'otrfileconverter-gui'],
+      data_files=[('share/man/man1', ['man/otrfileconverter.1'])],
       license='GPLv3+',
       classifiers=[
           'Development Status :: 3 - Alpha',
