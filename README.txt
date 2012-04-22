@@ -3,6 +3,19 @@ This project is for converting the various OTR file formats between
 each other.  We are focusing on two major versions: libotr format and
 otr4j, and then a few variants of those major formats.
 
+It reads Adium, IRSSI, Jitsi, and Pidgin formats and converts to
+Gibberbot format.  It will produce an 'otr_keystore' file, that
+Gibberbot can use directly.  To install that file using adb, do:
+
+  adb push otr_keystore /data/data/info.guardianproject.otr.app.im/files/otr_keystore
+
+This is very alpha software, do not rely on it for strong identity
+verification.  It is unlikely to mess up so bad as to produce
+compromised private keys, but anything is possible.  Also, keep in
+mind that program is handling your private OTR keys, so make sure that
+you don't leave the That said, testing and feedback is greatly
+appreciated, so we can get it to the point where we can trust it.
+
 =======
 INSTALL
 =======
