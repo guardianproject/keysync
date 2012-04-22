@@ -19,66 +19,96 @@ from otrapps.adium import AdiumProperties
 # TODO convert protocol names to a standard format, i.e. prpl-jabber vs. libpurple-Jabber
 # TODO use python-potr's convertkey.py to convert old libotr files
 
-islibotr = False
-isotr4j = False
+def testforfile(files):
+    islibotr = False
+    isotr4j = False
 
-isjitsi = False
-isgibberbot = False
-isirssi = False
-isadium = False
-ispidgin = False
+    isjitsi = False
+    isgibberbot = False
+    isirssi = False
+    isadium = False
+    ispidgin = False
 
-if len(sys.argv) == 0:
-    print 'you need to specify file(s) to convert'
+    keys = dict()
+    for file in files:
+        appdir = os.path.dirname(file)
+        print 'Checking ' + appdir + ':'
+
+        if os.path.exists(os.path.join(appdir, 'otr_keystore')):
+            isotr4j = True
+            isgibberbot = True
+        elif os.path.exists(os.path.join(appdir, 'sip-communicator.properties')) \
+            and os.path.exists(os.path.join(appdir, 'contactlist.xml')):
+            isotr4j = True
+            isjitsi = True
+        elif os.path.exists(os.path.join(appdir, 'otr.private_key')) \
+            and os.path.exists(os.path.join(appdir, 'otr.fingerprints')):
+            islibotr = True
+            if os.path.exists(os.path.join(appdir, 'Accounts.plist')):
+                isadium = True
+            elif os.path.exists(os.path.join(appdir, 'accounts.xml')):
+                ispidgin = True
+        elif os.path.exists(os.path.join(appdir, 'otr.key')) \
+            and os.path.exists(os.path.join(appdir, 'otr.fp')):
+            islibotr = True
+            isirssi = True
+
+        if isadium:
+            print 'Reading Adium files: '
+            tmp = AdiumProperties.parse(appdir)
+        elif isirssi:
+            print 'Reading irssi files: '
+            tmp = OtrPrivateKeys.parse(os.path.join(appdir, 'otr.key'))
+            keys += OtrFingerprints.parse(os.path.join(appdir, 'otr.fp'))
+        elif islibotr:
+            print 'Reading libotr files: '
+            tmp = OtrPrivateKeys.parse(os.path.join(appdir, 'otr.private_key'))
+            tmp += OtrFingerprints.parse(os.path.join(appdir, 'otr.fingerprints'))
+        elif isgibberbot:
+            print 'Reading Gibberbot otr4j format'
+            tmp = GibberbotProperties.parse(os.path.join(appdir, 'otr_keystore'))
+            pprint.pprint(tmp)
+        elif isjitsi:
+            print 'Reading Jitsi otr4j format'
+        keys = tmp
+            #for k,v in tmp.items():
+            #keys[k] = v
+
+    if keys:
+        #pprint.pprint(keys)
+        GibberbotProperties.write(keys, 'output')
+        OtrFingerprints.write(keys, os.path.join('output', 'otr.fingerprints'))
+        OtrPrivateKeys.write(keys, os.path.join('output', 'otr.private_keys'))
+
+def usage():
+    print 'Usage: otrfileconverter [app] [write to folder]'
+    print '[app] must be one of: --adium, --irssi, --jitsi, --pidgin'
+    print '[write-to-folder] the folder to write otr_keystore to'
     sys.exit()
 
-keys = dict()
-for file in sys.argv[1:]:
-    appdir = os.path.dirname(file)
-    print 'Checking ' + appdir + ':'
+def main(argv):
+    if len(argv) == 0 or len(argv) > 2:
+        usage()
+    keys = None
+    app = argv[0]
+    if app == '--adium':
+        keys = AdiumProperties.parse()
+    elif app == '--jitsi':
+        keys = JitsiProperties.parse()
+    elif app == '--irssi':
+        keys = IrssiProperties.parse()
+    elif app == '--pidgin':
+        keys = PidginProperties.parse()
+    else:
+        usage()
+    if keys:
+        if len(argv) > 1:
+            tofolder = argv[1]
+            print tofolder
+        else:
+            tofolder = os.getcwd()
+        GibberbotProperties.write(keys, tofolder)
 
-    if os.path.exists(os.path.join(appdir, 'otr_keystore')):
-        isotr4j = True
-        isgibberbot = True
-    elif os.path.exists(os.path.join(appdir, 'sip-communicator.properties')) \
-        and os.path.exists(os.path.join(appdir, 'contactlist.xml')):
-        isotr4j = True
-        isjitsi = True
-    elif os.path.exists(os.path.join(appdir, 'otr.private_key')) \
-        and os.path.exists(os.path.join(appdir, 'otr.fingerprints')):
-        islibotr = True
-        if os.path.exists(os.path.join(appdir, 'Accounts.plist')):
-            isadium = True
-        elif os.path.exists(os.path.join(appdir, 'accounts.xml')):
-            ispidgin = True
-    elif os.path.exists(os.path.join(appdir, 'otr.key')) \
-        and os.path.exists(os.path.join(appdir, 'otr.fp')):
-        islibotr = True
-        isirssi = True
 
-    if isadium:
-        print 'Reading Adium files: '
-        tmp = AdiumProperties.parse(appdir)
-    elif isirssi:
-        print 'Reading irssi files: '
-        tmp = OtrPrivateKeys.parse(os.path.join(appdir, 'otr.key'))
-        keys += OtrFingerprints.parse(os.path.join(appdir, 'otr.fp'))
-    elif islibotr:
-        print 'Reading libotr files: '
-        tmp = OtrPrivateKeys.parse(os.path.join(appdir, 'otr.private_key'))
-        tmp += OtrFingerprints.parse(os.path.join(appdir, 'otr.fingerprints'))
-    elif isgibberbot:
-        print 'Reading Gibberbot otr4j format'
-        tmp = GibberbotProperties.parse(os.path.join(appdir, 'otr_keystore'))
-        pprint.pprint(tmp)
-    elif isjitsi:
-        print 'Reading Jitsi otr4j format'
-    keys = tmp
-        #for k,v in tmp.items():
-        #keys[k] = v
-
-if keys:
-    #pprint.pprint(keys)
-    GibberbotProperties.write(keys, 'output')
-    OtrFingerprints.write(keys, os.path.join('output', 'otr.fingerprints'))
-    OtrPrivateKeys.write(keys, os.path.join('output', 'otr.private_keys'))
+if __name__ == "__main__":
+    main(sys.argv[1:])
