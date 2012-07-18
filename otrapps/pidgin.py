@@ -20,8 +20,10 @@ class PidginProperties():
     def parse(settingsdir=None):
         if settingsdir == None:
             settingsdir = PidginProperties.path
-        keys = OtrPrivateKeys.parse(os.path.join(settingsdir, 'otr.private_key'))
-        keys += OtrFingerprints.parse(os.path.join(settingsdir, 'otr.fingerprints'))
+        if os.path.exists(os.path.join(settingsdir, 'otr.private_key')):
+            keys = OtrPrivateKeys.parse(os.path.join(settingsdir, 'otr.private_key'))
+        if os.path.exists(os.path.join(settingsdir, 'otr.fingerprints')):
+            keys += OtrFingerprints.parse(os.path.join(settingsdir, 'otr.fingerprints'))
         return keys
 
     @staticmethod
