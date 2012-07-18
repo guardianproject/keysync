@@ -31,6 +31,9 @@ This script needs a few python libs to work:
 	PPA: https://launchpad.net/~guardianproject/+archive/ppa then install:
 	apt-get install python-potr python-pyjavaproperties
 
+    For GUI support install the python tk toolkit:
+    sudo apt-get install python-tk
+
  Fink: 
     fink install pycrypto-py27 pyparsing-py27 pyjavaproperties-py27 \
         python-potr-py27 gnupg-interface-py27 pyasn1-py27
