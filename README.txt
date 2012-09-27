@@ -44,12 +44,12 @@ USAGE
 
 Currently, the code allows for reading multiple file formats into a python
 dictionary form.  The only export method currently activated is for Gibberbot
-format in a file called otr_keystore.  To use, point the 'otrfileconverter.py'
+format in a file called otr_keystore.  To use, point the 'otrfileconverter
 script the app that you want to read OTR info from, and it will generate
 'otr_keystore' to send to Gibberbot on your Android device (run
-./otrfileconverter.py --help to see all currently available options).
+./otrfileconverter --help to see all currently available options).
 
-  ./otrfileconverter.py --pidgin
+  ./otrfileconverter --pidgin
 
 You currently need to have root on your Android device in order to upload a
 new OTR keystore to Gibberbot.  Here's how:
