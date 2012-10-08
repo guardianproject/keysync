@@ -52,6 +52,11 @@ class JitsiProperties():
                     keydict[num] = numdict[num]
                 dsakey = DSAKey((keydict['y'], keydict['g'], keydict['p'], keydict['q']))
                 keydict['fingerprint'] = dsakey.cfingerprint()
+                verifiedkey = ('net.java.sip.communicator.plugin.otr.'
+                               + re.sub('[^a-zA-Z0-9_]', '_', keydict['name'])
+                               + '_publicKey_verified')
+                if p.getProperty(verifiedkey).strip() == 'true':
+                    keydict['verification'] = 'verified'
                 ret.append(keydict)
             elif (re.match('net\.java\.sip\.communicator\.plugin\.otr\..*_publicKey.verified', propkey)):
                 keydict = {}
