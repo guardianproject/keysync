@@ -5,8 +5,7 @@ import os
 import sys
 import pyjavaproperties
 import util
-
-# TODO parse public keys into fingerprints
+from potr.crypt import DSAKey
 
 class GibberbotProperties():
 
@@ -15,21 +14,24 @@ class GibberbotProperties():
     @staticmethod
     def parse(filename):
         '''parse the given file into the standard keydict'''
+        # the parsing and generation is done in separate passes so that
+        # multiple properties are combined into a single keydict per account,
+        # containing all of the fields
         p = pyjavaproperties.Properties()
         p.load(open(filename))
         parsed = []
         for item in p.items():
-            keydata = item[0]
-            if keydata.endswith('.publicKey'):
-                id = '.'.join(keydata.split('.')[0:-1])
+            propkey = item[0]
+            if propkey.endswith('.publicKey'):
+                id = '.'.join(propkey.split('.')[0:-1])
                 parsed.append(('public-key', id, item[1]))
-            if keydata.endswith('.publicKey.verified'):
-                keylist = keydata.split('.')
+            elif propkey.endswith('.publicKey.verified'):
+                keylist = propkey.split('.')
                 fingerprint = keylist[-3]
                 id = '.'.join(keylist[0:-3])
                 parsed.append(('verified', id, fingerprint))
-            if keydata.endswith('.privateKey'):
-                id = '.'.join(keydata.split('.')[0:-1])
+            elif propkey.endswith('.privateKey'):
+                id = '.'.join(propkey.split('.')[0:-1])
                 parsed.append(('private-key', id, item[1]))
         # create blank keys for all IDs
         keydict = dict()
@@ -40,23 +42,21 @@ class GibberbotProperties():
                 keydict[name]['name'] = name
                 keydict[name]['protocol'] = 'prpl-jabber'
             if keydata[0] == 'private-key':
-                #print 'private-key: ' + name + ' | ',
                 cleaned = keydata[2].replace('\\n', '')
                 numdict = util.ParsePkcs8(cleaned)
-                for num in ('q', 'p', 'g', 'x'):
+                for num in ('g', 'p', 'q', 'x'):
                     keydict[name][num] = numdict[num]
             elif keydata[0] == 'verified':
                 keydict[name]['verification'] = 'verified'
                 keydict[name]['fingerprint'] = keydata[2]
             elif keydata[0] == 'public-key':
-                #print 'public-key: ' + name + ' | ',
                 cleaned = keydata[2].replace('\\n', '')
                 numdict = util.ParseX509(cleaned)
-                for num in ('q', 'p', 'g', 'y'):
+                for num in ('y', 'g', 'p', 'q'):
                     keydict[name][num] = numdict[num]
-                keydict[name]['fingerprint'] = 'PLACEHOLDER'
-                #dsakey = DSAKey(keytuple)
-                #keydict['fingerprint'] = dsakey.cfingerprint()
+                dsakey = DSAKey((keydict[name]['y'], keydict[name]['g'],
+                                 keydict[name]['p'], keydict[name]['q']))
+                keydict['fingerprint'] = dsakey.cfingerprint()
         return keydict.values()
 
     @staticmethod
