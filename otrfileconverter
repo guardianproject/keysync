@@ -79,6 +79,8 @@ def testforfile(files):
 
     if keys:
         #pprint.pprint(keys)
+        if not os.path.exists('output'):
+            os.mkdir('output')
         GibberbotProperties.write(keys, 'output')
         OtrFingerprints.write(keys, os.path.join('output', 'otr.fingerprints'))
         OtrPrivateKeys.write(keys, os.path.join('output', 'otr.private_keys'))
