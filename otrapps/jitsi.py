@@ -42,22 +42,28 @@ class JitsiProperties():
 
                 propkey_base = ('net.java.sip.communicator.plugin.otr.'
                                 + re.sub('[^a-zA-Z0-9_]', '_', item[1]))
-                keydict['private-key'] = p.getProperty(propkey_base + '_privateKey')
-                keydict['public_key'] = p.getProperty(propkey_base + '_publicKey')
+                private_key = p.getProperty(propkey_base + '_privateKey').strip()
+                public_key = p.getProperty(propkey_base + '_publicKey').strip()
+                numdict = util.ParsePkcs8(private_key)
+                keydict['x'] = numdict['x']
+                numdict = util.ParseX509(public_key)
+                for num in ('y', 'g', 'p', 'q'):
+                    keydict[num] = numdict[num]
                 ret.append(keydict)
             elif (re.match('net\.java\.sip\.communicator\.plugin\.otr\..*_publicKey.verified', propkey)):
-                print propkey
                 keydict = {}
                 keydict['name'] = '.'.join(propkey.split('.')[-1].split('_')[0:-1])
                 keydict['verification'] = 'verified'
             elif (re.match('net\.java\.sip\.communicator\.plugin\.otr\..*_publicKey', propkey) and not
                   re.match('net\.java\.sip\.communicator\.plugin\.otr\.(Jabber_|Google_Talk_)', propkey)):
                 keydict = {}
+                keydict['protocol'] = 'prpl-jabber'
                 keydict['name'] = '.'.join(propkey.split('.')[-1].split('_')[0:-1])
-                keydict['public-key'] = item[1]
+                numdict = util.ParseX509(item[1])
+                for num in ('y', 'g', 'p', 'q'):
+                    keydict[num] = numdict[num]
                 ret.append(keydict)
         return ret
-
 
 
 #------------------------------------------------------------------------------#
