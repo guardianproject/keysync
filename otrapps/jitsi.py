@@ -6,6 +6,7 @@ import platform
 import re
 import sys
 from pyjavaproperties import Properties
+from potr.crypt import DSAKey
 
 import util
 
@@ -49,6 +50,8 @@ class JitsiProperties():
                 numdict = util.ParseX509(public_key)
                 for num in ('y', 'g', 'p', 'q'):
                     keydict[num] = numdict[num]
+                dsakey = DSAKey((keydict['y'], keydict['g'], keydict['p'], keydict['q']))
+                keydict['fingerprint'] = dsakey.cfingerprint()
                 ret.append(keydict)
             elif (re.match('net\.java\.sip\.communicator\.plugin\.otr\..*_publicKey.verified', propkey)):
                 keydict = {}
@@ -62,6 +65,8 @@ class JitsiProperties():
                 numdict = util.ParseX509(item[1])
                 for num in ('y', 'g', 'p', 'q'):
                     keydict[num] = numdict[num]
+                dsakey = DSAKey((keydict['y'], keydict['g'], keydict['p'], keydict['q']))
+                keydict['fingerprint'] = dsakey.cfingerprint()
                 ret.append(keydict)
         return ret
 
