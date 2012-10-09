@@ -5,7 +5,6 @@ import os
 import sys
 import pyjavaproperties
 import util
-from potr.crypt import DSAKey
 
 class GibberbotProperties():
 
@@ -54,9 +53,8 @@ class GibberbotProperties():
                 numdict = util.ParseX509(cleaned)
                 for num in ('y', 'g', 'p', 'q'):
                     keydict[name][num] = numdict[num]
-                dsakey = DSAKey((keydict[name]['y'], keydict[name]['g'],
-                                 keydict[name]['p'], keydict[name]['q']))
-                keydict['fingerprint'] = dsakey.cfingerprint()
+                fingerprint = util.fingerprint((numdict['y'], numdict['g'], numdict['p'], numdict['q']))
+                keydict[name]['fingerprint'] = fingerprint
         return keydict.values()
 
     @staticmethod

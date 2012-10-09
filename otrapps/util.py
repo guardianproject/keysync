@@ -34,6 +34,9 @@ from pyasn1.codec.der import decoder
 from pyasn1.codec.der import encoder
 from pyasn1.type import univ
 
+from potr.utils import bytes_to_long
+from potr.compatcrypto import DSAKey
+
 import errors
 
 HLEN = sha1().digest_size  # length of the hash output
@@ -392,3 +395,7 @@ def MGF(seed, mlen):
   for i in range(int(math.ceil(mlen / float(HLEN)))):
     output += Hash(seed, IntToBytes(i))
   return output[:mlen]
+
+
+def fingerprint(key):
+  return '{0:040x}'.format(bytes_to_long(DSAKey(key).fingerprint()))

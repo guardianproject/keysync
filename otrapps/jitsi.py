@@ -6,8 +6,6 @@ import platform
 import re
 import sys
 from pyjavaproperties import Properties
-from potr.crypt import DSAKey
-
 import util
 
 # the accounts, private/public keys, and fingerprints are in sip-communicator.properties
@@ -50,8 +48,7 @@ class JitsiProperties():
                 numdict = util.ParseX509(public_key)
                 for num in ('y', 'g', 'p', 'q'):
                     keydict[num] = numdict[num]
-                dsakey = DSAKey((keydict['y'], keydict['g'], keydict['p'], keydict['q']))
-                keydict['fingerprint'] = dsakey.cfingerprint()
+                keydict['fingerprint'] = util.fingerprint((keydict['y'], keydict['g'], keydict['p'], keydict['q']))
                 verifiedkey = ('net.java.sip.communicator.plugin.otr.'
                                + re.sub('[^a-zA-Z0-9_]', '_', keydict['name'])
                                + '_publicKey_verified')
@@ -70,8 +67,7 @@ class JitsiProperties():
                 numdict = util.ParseX509(item[1])
                 for num in ('y', 'g', 'p', 'q'):
                     keydict[num] = numdict[num]
-                dsakey = DSAKey((keydict['y'], keydict['g'], keydict['p'], keydict['q']))
-                keydict['fingerprint'] = dsakey.cfingerprint()
+                keydict['fingerprint'] = util.fingerprint((keydict['y'], keydict['g'], keydict['p'], keydict['q']))
                 ret.append(keydict)
         return ret
 
