@@ -6,6 +6,10 @@ import sys
 import pyjavaproperties
 import util
 
+def compare_fingerprints(fp0, fp1):
+  if fp0 != fp1:
+    print('Previous (' + fp0 + ') and current (' + fp1 + ") fingerprints don't match!")
+
 class GibberbotProperties():
 
     path = '/data/data/info.guardianproject.otr.app.im/files/otr_keystore'
@@ -47,13 +51,18 @@ class GibberbotProperties():
                     keydict[name][num] = numdict[num]
             elif keydata[0] == 'verified':
                 keydict[name]['verification'] = 'verified'
-                keydict[name]['fingerprint'] = keydata[2]
+                fingerprint = keydata[2].lower()
+                if 'fingerprint' in keydict[name]:
+                    compare_fingerprints(keydict[name]['fingerprint'], fingerprint)
+                keydict[name]['fingerprint'] = fingerprint
             elif keydata[0] == 'public-key':
                 cleaned = keydata[2].replace('\\n', '')
                 numdict = util.ParseX509(cleaned)
                 for num in ('y', 'g', 'p', 'q'):
                     keydict[name][num] = numdict[num]
                 fingerprint = util.fingerprint((numdict['y'], numdict['g'], numdict['p'], numdict['q']))
+                if 'fingerprint' in keydict[name]:
+                    compare_fingerprints(keydict[name]['fingerprint'], fingerprint)
                 keydict[name]['fingerprint'] = fingerprint
         return keydict.values()
 
