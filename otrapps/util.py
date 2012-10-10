@@ -398,4 +398,110 @@ def MGF(seed, mlen):
 
 
 def fingerprint(key):
+  '''generate the human readable form of the fingerprint as used in OTR'''
   return '{0:040x}'.format(bytes_to_long(DSAKey(key).fingerprint()))
+
+
+def check_and_set(key, k, v):
+  '''
+  Check if a key is already in the keydict, check its contents against the
+  supplied value.  If the key does not exist, then create a new entry in
+  keydict.  If the key exists and has a different value, throw an exception.
+  '''
+  if k in key:
+    if key[k] != v:
+      raise Exception('"' + k + '" values did not match: "' + key[k]
+                      + '" != "' + v + '"')
+  else:
+    key[k] = v
+
+def merge_keys(key1, key2):
+  '''merge the second key data into the first, checking for conflicts'''
+  for k, v in key2.iteritems():
+    check_and_set(key1, k, v)
+
+
+def merge_keydicts(kd1, kd2):
+  '''
+  given two keydicts, merge the second one into the first one and report errors
+  '''
+  for k, v in kd2.iteritems():
+    if k in kd1:
+      merge_keys(kd1[k], v)
+    else:
+      kd1[k] = v
+
+
+#------------------------------------------------------------------------------#
+# for testing from the command line:
+def main(argv):
+  import pprint
+
+  key = dict()
+  key['name'] = 'key'
+  key['test'] = 'yes, testing'
+  try:
+    check_and_set(key, 'test', 'no, this should break')
+  except Exception as e:
+    print 'Exception: ',
+    print e
+  print key['test']
+  check_and_set(key, 'test', 'yes, testing')
+  print key['test']
+  check_and_set(key, 'new', 'this is a new value')
+
+  key2 = dict()
+  key2['name'] = 'key'
+  key2['yat'] = 'yet another test';
+  merge_keys(key, key2)
+  print 'key: ',
+  pprint.pprint(key)
+
+  # now make trouble again
+  key2['test'] = 'yet another breakage'
+  try:
+    merge_keys(key, key2)
+  except Exception as e:
+    print 'Exception: ',
+    print e
+
+  # now let's try dicts of dicts aka 'keydict'
+  keydict = dict()
+  keydict['key'] = key
+  key3 = dict()
+  key3['name'] = 'key'
+  key3['protocol'] = 'prpl-jabber'
+  key4 = dict()
+  key4['name'] = 'key4'
+  key4['protocol'] = 'prpl-jabber'
+  key4['fingerprint'] = 'gotone'
+  key4['teststate'] = 'this one should not be merged'
+  key5 = dict()
+  key5['name'] = 'key'
+  key5['protocol'] = 'prpl-jabber'
+  key5['moreinfo'] = 'even more!'
+  keydict2 = dict()
+  keydict2['key'] = key3
+  keydict2['key'] = key5
+  keydict2['key4'] = key4
+  merge_keydicts(keydict, keydict2)
+  pprint.pprint(keydict)
+
+  # one more test
+  print('---------------------------')
+  key6 = dict()
+  key6['name'] = 'key'
+  keydict3 = dict()
+  keydict3['key'] = key6
+  pprint.pprint(keydict3['key'])
+  merge_keys(keydict3['key'], key3)
+  pprint.pprint(keydict3['key'])
+  merge_keys(keydict3['key'], key5)
+  pprint.pprint(keydict3['key'])
+
+
+if __name__ == "__main__":
+  import sys
+  main(sys.argv[1:])
+
+
