@@ -25,7 +25,7 @@ This script needs a few python libs to work:
 
  Debian/Ubuntu/Mint: 
     sudo apt-get install python-crypto python-pyparsing \
-    python-gnupginterface python-pyasn1
+    python-gnupginterface python-pyasn1 python-beautifulsoup
     
     There are two packages not yet in Debian, you can get them from our
 	PPA: https://launchpad.net/~guardianproject/+archive/ppa then install:
@@ -36,7 +36,7 @@ This script needs a few python libs to work:
 
  Fink: 
     fink install pycrypto-py27 pyparsing-py27 pyjavaproperties-py27 \
-        python-potr-py27 gnupg-interface-py27 pyasn1-py27
+        python-potr-py27 gnupg-interface-py27 pyasn1-py27 beautifulsoup-py27
 
 =====
 USAGE

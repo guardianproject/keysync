@@ -6,7 +6,9 @@ import platform
 import re
 import sys
 from pyjavaproperties import Properties
+from BeautifulSoup import BeautifulSoup
 import util
+
 
 # the accounts, private/public keys, and fingerprints are in sip-communicator.properties
 # the contacts list is in contactlist.xml
@@ -25,6 +27,25 @@ class JitsiProperties():
         username, domain, server = uidstring.split(':')[1].split('@')
         return username + '@' + domain
 
+
+    @staticmethod
+    def _parse_account_from_propkey(settingsdir, propkey):
+        '''give a Java Properties key, parse out a real account UID, based on
+        what's listed in contactlist.xml'''
+        # jitsi stores the account name in the properties key, so it strips the @ out
+        name_from_prop = '.'.join(propkey.split('.')[-1].split('_')[0:-2])
+        # so let's find where the @ was originally placed:
+        xml = ''
+        for line in open(os.path.join(settingsdir, 'contactlist.xml'), 'r').readlines():
+            xml += line
+        name = None
+        for e in BeautifulSoup(xml).findAll('display-name'):
+            if re.match(name_from_prop, e.text):
+                name = e.text
+                break
+        return str(name)
+
+
     @staticmethod
     def parse(settingsdir=None):
         if settingsdir == None:
@@ -36,10 +57,14 @@ class JitsiProperties():
             propkey = item[0]
             name = ''
             if re.match('net\.java\.sip\.communicator\.impl\.protocol\.jabber\.acc[0-9]+\.ACCOUNT_UID', propkey):
-                key = dict()
                 name = JitsiProperties._parse_account_uid(item[1])
-                key['name'] = name
-                key['protocol'] = 'prpl-jabber'
+                if name in keydict:
+                    key = keydict[name]
+                else:
+                    key = dict()
+                    key['name'] = name
+                    key['protocol'] = 'prpl-jabber'
+                    keydict[name] = key
 
                 propkey_base = ('net.java.sip.communicator.plugin.otr.'
                                 + re.sub('[^a-zA-Z0-9_]', '_', item[1]))
@@ -56,27 +81,26 @@ class JitsiProperties():
                                + '_publicKey_verified')
                 if p.getProperty(verifiedkey).strip() == 'true':
                     key['verification'] = 'verified'
-                keydict[name] = key
             elif (re.match('net\.java\.sip\.communicator\.plugin\.otr\..*_publicKey_verified', propkey)):
-                key = dict()
-                name = '.'.join(propkey.split('.')[-1].split('_')[0:-2])
-                key['name'] = name
-                key['verification'] = 'verified'
-                if name in keydict:
-                    util.merge_keys(keydict[name], key)
-                else:
-                    keydict[name] = key
+                name = JitsiProperties._parse_account_from_propkey(settingsdir, propkey)
+                if name != None:
+                    if name not in keydict:
+                        key = dict()
+                        key['name'] = name
+                        keydict[name] = key
+                    keydict[name]['verification'] = 'verified'
             elif (re.match('net\.java\.sip\.communicator\.plugin\.otr\..*_publicKey', propkey) and not
                   re.match('net\.java\.sip\.communicator\.plugin\.otr\.(Jabber_|Google_Talk_)', propkey)):
-                key = dict()
-                name = '.'.join(propkey.split('.')[-1].split('_')[0:-1])
-                key['name'] = name
-                key['protocol'] = 'prpl-jabber'
+                name = JitsiProperties._parse_account_from_propkey(settingsdir, propkey)
+                if name not in keydict:
+                    key = dict()
+                    key['name'] = name
+                    key['protocol'] = 'prpl-jabber'
+                    keydict[name] = key
                 numdict = util.ParseX509(item[1])
                 for num in ('y', 'g', 'p', 'q'):
                     key[num] = numdict[num]
                 key['fingerprint'] = util.fingerprint((key['y'], key['g'], key['p'], key['q']))
-                keydict[name] = key
         return keydict
 
 
