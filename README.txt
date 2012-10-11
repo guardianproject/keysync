@@ -168,3 +168,21 @@ specification to get detailed information about the ZID.
   3072 bit Diffie-Helman values
   256 bit Diffie-Helman elliptic curve
   384 bit Diffie-Helman elliptic curve 
+
+
+
+==============
+IMPLEMENTATION
+==============
+
+The key idea in the implementation is to get everything into a common format
+internally.  That common format can then be handed to any class for a given
+program, which knows how to output it to the correct file format.  The current
+internal data format is a dict of dicts representing a key, called 'keydict'.
+So first, you have a dict representing a given account with a given key
+associated with it.  This account name is used as the unique ID.  Then the
+whole collection of keys, both local private keys and remote public keys, are
+collected in meta dict with the account name as the key and the whole dict as
+the value. This format allows for easy merging, which enables syncing between
+files.
+

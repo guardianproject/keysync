@@ -64,13 +64,13 @@ class GibberbotProperties():
                 if 'fingerprint' in keydict[name]:
                     compare_fingerprints(keydict[name]['fingerprint'], fingerprint)
                 keydict[name]['fingerprint'] = fingerprint
-        return keydict.values()
+        return keydict
 
     @staticmethod
-    def write(keys, savedir):
+    def write(keydict, savedir):
         '''given a list of keydicts, generate a gibberbot file'''
         p = pyjavaproperties.Properties()
-        for key in keys:
+        for k, key in keydict.iteritems():
             if 'y' in key:
                 p.setProperty(key['name'] + '.publicKey', util.ExportDsaX509(key))
             if 'x' in key:

@@ -62,37 +62,40 @@ class OtrPrivateKeys():
             data += line
         f.close()
 
-        keys = []
         sexplist = OtrPrivateKeys.parse_sexp(data)
-        for key in sexplist:
-            if key[0] == "account":
-                keydict = {}
-                for element in key:
+        keydict = dict()
+        for sexpkey in sexplist:
+            if sexpkey[0] == "account":
+                key = dict()
+                name = ''
+                for element in sexpkey:
+                    # 'name' must be the first element in the sexp or BOOM!
                     if element[0] == "name":
                         if element[1].find('/') > -1:
                             name, resource = element[1].split('/')
-                            keydict['name'] = name.strip()
-                            keydict['resource'] = resource.strip()
                         else:
-                            keydict['name'] = element[1].strip()
-                            keydict['resource'] = ''
-                    elif element[0] == "protocol":
-                        keydict['protocol'] = element[1]
+                            name = element[1].strip()
+                            resource = ''
+                        key = dict()
+                        key['name'] = name.strip()
+                        key['resource'] = resource.strip()
+                    if element[0] == "protocol":
+                        key['protocol'] = element[1]
                     elif element[0] == "private-key":
                         if element[1][0] == 'dsa':
-                            keydict['type'] = 'dsa';
+                            key['type'] = 'dsa';
                             for num in element[1][1:6]:
-                                keydict[num[0]] = num[1]
-                keytuple = (keydict['y'], keydict['g'], keydict['p'], keydict['q'])
-                keydict['fingerprint'] = util.fingerprint(keytuple)
-                keys.append(keydict)
-        return keys
+                                key[num[0]] = num[1]
+                keytuple = (key['y'], key['g'], key['p'], key['q'])
+                key['fingerprint'] = util.fingerprint(keytuple)
+                keydict[name] = key
+        return keydict
 
 
     @staticmethod
-    def write(keys, filename):
+    def write(keydict, filename):
         privkeys = '(privkeys\n'
-        for key in keys:
+        for key, v in keydict.iteritems():
             if 'x' in key:
                 dsa = '    (p #' + ('%0258X' % key['p']) + '#)\n'
                 dsa += '    (q #' + ('%042X' % key['q']) + '#)\n'
@@ -107,7 +110,6 @@ class OtrPrivateKeys():
         f = open(filename, 'w')
         f.write(privkeys)
         f.close()
-        #print privkeys
 
 if __name__ == "__main__":
     import sys

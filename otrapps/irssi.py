@@ -5,6 +5,7 @@ import os
 import platform
 import sys
 import plistlib
+import util
 
 from otr_private_key import OtrPrivateKeys
 from otr_fingerprints import OtrFingerprints
@@ -17,9 +18,18 @@ class IrssiProperties():
     def parse(settingsdir=None):
         if settingsdir == None:
             settingsdir = IrssiProperties.path
-        keys = OtrPrivateKeys.parse(os.path.join(settingsdir, 'otr.key'))
-        keys += OtrFingerprints.parse(os.path.join(settingsdir, 'otr.fp'))
-        return keys
+
+        kf = os.path.join(settingsdir, 'otr.key')
+        if os.path.exists(kf):
+            keydict = OtrPrivateKeys.parse(kf)
+        else:
+            keydict = dict()
+
+        fpf = os.path.join(settingsdir, 'otr.fp')
+        if os.path.exists(fpf):
+            util.merge_keydicts(keydict, OtrFingerprints.parse(fpf))
+
+        return keydict
 
     @staticmethod
     def write(keys, savedir):

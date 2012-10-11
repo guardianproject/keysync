@@ -94,25 +94,25 @@ def usage():
 def main(argv):
     if len(argv) == 0 or len(argv) > 2:
         usage()
-    keys = None
+    keydict = None
     app = argv[0]
     if app == '--adium':
-        keys = AdiumProperties.parse()
+        keydict = AdiumProperties.parse()
     elif app == '--jitsi':
-        keys = JitsiProperties.parse()
+        keydict = JitsiProperties.parse()
     elif app == '--irssi':
-        keys = IrssiProperties.parse()
+        keydict = IrssiProperties.parse()
     elif app == '--pidgin':
-        keys = PidginProperties.parse()
+        keydict = PidginProperties.parse()
     else:
         usage()
-    if keys:
+    if keydict:
         if len(argv) > 1:
             tofolder = argv[1]
             print tofolder
         else:
             tofolder = os.getcwd()
-        GibberbotProperties.write(keys, tofolder)
+        GibberbotProperties.write(keydict, tofolder)
 
 
 if __name__ == "__main__":

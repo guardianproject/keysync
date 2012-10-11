@@ -5,6 +5,7 @@ import os
 import platform
 import sys
 import plistlib
+import util
 
 from otr_private_key import OtrPrivateKeys
 from otr_fingerprints import OtrFingerprints
@@ -20,11 +21,18 @@ class PidginProperties():
     def parse(settingsdir=None):
         if settingsdir == None:
             settingsdir = PidginProperties.path
-        if os.path.exists(os.path.join(settingsdir, 'otr.private_key')):
-            keys = OtrPrivateKeys.parse(os.path.join(settingsdir, 'otr.private_key'))
-        if os.path.exists(os.path.join(settingsdir, 'otr.fingerprints')):
-            keys += OtrFingerprints.parse(os.path.join(settingsdir, 'otr.fingerprints'))
-        return keys
+
+        kf = os.path.join(settingsdir, 'otr.private_key')
+        if os.path.exists(kf):
+            keydict = OtrPrivateKeys.parse(kf)
+        else:
+            keydict = dict()
+
+        fpf = os.path.join(settingsdir, 'otr.fingerprints')
+        if os.path.exists(fpf):
+            util.merge_keydicts(keydict, OtrFingerprints.parse(fpf))
+
+        return keydict
 
     @staticmethod
     def write(keys, savedir):

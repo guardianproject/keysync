@@ -31,50 +31,59 @@ class JitsiProperties():
             settingsdir = JitsiProperties.path
         p = Properties()
         p.load(open(os.path.join(settingsdir, 'sip-communicator.properties')))
-        ret = []
+        keydict = dict()
         for item in p.items():
             propkey = item[0]
+            name = ''
             if re.match('net\.java\.sip\.communicator\.impl\.protocol\.jabber\.acc[0-9]+\.ACCOUNT_UID', propkey):
-                keydict = {}
-                keydict['protocol'] = 'prpl-jabber'
-                keydict['name'] = JitsiProperties._parse_account_uid(item[1])
+                key = dict()
+                name = JitsiProperties._parse_account_uid(item[1])
+                key['name'] = name
+                key['protocol'] = 'prpl-jabber'
 
                 propkey_base = ('net.java.sip.communicator.plugin.otr.'
                                 + re.sub('[^a-zA-Z0-9_]', '_', item[1]))
                 private_key = p.getProperty(propkey_base + '_privateKey').strip()
                 public_key = p.getProperty(propkey_base + '_publicKey').strip()
                 numdict = util.ParsePkcs8(private_key)
-                keydict['x'] = numdict['x']
+                key['x'] = numdict['x']
                 numdict = util.ParseX509(public_key)
                 for num in ('y', 'g', 'p', 'q'):
-                    keydict[num] = numdict[num]
-                keydict['fingerprint'] = util.fingerprint((keydict['y'], keydict['g'], keydict['p'], keydict['q']))
+                    key[num] = numdict[num]
+                key['fingerprint'] = util.fingerprint((key['y'], key['g'], key['p'], key['q']))
                 verifiedkey = ('net.java.sip.communicator.plugin.otr.'
-                               + re.sub('[^a-zA-Z0-9_]', '_', keydict['name'])
+                               + re.sub('[^a-zA-Z0-9_]', '_', key['name'])
                                + '_publicKey_verified')
                 if p.getProperty(verifiedkey).strip() == 'true':
-                    keydict['verification'] = 'verified'
-                ret.append(keydict)
-            elif (re.match('net\.java\.sip\.communicator\.plugin\.otr\..*_publicKey.verified', propkey)):
-                keydict = {}
-                keydict['name'] = '.'.join(propkey.split('.')[-1].split('_')[0:-1])
-                keydict['verification'] = 'verified'
+                    key['verification'] = 'verified'
+                keydict[name] = key
+            elif (re.match('net\.java\.sip\.communicator\.plugin\.otr\..*_publicKey_verified', propkey)):
+                key = dict()
+                name = '.'.join(propkey.split('.')[-1].split('_')[0:-2])
+                key['name'] = name
+                key['verification'] = 'verified'
+                if name in keydict:
+                    util.merge_keys(keydict[name], key)
+                else:
+                    keydict[name] = key
             elif (re.match('net\.java\.sip\.communicator\.plugin\.otr\..*_publicKey', propkey) and not
                   re.match('net\.java\.sip\.communicator\.plugin\.otr\.(Jabber_|Google_Talk_)', propkey)):
-                keydict = {}
-                keydict['protocol'] = 'prpl-jabber'
-                keydict['name'] = '.'.join(propkey.split('.')[-1].split('_')[0:-1])
+                key = dict()
+                name = '.'.join(propkey.split('.')[-1].split('_')[0:-1])
+                key['name'] = name
+                key['protocol'] = 'prpl-jabber'
                 numdict = util.ParseX509(item[1])
                 for num in ('y', 'g', 'p', 'q'):
-                    keydict[num] = numdict[num]
-                keydict['fingerprint'] = util.fingerprint((keydict['y'], keydict['g'], keydict['p'], keydict['q']))
-                ret.append(keydict)
-        return ret
+                    key[num] = numdict[num]
+                key['fingerprint'] = util.fingerprint((key['y'], key['g'], key['p'], key['q']))
+                keydict[name] = key
+        return keydict
 
 
 #------------------------------------------------------------------------------#
 # for testing from the command line:
 def main(argv):
+    import pprint
 
     print 'Jitsi stores its files in ' + JitsiProperties.path
 
@@ -85,8 +94,7 @@ def main(argv):
 
     p = JitsiProperties.parse(settingsdir)
     print '----------------------------------------'
-    for item in p:
-        print item
+    pprint.pprint(p)
     print '----------------------------------------'
 
 if __name__ == "__main__":

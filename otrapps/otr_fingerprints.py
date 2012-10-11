@@ -9,15 +9,16 @@ class OtrFingerprints():
     def parse(filename):
         '''parse the otr.fingerprints file and return a list of keydicts'''
         tsv = csv.reader(open(filename, 'r'), delimiter='\t')
-        keys = []
+        keydict = dict()
         for row in tsv:
-            keydict = {}
-            keydict['name'] = row[0].strip()
-            keydict['protocol'] = row[2].strip()
-            keydict['fingerprint'] = row[3].strip()
-            keydict['verification'] = row[4].strip()
-            keys.append(keydict)
-        return keys
+            key = dict()
+            name = row[0].strip()
+            key['name'] = name
+            key['protocol'] = row[2].strip()
+            key['fingerprint'] = row[3].strip()
+            key['verification'] = row[4].strip()
+            keydict[name] = key
+        return keydict
 
     @staticmethod
     def write(keys, filename):
