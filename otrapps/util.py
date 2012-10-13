@@ -410,7 +410,12 @@ def check_and_set(key, k, v):
   '''
   if k in key:
     if key[k] != v:
-      raise Exception('"' + k + '" values did not match: "' + key[k]
+      if 'name' in key:
+        name = key['name']
+      else:
+        name = '(unknown)'
+      # this should be an Exception so that the GUI can catch it to handle it
+      print('"' + k + '" values for "' + name + '" did not match: \n\t"' + key[k]
                       + '" != "' + v + '"')
   else:
     key[k] = v
