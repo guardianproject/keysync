@@ -97,6 +97,7 @@ irssi
   differently, basically abbreviated versions of the libotr names.
   Account IDs are used directly in the libotr files.
 
+
 otr4j
 -----
 
@@ -124,6 +125,27 @@ Jitsi:
   All app settings are stored in a single Java .properties file,
   including OTR information. Private keys, public key fingerprints,
   and verification status are each individual properties.
+
+
+pure-python-otr
+---------------
+
+pure-python-otr is pure python implementation of the OTR spec.  It
+includes newer features like Socialist Millionaire's Protocol.  The
+private key is stored in a separate file per-account.  The
+fingerprints are stored in the same tab-separated-value format as
+libotr but with a fingerprint file per-account.
+
+Gajim:
+  GNU/Linux:
+    ~/.local/share/gajim/_SERVERNAME_.key3
+    ~/.local/share/gajim/_SERVERNAME_.fpr
+    ~/.config/gajim/config
+  Windows:
+    ~/Application Data/Gajim/
+
+weechat:
+
 
 keyczar
 -------
