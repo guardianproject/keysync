@@ -16,6 +16,15 @@ class AdiumProperties():
     fingerprintfile = 'otr.fingerprints'
 
     @staticmethod
+    def _get_accounts_from_plist(settingsdir):
+        '''get dict of accounts from Accounts.plist'''
+        # convert index numbers used for the name into the actual account name
+        accountsfile = os.path.join(settingsdir, 'Accounts.plist')
+        # make sure the plist is in XML format, not binary
+        os.system("plutil -convert xml1 '" + accountsfile + "'")
+        return plistlib.readPlist(accountsfile)['Accounts']
+
+    @staticmethod
     def parse(settingsdir=None):
         if settingsdir == None:
             settingsdir = AdiumProperties.path
@@ -26,11 +35,7 @@ class AdiumProperties():
         else:
             keydict = dict()
 
-        # convert index numbers used for the name into the actual account name
-        accountsfile = os.path.join(settingsdir, 'Accounts.plist')
-        # make sure the plist is in XML format, not binary
-        os.system("plutil -convert xml1 '" + accountsfile + "'")
-        accounts = plistlib.readPlist(accountsfile)['Accounts']
+        accounts = AdiumProperties._get_accounts_from_plist(settingsdir)
         newkeydict = dict()
         for adiumIndex, key in keydict.iteritems():
             for account in accounts:
@@ -55,10 +60,9 @@ class AdiumProperties():
         OtrPrivateKeys.write(keydict, kf)
 
         accounts = []
-        # look for all private keys and use them for the accounts list
-        for name, key in keydict.iteritems():
-            if 'x' in key:
-                accounts.append(name)
+        accountsplist = AdiumProperties._get_accounts_from_plist(settingsdir)
+        for account in accountsplist:
+            accounts.append(account['ObjectID'])
         fpf = os.path.join(savedir, AdiumProperties.fingerprintfile)
         OtrFingerprints.write(keydict, fpf, accounts)
 
