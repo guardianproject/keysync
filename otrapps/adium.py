@@ -4,6 +4,7 @@
 import os
 import plistlib
 import sys
+import util
 
 from otr_private_key import OtrPrivateKeys
 from otr_fingerprints import OtrFingerprints
@@ -16,17 +17,32 @@ class AdiumProperties():
     def parse(settingsdir=None):
         if settingsdir == None:
             settingsdir = AdiumProperties.path
-        keys = OtrPrivateKeys.parse(os.path.join(settingsdir, 'otr.private_key'))
-        keys += OtrFingerprints.parse(os.path.join(settingsdir, 'otr.fingerprints'))
+
+        kf = os.path.join(settingsdir, 'otr.private_key')
+        if os.path.exists(kf):
+            keydict = OtrPrivateKeys.parse(kf)
+        else:
+            keydict = dict()
+
+        # convert index numbers used for the name into the actual account name
         accountsfile = os.path.join(settingsdir, 'Accounts.plist')
         # make sure the plist is in XML format, not binary
         os.system("plutil -convert xml1 '" + accountsfile + "'")
         accounts = plistlib.readPlist(accountsfile)['Accounts']
-        for key in keys:
+        newkeydict = dict()
+        for adiumIndex, key in keydict.iteritems():
             for account in accounts:
                 if account['ObjectID'] == key['name']:
-                    key['name'] = account['UID']
-        return keys
+                    name = account['UID']
+                    key['name'] = name
+                    newkeydict[name] = key
+        keydict = newkeydict
+
+        fpf = os.path.join(settingsdir, 'otr.fingerprints')
+        if os.path.exists(fpf):
+            util.merge_keydicts(keydict, OtrFingerprints.parse(fpf))
+
+        return keydict
 
     @staticmethod
     def write():
