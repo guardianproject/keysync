@@ -21,19 +21,25 @@ class OtrFingerprints():
         return keydict
 
     @staticmethod
-    def write(keys, filename):
+    def write(keydict, filename, accounts):
+        # we have to use this list 'accounts' rather than the private
+        # keys in the keydict in order to support apps like Adium that
+        # don't use the actual account ID as the index in the files.
         tsv = csv.writer(open(filename, 'w'), delimiter='\t')
-        for key in keys:
+        for name, key in keydict.iteritems():
             if 'fingerprint' in key:
-                # TODO look up accounts to associate remote accounts to
-                row = ['PLACEHOLDER', key['name'], key['protocol'], key['fingerprint']]
-                if 'verification' in key and key['verification'] != None:
-                    row.append(key['verification'])
-                tsv.writerow(row)
+                for account in accounts:
+                    row = [key['name'], account, key['protocol'], key['fingerprint']]
+                    if 'verification' in key and key['verification'] != None:
+                        row.append(key['verification'])
+                    tsv.writerow(row)
 
 
 if __name__ == '__main__':
 
     import sys
     import pprint
-    pprint.pprint(OtrFingerprints.parse(sys.argv[1]))
+    keydict = OtrFingerprints.parse(sys.argv[1])
+    pprint.pprint(keydict)
+    accounts = [ 'gptest@jabber.org', 'gptest@limun.org', 'hans@eds.org']
+    OtrFingerprints.write(keydict, 'otr.fingerprints', accounts)
