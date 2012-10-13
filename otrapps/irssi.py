@@ -13,19 +13,21 @@ from otr_fingerprints import OtrFingerprints
 class IrssiProperties():
 
     path = os.path.expanduser('~/.irssi/otr')
+    keyfile = 'otr.key'
+    fingerprintfile = 'otr.fp'
 
     @staticmethod
     def parse(settingsdir=None):
         if settingsdir == None:
             settingsdir = IrssiProperties.path
 
-        kf = os.path.join(settingsdir, 'otr.key')
+        kf = os.path.join(settingsdir, IrssiProperties.keyfile)
         if os.path.exists(kf):
             keydict = OtrPrivateKeys.parse(kf)
         else:
             keydict = dict()
 
-        fpf = os.path.join(settingsdir, 'otr.fp')
+        fpf = os.path.join(settingsdir, IrssiProperties.fingerprintfile)
         if os.path.exists(fpf):
             util.merge_keydicts(keydict, OtrFingerprints.parse(fpf))
 
@@ -33,7 +35,20 @@ class IrssiProperties():
 
     @staticmethod
     def write(keys, savedir):
-        pass
+        if not os.path.exists(savedir):
+            raise Exception('"' + savedir + '" does not exist!')
+
+        kf = os.path.join(savedir, IrssiProperties.keyfile)
+        OtrPrivateKeys.write(keydict, kf)
+
+        accounts = []
+        # look for all private keys and use them for the accounts list
+        for name, key in keydict.iteritems():
+            if 'x' in key:
+                accounts.append(name)
+        fpf = os.path.join(savedir, IrssiProperties.fingerprintfile)
+        OtrFingerprints.write(keydict, fpf, accounts)
+
 
 if __name__ == '__main__':
 
@@ -46,5 +61,7 @@ if __name__ == '__main__':
     else:
         settingsdir = '../tests/irssi'
 
-    l = IrssiProperties.parse(settingsdir)
-    pprint.pprint(l)
+    keydict = IrssiProperties.parse(settingsdir)
+    pprint.pprint(keydict)
+
+    IrssiProperties.write(keydict, '/tmp')

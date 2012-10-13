@@ -16,19 +16,21 @@ class PidginProperties():
         path = os.path.expanduser('~/Application Data/.purple')
     else:
         path = os.path.expanduser('~/.purple')
+    keyfile = 'otr.private_key'
+    fingerprintfile = 'otr.fingerprints'
 
     @staticmethod
     def parse(settingsdir=None):
         if settingsdir == None:
             settingsdir = PidginProperties.path
 
-        kf = os.path.join(settingsdir, 'otr.private_key')
+        kf = os.path.join(settingsdir, PidginProperties.keyfile)
         if os.path.exists(kf):
             keydict = OtrPrivateKeys.parse(kf)
         else:
             keydict = dict()
 
-        fpf = os.path.join(settingsdir, 'otr.fingerprints')
+        fpf = os.path.join(settingsdir, PidginProperties.fingerprintfile)
         if os.path.exists(fpf):
             util.merge_keydicts(keydict, OtrFingerprints.parse(fpf))
 
@@ -36,7 +38,20 @@ class PidginProperties():
 
     @staticmethod
     def write(keys, savedir):
-        pass
+        if not os.path.exists(savedir):
+            raise Exception('"' + savedir + '" does not exist!')
+
+        kf = os.path.join(savedir, PidginProperties.keyfile)
+        OtrPrivateKeys.write(keydict, kf)
+
+        accounts = []
+        # look for all private keys and use them for the accounts list
+        for name, key in keydict.iteritems():
+            if 'x' in key:
+                accounts.append(name)
+        fpf = os.path.join(savedir, PidginProperties.fingerprintfile)
+        OtrFingerprints.write(keydict, fpf, accounts)
+
 
 if __name__ == '__main__':
 
@@ -49,5 +64,7 @@ if __name__ == '__main__':
     else:
         settingsdir = '../tests/pidgin'
 
-    l = PidginProperties.parse(settingsdir)
-    pprint.pprint(l)
+    keydict = PidginProperties.parse(settingsdir)
+    pprint.pprint(keydict)
+
+    PidginProperties.write(keydict, '/tmp')

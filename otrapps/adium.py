@@ -12,13 +12,15 @@ from otr_fingerprints import OtrFingerprints
 class AdiumProperties():
 
     path = os.path.expanduser('~/Library/Application Support/Adium 2.0/Users/Default')
+    keyfile = 'otr.private_key'
+    fingerprintfile = 'otr.fingerprints'
 
     @staticmethod
     def parse(settingsdir=None):
         if settingsdir == None:
             settingsdir = AdiumProperties.path
 
-        kf = os.path.join(settingsdir, 'otr.private_key')
+        kf = os.path.join(settingsdir, AdiumProperties.keyfile)
         if os.path.exists(kf):
             keydict = OtrPrivateKeys.parse(kf)
         else:
@@ -38,15 +40,27 @@ class AdiumProperties():
                     newkeydict[name] = key
         keydict = newkeydict
 
-        fpf = os.path.join(settingsdir, 'otr.fingerprints')
+        fpf = os.path.join(settingsdir, AdiumProperties.fingerprintfile)
         if os.path.exists(fpf):
             util.merge_keydicts(keydict, OtrFingerprints.parse(fpf))
 
         return keydict
 
     @staticmethod
-    def write():
-        print 'AdiumProperties.write() is not implemented'
+    def write(keydict, savedir='./'):
+        if not os.path.exists(savedir):
+            raise Exception('"' + savedir + '" does not exist!')
+
+        kf = os.path.join(savedir, AdiumProperties.keyfile)
+        OtrPrivateKeys.write(keydict, kf)
+
+        accounts = []
+        # look for all private keys and use them for the accounts list
+        for name, key in keydict.iteritems():
+            if 'x' in key:
+                accounts.append(name)
+        fpf = os.path.join(savedir, AdiumProperties.fingerprintfile)
+        OtrFingerprints.write(keydict, fpf, accounts)
 
 
 if __name__ == '__main__':
@@ -59,5 +73,7 @@ if __name__ == '__main__':
         settingsdir = sys.argv[1]
     else:
         settingsdir = '../tests/adium'
-    l = AdiumProperties.parse(settingsdir)
-    pprint.pprint(l)
+    keydict = AdiumProperties.parse(settingsdir)
+    pprint.pprint(keydict)
+
+    AdiumProperties.write(keydict, '/tmp')
