@@ -430,11 +430,11 @@ def merge_keydicts(kd1, kd2):
   '''
   given two keydicts, merge the second one into the first one and report errors
   '''
-  for k, v in kd2.iteritems():
-    if k in kd1:
-      merge_keys(kd1[k], v)
+  for name, key in kd2.iteritems():
+    if name in kd1:
+      merge_keys(kd1[name], key)
     else:
-      kd1[k] = v
+      kd1[name] = key
 
 
 #------------------------------------------------------------------------------#

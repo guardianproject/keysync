@@ -60,9 +60,9 @@ class GibberbotProperties():
 
     @staticmethod
     def write(keydict, savedir):
-        '''given a list of keydicts, generate a gibberbot file'''
+        '''given a keydict, generate a gibberbot file in the savedir'''
         p = pyjavaproperties.Properties()
-        for k, key in keydict.iteritems():
+        for name, key in keydict.iteritems():
             if 'y' in key:
                 p.setProperty(key['name'] + '.publicKey', util.ExportDsaX509(key))
             if 'x' in key:
