@@ -27,13 +27,13 @@ class OtrPrivateKeys():
         bytes = Word(printables)
         raw = Group(decimal.setResultsName("len") + Suppress(":") + bytes).setParseAction(OtrPrivateKeys.verifyLen)
         token = Word(alphanums + "-./_:*+=")
-        base64_ = Group(Optional(decimal,default=None).setResultsName("len") + VBAR 
+        base64_ = Group(Optional(decimal,default=None).setResultsName("len") + VBAR
             + OneOrMore(Word( alphanums +"+/=" )).setParseAction(lambda t: b64decode("".join(t)))
             + VBAR).setParseAction(OtrPrivateKeys.verifyLen)
 
         hexadecimal = ("#" + OneOrMore(Word(hexnums)) + "#")\
                         .setParseAction(lambda t: int("".join(t[1:-1]),16))
-        qString = Group(Optional(decimal,default=None).setResultsName("len") + 
+        qString = Group(Optional(decimal,default=None).setResultsName("len") +
                                 dblQuotedString.setParseAction(removeQuotes)).setParseAction(OtrPrivateKeys.verifyLen)
         simpleString = raw | token | base64_ | hexadecimal | qString
 
