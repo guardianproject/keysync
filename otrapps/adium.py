@@ -60,7 +60,7 @@ class AdiumProperties():
         OtrPrivateKeys.write(keydict, kf)
 
         accounts = []
-        accountsplist = AdiumProperties._get_accounts_from_plist(settingsdir)
+        accountsplist = AdiumProperties._get_accounts_from_plist(savedir)
         for account in accountsplist:
             accounts.append(account['ObjectID'])
         fpf = os.path.join(savedir, AdiumProperties.fingerprintfile)

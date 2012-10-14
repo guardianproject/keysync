@@ -37,7 +37,7 @@ class PidginProperties():
         return keydict
 
     @staticmethod
-    def write(keys, savedir):
+    def write(keydict, savedir):
         if not os.path.exists(savedir):
             raise Exception('"' + savedir + '" does not exist!')
 
