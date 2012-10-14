@@ -24,7 +24,7 @@ INSTALL
 This script needs a few python libs to work:
 
  Debian/Ubuntu/Mint: 
-    sudo apt-get install python-crypto python-pyparsing \
+    sudo apt-get install python-crypto python-pyparsing python-argparse \
     python-gnupginterface python-pyasn1 python-beautifulsoup
     
     There are two packages not yet in Debian, you can get them from our
@@ -35,7 +35,7 @@ This script needs a few python libs to work:
     sudo apt-get install python-tk
 
  Fink: 
-    fink install pycrypto-py27 pyparsing-py27 pyjavaproperties-py27 \
+    fink install pycrypto-py27 pyparsing-py27 pyjavaproperties-py27 argparse-py27 \
         python-potr-py27 gnupg-interface-py27 pyasn1-py27 beautifulsoup-py27
 
 =====

@@ -6,6 +6,8 @@ import os
 import struct
 import base64
 import string
+import platform
+import argparse
 import pprint
 from pyparsing import *
 
@@ -13,6 +15,7 @@ import otrapps.util
 from otrapps.otr_private_key import OtrPrivateKeys
 from otrapps.otr_fingerprints import OtrFingerprints
 from otrapps.adium import AdiumProperties
+from otrapps.gajim import GajimProperties
 from otrapps.gibberbot import GibberbotProperties
 from otrapps.jitsi import JitsiProperties
 from otrapps.irssi import IrssiProperties
@@ -85,34 +88,85 @@ def testforfile(files):
         OtrFingerprints.write(keys, os.path.join('output', 'otr.fingerprints'))
         OtrPrivateKeys.write(keys, os.path.join('output', 'otr.private_keys'))
 
-def usage():
-    print 'Usage: otrfileconverter [app] [write to folder]'
-    print '[app] must be one of: --adium, --irssi, --jitsi, --pidgin'
-    print '[write-to-folder] the folder to write otr_keystore to'
-    sys.exit()
+
+def _make_outdir(output_folder, subdir):
+    dir = os.path.join(output_folder, subdir)
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+    return dir
+
 
 def main(argv):
-    if len(argv) == 0 or len(argv) > 2:
-        usage()
-    keydict = None
-    app = argv[0]
-    if app == '--adium':
-        keydict = AdiumProperties.parse()
-    elif app == '--jitsi':
-        keydict = JitsiProperties.parse()
-    elif app == '--irssi':
-        keydict = IrssiProperties.parse()
-    elif app == '--pidgin':
-        keydict = PidginProperties.parse()
-    else:
-        usage()
-    if keydict:
-        if len(argv) > 1:
-            tofolder = argv[1]
-            print tofolder
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i', '--input', action='append',
+                        help="specify which programs to take as input: adium, gajim, gibberbot, irssi, jitsi, pidgin (if multiple then they'll be merged)")
+    parser.add_argument('-o', '--output', action='append',
+                        help="specify which format to write out: all, adium, gajim, gibberbot, irssi, jitsi, pidgin (if multiple then each will be written out)")
+    # TODO add --input-folder option, it will conflict with '--input all'
+    parser.add_argument('--output-folder', default=os.getcwd(),
+                        help='the folder to write the output files to (defaults to current folder)')
+    parser.add_argument('--version', action='version', version='%(prog)s 0.1')
+    args = parser.parse_args()
+
+
+    # set defaults
+    if not args.input:
+        if platform.system() == 'Darwin':
+            args.input = ['adium']
         else:
-            tofolder = os.getcwd()
-        GibberbotProperties.write(keydict, tofolder)
+            args.input = ['pidgin']
+    if not args.output:
+        args.output = ['gibberbot']
+
+    # downcase all names to be a little more friendly
+    args.input = [i.lower() for i in args.input]
+    args.output = [o.lower() for o in args.output]
+
+    keydict = dict()
+    if 'adium' in args.input:
+        otrapps.util.merge_keydicts(keydict, AdiumProperties.parse())
+    if 'gajim' in args.input:
+        otrapps.util.merge_keydicts(keydict, GajimProperties.parse())
+    if 'gibberbot' in args.input:
+        otrapps.util.merge_keydicts(keydict, GibberbotProperties.parse())
+    if 'jitsi' in args.input:
+        otrapps.util.merge_keydicts(keydict, JitsiProperties.parse())
+    if 'irssi' in args.input:
+        otrapps.util.merge_keydicts(keydict, IrssiProperties.parse())
+    if 'pidgin' in args.input:
+        otrapps.util.merge_keydicts(keydict, PidginProperties.parse())
+
+    if keydict:
+        if not os.path.exists(args.output_folder):
+            os.makedirs(args.output_folder)
+        if 'all' in args.output:
+            AdiumProperties.write(keydict, _make_outdir(args.output_folder, 'adium'))
+            GajimProperties.write(keydict, _make_outdir(args.output_folder, 'gajim'))
+            GibberbotProperties.write(keydict, _make_outdir(args.output_folder, 'gibberbot'))
+            JitsiProperties.write(keydict, _make_outdir(args.output_folder, 'jitsi'))
+            IrssiProperties.write(keydict, _make_outdir(args.output_folder, 'irssi'))
+            PidginProperties.write(keydict, _make_outdir(args.output_folder, 'pidgin'))
+        else:
+            if 'adium' in args.output:
+                AdiumProperties.write(keydict, args.output_folder)
+            if 'gajim' in args.output:
+                GajimProperties.write(keydict, args.output_folder)
+            if 'gibberbot' in args.output:
+                GibberbotProperties.write(keydict, args.output_folder)
+            if 'jitsi' in args.output:
+                JitsiProperties.write(keydict, args.output_folder)
+            if 'irssi' in args.output:
+                IrssiProperties.write(keydict, args.output_folder)
+            if 'pidgin' in args.output:
+                PidginProperties.write(keydict, args.output_folder)
+
+            AdiumProperties.write(keydict, args.output_folder)
+            GajimProperties.write(keydict, args.output_folder)
+            GibberbotProperties.write(keydict, args.output_folder)
+            JitsiProperties.write(keydict, args.output_folder)
+            IrssiProperties.write(keydict, args.output_folder)
+            PidginProperties.write(keydict, args.output_folder)
+
 
 
 if __name__ == "__main__":
