@@ -20,6 +20,10 @@ class AdiumProperties():
         '''get dict of accounts from Accounts.plist'''
         # convert index numbers used for the name into the actual account name
         accountsfile = os.path.join(settingsdir, 'Accounts.plist')
+        if not os.path.exists(accountsfile) and os.path.exists(AdiumProperties.path):
+            print 'Adium ERROR: "' + accountsfile + '" does not exist! Using:'
+            accountsfile = os.path.join(AdiumProperties.path, 'Accounts.plist')
+            print '\t"' + accountsfile + '"'
         # make sure the plist is in XML format, not binary
         os.system("plutil -convert xml1 '" + accountsfile + "'")
         return plistlib.readPlist(accountsfile)['Accounts']
