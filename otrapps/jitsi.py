@@ -103,6 +103,10 @@ class JitsiProperties():
                 key['fingerprint'] = util.fingerprint((key['y'], key['g'], key['p'], key['q']))
         return keydict
 
+    @staticmethod
+    def write(keydict, savedir):
+        pass
+
 
 #------------------------------------------------------------------------------#
 # for testing from the command line:
