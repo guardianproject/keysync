@@ -60,11 +60,20 @@ class AdiumProperties():
         if not os.path.exists(savedir):
             raise Exception('"' + savedir + '" does not exist!')
 
+        # need when converting account names back to Adium's account index number
+        accountsplist = AdiumProperties._get_accounts_from_plist(savedir)
+
         kf = os.path.join(savedir, AdiumProperties.keyfile)
+        adiumkeydict = dict()
+        for name, key in keydict.iteritems():
+            name = key['name']
+            for account in accountsplist:
+                if account['UID'] == name:
+                    key['name'] = account['ObjectID']
+                    adiumkeydict[name] = key
         OtrPrivateKeys.write(keydict, kf)
 
         accounts = []
-        accountsplist = AdiumProperties._get_accounts_from_plist(savedir)
         for account in accountsplist:
             accounts.append(account['ObjectID'])
         fpf = os.path.join(savedir, AdiumProperties.fingerprintfile)
