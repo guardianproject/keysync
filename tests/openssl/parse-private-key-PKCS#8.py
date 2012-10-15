@@ -6,7 +6,7 @@ import imp
 errors = imp.load_source('errors', '../../otrapps/errors.py')
 util = imp.load_source('util', '../../otrapps/util.py')
 
-filename = 'private-key-PKCS#8.properties'
+filename = 'dsa-key.properties'
 p = pyjavaproperties.Properties()
 p.load(open(filename))
 for item in p.items():
