@@ -304,7 +304,7 @@ def PrefixHash(*inputs):
 
 def Encode(s):
     """
-    Return Base64 encoding of s. Suppress padding characters (=).
+    Return Base64 encoding of s.
 
     @param s: string to encode as Base64
     @type s: string
@@ -312,7 +312,7 @@ def Encode(s):
     @return: Base64 representation of s.
     @rtype: string
     """
-    return base64.b64encode(str(s)).replace("=", "")
+    return base64.b64encode(str(s))
 
 
 def Decode(s):
