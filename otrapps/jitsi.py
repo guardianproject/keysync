@@ -108,7 +108,39 @@ class JitsiProperties():
 
     @staticmethod
     def write(keydict, savedir):
-        pass
+        if not os.path.exists(savedir):
+            raise Exception('"' + savedir + '" does not exist!')
+
+        loadfile = os.path.join(savedir, JitsiProperties.propertiesfile)
+        savefile = loadfile
+        if not os.path.exists(loadfile) and os.path.exists(JitsiProperties.path):
+            print 'Adium ERROR: "' + loadfile + '" does not exist! Reading from:'
+            loadfile = os.path.join(JitsiProperties.path, JitsiProperties.propertiesfile)
+            print '\t"' + loadfile + '"'
+
+        propkey_base = 'net.java.sip.communicator.plugin.otr.'
+        p = Properties()
+        p.load(open(loadfile))
+        for name, key in keydict.iteritems():
+            if 'verification' in key and key['verification'] != '':
+                verifiedkey = (propkey_base + re.sub('[^a-zA-Z0-9_]', '_', key['name'])
+                               + '_publicKey_verified')
+                p[verifiedkey] = True
+            if 'y' in key:
+                pubkey = (propkey_base + re.sub('[^a-zA-Z0-9_]', '_', key['name'])
+                          + '_publicKey')
+                p.setProperty(pubkey, util.ExportDsaX509(key))
+            if 'x' in key and '@' in key['name']:
+                    pubkey = (propkey_base + 'Jabber_' + re.sub('[^a-zA-Z0-9_]', '_', key['name'])
+                               + '_' + re.sub('[^a-zA-Z0-9_]', '_', key['name'].split('@')[1])
+                               + '_publicKey')
+                    p.setProperty(pubkey, util.ExportDsaX509(key))
+                    privkey = (propkey_base + 'Jabber_' + re.sub('[^a-zA-Z0-9_]', '_', key['name'])
+                               + '_' + re.sub('[^a-zA-Z0-9_]', '_', key['name'].split('@')[1])
+                               + '_privateKey')
+                    p.setProperty(privkey, util.ExportDsaPkcs8(key))
+        p.store(open(savefile, 'w'))
+
 
 
 #------------------------------------------------------------------------------#
