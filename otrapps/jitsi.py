@@ -21,6 +21,8 @@ class JitsiProperties():
         path = os.path.expanduser('~/Application Data/Jitsi')
     else:
         path = os.path.expanduser('~/.jitsi')
+    propertiesfile = 'sip-communicator.properties'
+    contactsfile = 'contactlist.xml'
 
     @staticmethod
     def _parse_account_uid(uidstring):
@@ -31,12 +33,12 @@ class JitsiProperties():
     @staticmethod
     def _parse_account_from_propkey(settingsdir, propkey):
         '''give a Java Properties key, parse out a real account UID, based on
-        what's listed in contactlist.xml'''
+        what's listed in the contacts file'''
         # jitsi stores the account name in the properties key, so it strips the @ out
         name_from_prop = '.'.join(propkey.split('.')[-1].split('_')[0:-2])
         # so let's find where the @ was originally placed:
         xml = ''
-        for line in open(os.path.join(settingsdir, 'contactlist.xml'), 'r').readlines():
+        for line in open(os.path.join(settingsdir, JitsiProperties.contactsfile), 'r').readlines():
             xml += line
         name = None
         for e in BeautifulSoup(xml).findAll('contact'):
@@ -51,7 +53,7 @@ class JitsiProperties():
         if settingsdir == None:
             settingsdir = JitsiProperties.path
         p = Properties()
-        p.load(open(os.path.join(settingsdir, 'sip-communicator.properties')))
+        p.load(open(os.path.join(settingsdir, JitsiProperties.propertiesfile)))
         keydict = dict()
         for item in p.items():
             propkey = item[0]
