@@ -39,9 +39,9 @@ class JitsiProperties():
         for line in open(os.path.join(settingsdir, 'contactlist.xml'), 'r').readlines():
             xml += line
         name = None
-        for e in BeautifulSoup(xml).findAll('display-name'):
-            if re.match(name_from_prop, e.text):
-                name = e.text
+        for e in BeautifulSoup(xml).findAll('contact'):
+            if re.match(name_from_prop, e['address']):
+                name = e['address']
                 break
         return str(name)
 
