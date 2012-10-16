@@ -35,7 +35,8 @@ class JitsiProperties():
         '''give a Java Properties key, parse out a real account UID, based on
         what's listed in the contacts file'''
         # jitsi stores the account name in the properties key, so it strips the @ out
-        name_from_prop = '.'.join(propkey.split('.')[-1].split('_')[0:-2])
+        m = re.match('net\.java\.sip\.communicator\.plugin\.otr\.(.*)_publicKey.*', propkey)
+        name_from_prop = '.'.join(m.group(1).split('_'))
         # so let's find where the @ was originally placed:
         xml = ''
         for line in open(os.path.join(settingsdir, JitsiProperties.contactsfile), 'r').readlines():
