@@ -217,3 +217,21 @@ collected in meta dict with the account name as the key and the whole dict as
 the value. This format allows for easy merging, which enables syncing between
 files.
 
+Sample structure in python dict notation:
+
+    keydict = {
+        'userid': {
+                    'fingerprint': 'ff66e8c909c4deb51cbd4a02b9e6af4d6af215f8',
+                    'name': 'userid',
+                    'protocol': 'IRC',
+                    'verification': 'verified', # TODO: possible values?
+                    'p': '<p value>',
+                    'q': '<q value>',
+                    'x': '<x value>',
+                    'y': '<y value>',
+                },
+        'userid2' : { ... },
+        ...
+        'useridn' : { ... }
+    }
+
