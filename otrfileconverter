@@ -20,6 +20,7 @@ from otrapps.gibberbot import GibberbotProperties
 from otrapps.jitsi import JitsiProperties
 from otrapps.irssi import IrssiProperties
 from otrapps.pidgin import PidginProperties
+from otrapps.gpg import GPGProperties
 
 # TODO merge duplicates in the final keys
 # TODO convert protocol names to a standard format, i.e. prpl-jabber vs. libpurple-Jabber
@@ -34,6 +35,7 @@ def testforfile(files):
     isirssi = False
     isadium = False
     ispidgin = False
+    isgpg = False
 
     keys = dict()
     for file in files:
@@ -58,6 +60,9 @@ def testforfile(files):
             and os.path.exists(os.path.join(appdir, 'otr.fp')):
             islibotr = True
             isirssi = True
+        elif os.path.exists(os.path.join(appdir, 'secring.gpg')) \
+            and os.path.exists(os.path.join(appdir, 'pubring.gpg')):
+            isgpg = True
 
         if isadium:
             print 'Reading Adium files: '
@@ -76,6 +81,9 @@ def testforfile(files):
             pprint.pprint(tmp)
         elif isjitsi:
             print 'Reading Jitsi otr4j format'
+        elif isgpg:
+            print 'Reading GnuPG format'
+
         keys = tmp
             #for k,v in tmp.items():
             #keys[k] = v
@@ -135,6 +143,8 @@ def main(argv):
         otrapps.util.merge_keydicts(keydict, IrssiProperties.parse())
     if 'pidgin' in args.input:
         otrapps.util.merge_keydicts(keydict, PidginProperties.parse())
+    if 'gpg' in args.input:
+        otrapps.util.merge_keydicts(keydict, GPGProperties.parse())
 
     if keydict:
         if not os.path.exists(args.output_folder):
@@ -146,6 +156,7 @@ def main(argv):
             JitsiProperties.write(keydict, _make_outdir(args.output_folder, 'jitsi'))
             IrssiProperties.write(keydict, _make_outdir(args.output_folder, 'irssi'))
             PidginProperties.write(keydict, _make_outdir(args.output_folder, 'pidgin'))
+            #GPGProperties.write(keydict, _make_outdir(args.output_folder, 'gpg'))
         else:
             if 'adium' in args.output:
                 AdiumProperties.write(keydict, args.output_folder)
@@ -159,6 +170,8 @@ def main(argv):
                 IrssiProperties.write(keydict, args.output_folder)
             if 'pidgin' in args.output:
                 PidginProperties.write(keydict, args.output_folder)
+            #if 'gpg' in args.output:
+                #GPGProperties.write(keydict, args.output_folder)
 
             AdiumProperties.write(keydict, args.output_folder)
             GajimProperties.write(keydict, args.output_folder)
@@ -166,6 +179,7 @@ def main(argv):
             JitsiProperties.write(keydict, args.output_folder)
             IrssiProperties.write(keydict, args.output_folder)
             PidginProperties.write(keydict, args.output_folder)
+            #GPGProperties.write(keydict, args.output_folder)
 
 
 
