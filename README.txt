@@ -38,6 +38,15 @@ This script needs a few python libs to work:
     fink install pycrypto-py27 pyparsing-py27 pyjavaproperties-py27 argparse-py27 \
         python-potr-py27 gnupg-interface-py27 pyasn1-py27 beautifulsoup-py27
 
+Local dependencies using pip+virtualenv:
+    Install local build dependencies
+        sudo yum install gmp-devel tk
+    Activate your virtual python environment then:
+        pip install -Ur python-deps.txt
+
+    Currently pure-python-potr is incompatible with setuptools/pip (see bug
+    [#26](https://github.com/afflux/pure-python-otr/issues/26))
+
 =====
 USAGE
 =====

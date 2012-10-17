@@ -1,0 +1,7 @@
+pycrypto
+beautifulsoup
+pyparsing
+argparse
+pyasn1
+pyjavaproperties
+python-potr
