@@ -1,3 +1,5 @@
+# See "Local dependencies" in the README to learn
+# how to use this file to install all the python libraries
 pycrypto
 beautifulsoup
 pyparsing
