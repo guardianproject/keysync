@@ -224,11 +224,13 @@ Sample structure in python dict notation:
                     'fingerprint': 'ff66e8c909c4deb51cbd4a02b9e6af4d6af215f8',
                     'name': 'userid',
                     'protocol': 'IRC',
-                    'verification': 'verified', # TODO: possible values?
-                    'p': '<p value>',
-                    'q': '<q value>',
-                    'x': '<x value>',
-                    'y': '<y value>',
+                    'resource': 'laptop', # the XMPP "resource"
+                    'verification': 'verified', # or 'smp' for Socialist Millionares
+                    'p': '<p value>', # public part of the DSA key
+                    'q': '<q value>', # public part of the DSA key
+                    'g': '<g value>', # public part of the DSA key
+                    'x': '<x value>', # core of private DSA key
+                    'y': '<y value>', # core of public DSA key
                 },
         'userid2' : { ... },
         ...
