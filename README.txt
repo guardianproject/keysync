@@ -21,18 +21,12 @@ it to the point where we can trust it.
 INSTALL
 =======
 
-This script needs a few python libs to work:
+Ubuntu/Mint/Debian:
 
- Debian/Ubuntu/Mint: 
-    sudo apt-get install python-crypto python-pyparsing python-argparse \
-    python-gnupginterface python-pyasn1 python-beautifulsoup
-    
-    There are two packages not yet in Debian, you can get them from our
-	PPA: https://launchpad.net/~guardianproject/+archive/ppa then install:
-	apt-get install python-potr python-pyjavaproperties
-
-    For GUI support install the python tk toolkit:
-    sudo apt-get install python-tk
+    We're working to get all packages into Debian/Ubuntu, in the meantime you can 
+    install otrfileconverter by adding our PPA
+	PPA: https://launchpad.net/~guardianproject/+archive/ppa
+    Then install via `sudo apt-get install otrfileconverter`
 
  Fink: 
     fink install pycrypto-py27 pyparsing-py27 pyjavaproperties-py27 argparse-py27 \
