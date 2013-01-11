@@ -15,11 +15,23 @@ compromised private keys, but anything is possible.  Also, keep in
 mind that program is handling your private OTR keys, so make sure that
 you don't leave the otr_keystore file around somewhere unsafe.  All
 that said, testing and feedback is greatly appreciated, so we can get
-it to the point where we can trust it.
+it  to the point where we can trust it.
 
 =======
 INSTALL
 =======
+
+List of python dependencies:
+
+* pycrypto - https://www.dlitz.net/software/pycrypto/
+* pyparsing - http://pyparsing.wikispaces.com
+* pyjavaproperties - http://pypi.python.org/pypi/pyjavaproperties
+* argparse - native in >= 2.7, else https://code.google.com/p/argparse/
+* pure-python-otr - https://github.com/afflux/pure-python-otr
+* gnupg-interface - http://py-gnupg.sourceforge.net/
+* pyasn - https://code.google.com/p/pyasn/
+* beautifulsoup 3 - http://www.crummy.com/software/BeautifulSoup/
+
 
 Ubuntu/Mint/Debian:
 
