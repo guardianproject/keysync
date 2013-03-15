@@ -36,9 +36,18 @@ List of python dependencies:
 Ubuntu/Mint/Debian:
 
     We're working to get all packages into Debian/Ubuntu, in the meantime you can 
-    install otrfileconverter by adding our PPA
-	PPA: https://launchpad.net/~guardianproject/+archive/ppa
-    Then install via `sudo apt-get install otrfileconverter`
+    install otrfileconverter by adding our PPA (fingerprint F50EADDD2234F563):
+
+    sudo add-apt-repository ppa:guardianproject/ppa
+    sudo apt-get update
+    sudo apt-get install otrfileconverter
+
+	PPA URL: https://launchpad.net/~guardianproject/+archive/ppa
+
+    For Debian, you can try using the Ubuntu PPA, with something like
+    'oneiric' for wheezy, and 'natty' for squeeze: 
+
+  deb http://ppa.launchpad.net/guardianproject/ppa/ubuntu oneiric main
 
  Fink: 
     fink install pycrypto-py27 pyparsing-py27 pyjavaproperties-py27 argparse-py27 \
