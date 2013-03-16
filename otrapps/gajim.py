@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import glob
 import platform
 import re
 import sys
@@ -23,7 +24,7 @@ class GajimProperties():
         if settingsdir == None:
             settingsdir = GajimProperties.path
         keydict = dict()
-        for f in os.glob(settingsdir + '*.key3'):
+        for f in glob.glob(settingsdir + '*.key3'):
             pass
 
     @staticmethod
