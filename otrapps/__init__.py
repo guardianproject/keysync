@@ -1,4 +1,4 @@
-
+import os
 __all__ = ['adium', 'gibberbot', 'irssi', 'jitsi', 'pidgin', ]
 
 def make_outdir(output_folder, subdir):
