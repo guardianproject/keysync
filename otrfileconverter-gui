@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
+import os, sys
 from Tkinter import *
 import tkFileDialog
+import tkMessageBox
 
 import otrapps
 from otrapps.adium import AdiumProperties
@@ -44,6 +45,10 @@ class App(Tk):
         self.fromframe.pack(side=TOP, padx=5, pady=5, expand=True, fill=BOTH)
 
         optionslist = self.detectfiles()
+        if len(optionslist) == 0:
+            self.show_error("No supported OTR applications found.")
+            sys.exit(1)
+            return
         self.fromapp = StringVar(master)
         self.fromapp.set(optionslist[0]) # initial value
         self.option = OptionMenu(self.fromframe, self.fromapp, *optionslist,
@@ -84,6 +89,11 @@ class App(Tk):
 
         self.button = Button(master, text="Convert!", command=self.convert)
         self.button.pack(side=BOTTOM, padx=5, pady=5)
+
+    def show_error(self, error_msg):
+        print(error_msg)
+        tkMessageBox.showwarning("otrfileconverter error", error_msg)
+        return
 
     def select_app(self, app=None):
         self.fromfolder.set(self.getpath(app))
