@@ -26,6 +26,7 @@ List of python dependencies:
 * pycrypto - https://www.dlitz.net/software/pycrypto/
 * pyparsing - http://pyparsing.wikispaces.com
 * pyjavaproperties - http://pypi.python.org/pypi/pyjavaproperties
+* python-pgpdump - https://pypi.python.org/pypi/pgpdump/
 * argparse - native in >= 2.7, else https://code.google.com/p/argparse/
 * pure-python-otr - https://github.com/afflux/pure-python-otr
 * gnupg-interface - http://py-gnupg.sourceforge.net/
