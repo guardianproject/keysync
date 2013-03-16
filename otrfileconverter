@@ -12,6 +12,7 @@ import pprint
 from pyparsing import *
 
 import otrapps.util
+import otrapps
 from otrapps.otr_private_key import OtrPrivateKeys
 from otrapps.otr_fingerprints import OtrFingerprints
 from otrapps.adium import AdiumProperties
@@ -97,13 +98,6 @@ def testforfile(files):
         OtrPrivateKeys.write(keys, os.path.join('output', 'otr.private_keys'))
 
 
-def _make_outdir(output_folder, subdir):
-    dir = os.path.join(output_folder, subdir)
-    if not os.path.exists(dir):
-        os.makedirs(dir)
-    return dir
-
-
 def main(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--input', action='append',
@@ -150,13 +144,13 @@ def main(argv):
         if not os.path.exists(args.output_folder):
             os.makedirs(args.output_folder)
         if 'all' in args.output:
-            AdiumProperties.write(keydict, _make_outdir(args.output_folder, 'adium'))
-            GajimProperties.write(keydict, _make_outdir(args.output_folder, 'gajim'))
-            GibberbotProperties.write(keydict, _make_outdir(args.output_folder, 'gibberbot'))
-            JitsiProperties.write(keydict, _make_outdir(args.output_folder, 'jitsi'))
-            IrssiProperties.write(keydict, _make_outdir(args.output_folder, 'irssi'))
-            PidginProperties.write(keydict, _make_outdir(args.output_folder, 'pidgin'))
-            #GPGProperties.write(keydict, _make_outdir(args.output_folder, 'gpg'))
+            AdiumProperties.write(keydict, otrapps.make_outdir(args.output_folder, 'adium'))
+            GajimProperties.write(keydict, otrapps.make_outdir(args.output_folder, 'gajim'))
+            GibberbotProperties.write(keydict, otrapps.make_outdir(args.output_folder, 'gibberbot'))
+            JitsiProperties.write(keydict, otrapps.make_outdir(args.output_folder, 'jitsi'))
+            IrssiProperties.write(keydict, otrapps.make_outdir(args.output_folder, 'irssi'))
+            PidginProperties.write(keydict, otrapps.make_outdir(args.output_folder, 'pidgin'))
+            #GPGProperties.write(keydict, otrapps.make_outdir(args.output_folder, 'gpg'))
         else:
             if 'adium' in args.output:
                 AdiumProperties.write(keydict, args.output_folder)

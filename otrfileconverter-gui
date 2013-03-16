@@ -5,6 +5,7 @@ import os
 from Tkinter import *
 import tkFileDialog
 
+import otrapps
 from otrapps.adium import AdiumProperties
 from otrapps.gibberbot import GibberbotProperties
 from otrapps.jitsi import JitsiProperties
@@ -126,7 +127,7 @@ class App(Tk):
             haveapps.append('adium')
         if os.path.exists(JitsiProperties.path):
             haveapps.append('jitsi')
-        if os.path.exists(IrssiProperties.path): 
+        if os.path.exists(IrssiProperties.path):
             haveapps.append('irssi')
         if os.path.exists(PidginProperties.path):
             haveapps.append('pidgin')
@@ -148,6 +149,7 @@ class App(Tk):
         else:
             return None
         if keys:
+            otrapps.make_outdir(self.tofilder.get(), '')
             GibberbotProperties.write(keys, self.tofolder.get())
 
 #------------------------------------------------------------------------------#
