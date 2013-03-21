@@ -42,7 +42,14 @@ class PidginProperties():
             raise Exception('"' + savedir + '" does not exist!')
 
         kf = os.path.join(savedir, PidginProperties.keyfile)
-        OtrPrivateKeys.write(keydict, kf)
+        # Pidgin requires the XMPP resource in the account name field of the
+        # OTR private keys file, so we tack on a reasonable default.
+        pidginkeydict = dict()
+        for name, key in keydict.iteritems():
+            if key['protocol'] == 'prpl-jabber':
+                key['name'] = key['name'] + '/Pidgin'
+            pidginkeydict[name] = key
+        OtrPrivateKeys.write(pidginkeydict, kf)
 
         accounts = []
         # look for all private keys and use them for the accounts list
