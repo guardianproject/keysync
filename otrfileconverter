@@ -164,17 +164,8 @@ def main(argv):
                 IrssiProperties.write(keydict, args.output_folder)
             if 'pidgin' in args.output:
                 PidginProperties.write(keydict, args.output_folder)
-            #if 'gpg' in args.output:
-                #GPGProperties.write(keydict, args.output_folder)
-
-            AdiumProperties.write(keydict, args.output_folder)
-            GajimProperties.write(keydict, args.output_folder)
-            GibberbotProperties.write(keydict, args.output_folder)
-            JitsiProperties.write(keydict, args.output_folder)
-            IrssiProperties.write(keydict, args.output_folder)
-            PidginProperties.write(keydict, args.output_folder)
-            #GPGProperties.write(keydict, args.output_folder)
-
+            if 'gpg' in args.output:
+                GPGProperties.write(keydict, args.output_folder)
 
 
 if __name__ == "__main__":
