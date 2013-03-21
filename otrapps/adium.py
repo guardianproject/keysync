@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import platform
 import plistlib
 import sys
 import util
@@ -20,10 +21,18 @@ class AdiumProperties():
         '''get dict of accounts from Accounts.plist'''
         # convert index numbers used for the name into the actual account name
         accountsfile = os.path.join(settingsdir, 'Accounts.plist')
-        if not os.path.exists(accountsfile) and os.path.exists(AdiumProperties.path):
-            print 'Adium ERROR: "' + accountsfile + '" does not exist! Using:'
+        print 'accountsfile: ',
+        print accountsfile
+        if not os.path.exists(accountsfile):
+            oldaccountsfile = accountsfile
             accountsfile = os.path.join(AdiumProperties.path, 'Accounts.plist')
-            print '\t"' + accountsfile + '"'
+            if platform.system() == 'Darwin' and os.path.exists(accountsfile):
+                print 'Adium WARNING: "' + oldaccountsfile + '" does not exist! Using:'
+                print '\t"' + accountsfile + '"'
+            else:
+                print 'Adium ERROR: No usable Accounts.plist file found, cannot create Adium files!' 
+                return []
+        # TODO convert this to use python-biplist
         # make sure the plist is in XML format, not binary
         os.system("plutil -convert xml1 '" + accountsfile + "'")
         return plistlib.readPlist(accountsfile)['Accounts']
