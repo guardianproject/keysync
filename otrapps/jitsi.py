@@ -114,7 +114,7 @@ class JitsiProperties():
         loadfile = os.path.join(savedir, JitsiProperties.propertiesfile)
         savefile = loadfile
         if not os.path.exists(loadfile) and os.path.exists(JitsiProperties.path):
-            print 'Adium ERROR: "' + loadfile + '" does not exist! Reading from:'
+            print 'Adium WARNING: "' + loadfile + '" does not exist! Reading from:'
             loadfile = os.path.join(JitsiProperties.path, JitsiProperties.propertiesfile)
             print '\t"' + loadfile + '"'
 
@@ -125,7 +125,7 @@ class JitsiProperties():
             if 'verification' in key and key['verification'] != '':
                 verifiedkey = (propkey_base + re.sub('[^a-zA-Z0-9_]', '_', key['name'])
                                + '_publicKey_verified')
-                p[verifiedkey] = True
+                p[verifiedkey] = 'true'
             if 'y' in key:
                 pubkey = (propkey_base + re.sub('[^a-zA-Z0-9_]', '_', key['name'])
                           + '_publicKey')
