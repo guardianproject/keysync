@@ -159,7 +159,7 @@ class App(Tk):
         else:
             return None
         if keys:
-            otrapps.make_outdir(self.tofilder.get(), '')
+            otrapps.make_outdir(self.tofolder.get(), '')
             GibberbotProperties.write(keys, self.tofolder.get())
 
 #------------------------------------------------------------------------------#
