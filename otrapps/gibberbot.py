@@ -70,7 +70,7 @@ class GibberbotProperties():
             if 'fingerprint' in key:
                 p.setProperty(key['name'] + '.fingerprint', key['fingerprint'])
             if 'verification' in key and key['verification'] != None:
-                p.setProperty(key['name'] + '.' + key['fingerprint'].upper()
+                p.setProperty(key['name'] + '.' + key['fingerprint'].lower()
                               + '.publicKey.verified', 'true')
         f = open(os.path.join(savedir, 'otr_keystore'), 'w')
         p.store(f)
