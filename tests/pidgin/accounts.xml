@@ -68,10 +68,6 @@
 			<setting name='use-global-buddyicon' type='bool'>1</setting>
 			<setting name='first' type='string'>guest,,,,</setting>
 			<setting name='port' type='int'>5298</setting>
-			<setting name='email' type='string'></setting>
-			<setting name='last' type='string'></setting>
-			<setting name='AIM' type='string'></setting>
-			<setting name='jid' type='string'></setting>
 		</settings>
 		<settings ui='gtk-gaim'>
 			<setting name='auto-login' type='bool'>1</setting>
@@ -80,7 +76,7 @@
 	</account>
 	<account>
 		<protocol>prpl-jabber</protocol>
-		<name>gptest@limun.org/</name>
+		<name>gptest@limun.org/homeresource</name>
 		<password>mypassword</password>
 		<statuses>
 			<status type='available' name='Available' active='true'>
