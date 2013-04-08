@@ -97,14 +97,14 @@ class OtrPrivateKeys():
         privkeys = '(privkeys\n'
         for name, key in keydict.iteritems():
             if 'x' in key:
-                dsa = '    (p #' + ('%0258X' % key['p']) + '#)\n'
-                dsa += '    (q #' + ('%042X' % key['q']) + '#)\n'
-                dsa += '    (g #' + ('%0258X' % key['g']) + '#)\n'
-                dsa += '    (y #' + ('%0256X' % key['y']) + '#)\n'
-                dsa += '    (x #' + ('%042X' % key['x']) + '#)\n'
-                contents = ('  (name "' + key['name'] + '")\n' +
-                             '  (protocol ' + key['protocol'] + ')\n' +
-                             '  (private-key\n   (dsa\n' + dsa + '   )\n  )\n')
+                dsa = '  (p #' + ('%0258X' % key['p']) + '#)\n'
+                dsa += '  (q #' + ('%042X' % key['q']) + '#)\n'
+                dsa += '  (g #' + ('%0258X' % key['g']) + '#)\n'
+                dsa += '  (y #' + ('%0256X' % key['y']) + '#)\n'
+                dsa += '  (x #' + ('%042X' % key['x']) + '#)\n'
+                contents = ('(name "' + key['name'] + '")\n' +
+                             '(protocol ' + key['protocol'] + ')\n' +
+                             '(private-key \n (dsa \n' + dsa + '  )\n )\n')
                 privkeys += ' (account\n' + contents + ' )\n'
         privkeys += ')\n'
         f = open(filename, 'w')
