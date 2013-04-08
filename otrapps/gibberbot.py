@@ -8,6 +8,7 @@ import util
 
 class GibberbotProperties():
 
+    keyfile = 'otr_keystore'
     path = '/data/data/info.guardianproject.otr.app.im/files/otr_keystore'
 
     @staticmethod

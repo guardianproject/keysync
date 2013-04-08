@@ -130,7 +130,12 @@ def main(argv):
     if 'gajim' in args.input:
         otrapps.util.merge_keydicts(keydict, GajimProperties.parse())
     if 'gibberbot' in args.input:
-        otrapps.util.merge_keydicts(keydict, GibberbotProperties.parse())
+        keyfile = os.path.join(args.output_folder, GibberbotProperties.keyfile)
+        if os.path.exists(keyfile):
+            otrapps.util.merge_keydicts(keydict, GibberbotProperties.parse(keyfile))
+        else:
+            print('Gibberbot WARNING: No usable "' + GibberbotProperties.keyfile +
+                  '" file found, not reading keys from Gibberbot!')
     if 'jitsi' in args.input:
         otrapps.util.merge_keydicts(keydict, JitsiProperties.parse())
     if 'irssi' in args.input:
