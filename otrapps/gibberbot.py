@@ -63,10 +63,13 @@ class GibberbotProperties():
         '''given a keydict, generate a gibberbot file in the savedir'''
         p = pyjavaproperties.Properties()
         for name, key in keydict.iteritems():
-            if 'y' in key:
-                p.setProperty(key['name'] + '.publicKey', util.ExportDsaX509(key))
-            if 'x' in key:
-                p.setProperty(key['name'] + '.privateKey', util.ExportDsaPkcs8(key))
+            # only include XMPP keys, since Gibberbot only supports XMPP
+            # accounts, so we avoid spreading private keys around
+            if key['protocol'] == 'prpl-jabber' or key['protocol'] == 'prpl-bonjour':
+                if 'y' in key:
+                    p.setProperty(key['name'] + '.publicKey', util.ExportDsaX509(key))
+                if 'x' in key:
+                    p.setProperty(key['name'] + '.privateKey', util.ExportDsaPkcs8(key))
             if 'fingerprint' in key:
                 p.setProperty(key['name'] + '.fingerprint', key['fingerprint'])
             if 'verification' in key and key['verification'] != None:
