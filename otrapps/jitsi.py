@@ -29,11 +29,17 @@ class JitsiProperties():
         username, domain, server = uidstring.split(':')[1].split('@')
         return username + '@' + domain
 
+    @staticmethod
+    def _convert_protocol_name(protocol):
+        if protocol == 'Jabber':
+            return 'prpl-jabber'
+        else:
+            return 'IMPLEMENTME'
 
     @staticmethod
     def _parse_account_from_propkey(settingsdir, propkey):
-        '''give a Java Properties key, parse out a real account UID, based on
-        what's listed in the contacts file'''
+        '''give a Java Properties key, parse out a real account UID and
+        protocol, based on what's listed in the contacts file'''
         # jitsi stores the account name in the properties key, so it strips the @ out
         m = re.match('net\.java\.sip\.communicator\.plugin\.otr\.(.*)_publicKey.*', propkey)
         name_from_prop = '.'.join(m.group(1).split('_'))
@@ -42,11 +48,13 @@ class JitsiProperties():
         for line in open(os.path.join(settingsdir, JitsiProperties.contactsfile), 'r').readlines():
             xml += line
         name = None
+        protocol = None
         for e in BeautifulSoup(xml).findAll('contact'):
             if re.match(name_from_prop, e['address']):
                 name = e['address']
+                protocol = JitsiProperties._convert_protocol_name(e['account-id'].split(':')[0])
                 break
-        return str(name)
+        return str(name), protocol
 
 
     @staticmethod
@@ -85,16 +93,19 @@ class JitsiProperties():
                 if p.getProperty(verifiedkey).strip() == 'true':
                     key['verification'] = 'verified'
             elif (re.match('net\.java\.sip\.communicator\.plugin\.otr\..*_publicKey_verified', propkey)):
-                name = JitsiProperties._parse_account_from_propkey(settingsdir, propkey)
+                name, protocol = JitsiProperties._parse_account_from_propkey(settingsdir, propkey)
                 if name != None:
                     if name not in keydict:
                         key = dict()
                         key['name'] = name
                         keydict[name] = key
+                    if protocol and 'protocol' not in keydict[name]:
+                        keydict[name]['protocol'] = protocol
                     keydict[name]['verification'] = 'verified'
+            # if the protocol name is included in the property name, its a local account with private key
             elif (re.match('net\.java\.sip\.communicator\.plugin\.otr\..*_publicKey', propkey) and not
                   re.match('net\.java\.sip\.communicator\.plugin\.otr\.(Jabber_|Google_Talk_)', propkey)):
-                name = JitsiProperties._parse_account_from_propkey(settingsdir, propkey)
+                name, ignored = JitsiProperties._parse_account_from_propkey(settingsdir, propkey)
                 if name not in keydict:
                     key = dict()
                     key['name'] = name
