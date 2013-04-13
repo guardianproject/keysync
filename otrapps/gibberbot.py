@@ -1,9 +1,11 @@
 #!/usr/bin/env python2.6
 # -*- coding: utf-8 -*-
 
+import hashlib
 import os
 import sys
 import pyjavaproperties
+import subprocess
 import util
 
 class GibberbotProperties():
@@ -60,7 +62,7 @@ class GibberbotProperties():
         return keydict
 
     @staticmethod
-    def write(keydict, savedir):
+    def write(keydict, savedir, password=None):
         '''given a keydict, generate a gibberbot file in the savedir'''
         p = pyjavaproperties.Properties()
         for name, key in keydict.iteritems():
@@ -70,14 +72,30 @@ class GibberbotProperties():
                 if 'y' in key:
                     p.setProperty(key['name'] + '.publicKey', util.ExportDsaX509(key))
                 if 'x' in key:
+                    if not password:
+                        h = hashlib.sha256()
+                        h.update(os.urandom(16)) # salt
+                        h.update(bytes(key['x']))
+                        password = h.digest().encode('base64')
                     p.setProperty(key['name'] + '.privateKey', util.ExportDsaPkcs8(key))
             if 'fingerprint' in key:
                 p.setProperty(key['name'] + '.fingerprint', key['fingerprint'])
             if 'verification' in key and key['verification'] != None:
                 p.setProperty(key['name'] + '.' + key['fingerprint'].lower()
                               + '.publicKey.verified', 'true')
-        f = open(os.path.join(savedir, 'otr_keystore'), 'w')
+        filename = os.path.join(savedir, 'otr_keystore')
+        f = open(filename, 'w')
         p.store(f)
+
+        # if there is no password, then one has not been set, or there are not
+        # private keys included in the file, so no way or need to encrypt
+        if password:
+            # create passphrase file from the first private key
+            cmd = ['openssl', 'aes-256-cbc', '-pass', 'stdin', '-in', filename,
+                   '-out', "%s.ofcaes" % (filename)]
+            p = subprocess.Popen(cmd, stdin=subprocess.PIPE,
+                                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
 
 #------------------------------------------------------------------------------#
 # for testing from the command line:
