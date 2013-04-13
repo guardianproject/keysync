@@ -107,6 +107,10 @@ def main(argv):
     # TODO add --input-folder option, it will conflict with '--input all'
     parser.add_argument('--output-folder', default=os.getcwd(),
                         help='the folder to write the output files to (defaults to current folder)')
+    parser.add_argument('--no-qrcode', action='store_true', default=False,
+                        help='do not print the Gibberbot QR Code to the terminal')
+    parser.add_argument('-q', '--quiet', action='store_true', default=False,
+                        help='do not print anything to the terminal')
     parser.add_argument('--version', action='version', version='%(prog)s 0.1')
     args = parser.parse_args()
 
@@ -163,6 +167,14 @@ def main(argv):
                 GajimProperties.write(keydict, args.output_folder)
             if 'gibberbot' in args.output:
                 GibberbotProperties.write(keydict, args.output_folder)
+                if not args.quiet:
+                    print('\nenter this password into Gibberbot: ' + GibberbotProperties.password)
+                    if not args.no_qrcode and sys.stdout.isatty():
+                        print('or just scan this QR Code:')
+                        import qrcode
+                        qr = qrcode.QRCode()
+                        qr.add_data(GibberbotProperties.password)
+                        qr.print_tty()
             if 'jitsi' in args.output:
                 JitsiProperties.write(keydict, args.output_folder)
             if 'irssi' in args.output:

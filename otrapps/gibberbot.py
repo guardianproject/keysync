@@ -13,6 +13,8 @@ class GibberbotProperties():
     keyfile = 'otr_keystore'
     path = '/data/data/info.guardianproject.otr.app.im/files/otr_keystore'
 
+    password = None
+
     @staticmethod
     def parse(filename):
         '''parse the given file into the standard keydict'''
@@ -95,6 +97,8 @@ class GibberbotProperties():
                    '-out', "%s.ofcaes" % (filename)]
             p = subprocess.Popen(cmd, stdin=subprocess.PIPE,
                                  stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            GibberbotProperties.password = password
+            print(p.communicate(password))
 
 
 #------------------------------------------------------------------------------#
