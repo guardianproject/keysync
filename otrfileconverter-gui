@@ -3,6 +3,7 @@
 
 import os, sys
 from Tkinter import *
+from PIL import ImageTk, Image
 import tkFileDialog
 import tkMessageBox
 
@@ -159,8 +160,31 @@ class App(Tk):
         else:
             return None
         if keys:
+            import qrcode
+            import tempfile
+
             otrapps.make_outdir(self.tofolder.get(), '')
             GibberbotProperties.write(keys, self.tofolder.get())
+
+            img = qrcode.make(GibberbotProperties.password)
+            fd, imgfile = tempfile.mkstemp(suffix='.png')
+            f = os.fdopen(fd, 'w')
+            img.save(f)
+            f.close()
+
+            self.qrwindow = Toplevel(self)
+            self.qrframe = Frame(self.qrwindow)
+            self.qrframe.pack(side = "top", fill = "both", expand = "yes")
+            pwtxt = ('Enter this password into Gibberbot: \n'
+                     + GibberbotProperties.password
+                     + '\nor just scan this QRCode:')
+            self.pwlabel = Label(self.qrframe, text=pwtxt)
+            self.pwlabel.pack(side = "top", fill = "both", expand = "yes")
+            self.tkimg = ImageTk.PhotoImage(Image.open(imgfile))
+            os.remove(imgfile)
+            self.qrlabel = Label(self.qrframe, image=self.tkimg)
+            self.qrlabel.pack(side = "bottom", fill = "both", expand = "yes")
+
 
 #------------------------------------------------------------------------------#
 # main
