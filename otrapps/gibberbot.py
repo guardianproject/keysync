@@ -6,6 +6,7 @@ import os
 import sys
 import pyjavaproperties
 import subprocess
+import tempfile
 import util
 
 class GibberbotProperties():
@@ -85,8 +86,8 @@ class GibberbotProperties():
             if 'verification' in key and key['verification'] != None:
                 p.setProperty(key['name'] + '.' + key['fingerprint'].lower()
                               + '.publicKey.verified', 'true')
-        filename = os.path.join(savedir, 'otr_keystore')
-        f = open(filename, 'w')
+        fd, filename = tempfile.mkstemp()
+        f = os.fdopen(fd, 'w')
         p.store(f)
 
         # if there is no password, then one has not been set, or there are not
@@ -94,11 +95,13 @@ class GibberbotProperties():
         if password:
             # create passphrase file from the first private key
             cmd = ['openssl', 'aes-256-cbc', '-pass', 'stdin', '-in', filename,
-                   '-out', "%s.ofcaes" % (filename)]
+                   '-out', os.path.join(savedir, 'otr_keystore.ofcaes')]
             p = subprocess.Popen(cmd, stdin=subprocess.PIPE,
                                  stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             GibberbotProperties.password = password
             print(p.communicate(password))
+        else:
+            os.rename(filename, os.path.join(savedir, 'otr_keystore'))
 
 
 #------------------------------------------------------------------------------#
