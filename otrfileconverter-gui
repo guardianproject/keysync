@@ -8,11 +8,7 @@ import tkFileDialog
 import tkMessageBox
 
 import otrapps
-from otrapps.adium import AdiumProperties
 from otrapps.gibberbot import GibberbotProperties
-from otrapps.jitsi import JitsiProperties
-from otrapps.irssi import IrssiProperties
-from otrapps.pidgin import PidginProperties
 
 class MenuBar(Menu):
 
@@ -120,28 +116,18 @@ class App(Tk):
 
     def getpath(self, app):
         '''output the standard path of a given app'''
-        if app == 'adium':
-            return AdiumProperties.path
-        elif app == 'jitsi':
-            return JitsiProperties.path
-        elif app == 'irssi':
-            return IrssiProperties.path
-        elif app == 'pidgin':
-            return PidginProperties.path
-        else:
+        try:
+            return otrapps.apps[app].path
+        except KeyError:
+            print "Invalid app: %s" % ( app )
             return None
 
     def detectfiles(self):
         '''detect which apps are installed based on the existence of OTR files'''
         haveapps = []
-        if os.path.exists(AdiumProperties.path):
-            haveapps.append('adium')
-        if os.path.exists(JitsiProperties.path):
-            haveapps.append('jitsi')
-        if os.path.exists(IrssiProperties.path):
-            haveapps.append('irssi')
-        if os.path.exists(PidginProperties.path):
-            haveapps.append('pidgin')
+        for app in otrapps.apps:
+            if os.path.exists(otrapps.apps[app].path):
+                haveapps.append(app)
         return haveapps
 
     def convert(self):
@@ -149,15 +135,10 @@ class App(Tk):
         app = self.fromapp.get()
         keys = None
         print 'Parsing ', app
-        if app == 'adium':
-            keys = AdiumProperties.parse()
-        elif app == 'jitsi':
-            keys = JitsiProperties.parse()
-        elif app == 'irssi':
-            keys = IrssiProperties.parse()
-        elif app == 'pidgin':
-            keys = PidginProperties.parse()
-        else:
+        try:
+            keys = otrapps.apps[app].parse()
+        except KeyError:
+            print "Invalid app: %s" % ( app )
             return None
         if keys:
             import qrcode

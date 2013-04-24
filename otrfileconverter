@@ -102,11 +102,11 @@ def main(argv):
 
     # defaults
     if platform.system() == 'Darwin':
-        default_input = 'adium'
+        default_input = ['adium']
     else:
-        default_input = 'pidgin'
+        default_input = ['pidgin']
 
-    default_output = 'gibberbot'
+    default_output = ['gibberbot']
 
 
     parser = argparse.ArgumentParser()
@@ -123,6 +123,7 @@ def main(argv):
                         help='do not print the Gibberbot QR Code to the terminal')
     parser.add_argument('-q', '--quiet', action='store_true', default=False,
                         help='do not print anything to the terminal')
+    parser.add_argument('-t', '--test', help=argparse.SUPPRESS, default=None)
     parser.add_argument('--version', action='version', version='%(prog)s 0.1')
     args = parser.parse_args()
 
@@ -131,42 +132,31 @@ def main(argv):
     args.output = [o.lower() for o in args.output]
 
     keydict = dict()
-    if 'adium' in args.input:
-        otrapps.util.merge_keydicts(keydict, AdiumProperties.parse())
-    if 'gajim' in args.input:
-        otrapps.util.merge_keydicts(keydict, GajimProperties.parse())
-    if 'gibberbot' in args.input:
-        keyfile = os.path.join(args.output_folder, GibberbotProperties.keyfile)
-        if os.path.exists(keyfile):
-            otrapps.util.merge_keydicts(keydict, GibberbotProperties.parse(keyfile))
+    for app in args.input:
+        print 'Reading %s files...' % ( app )
+        # special case GB for now 'cause of this keyfile business
+        if app == 'gibberbot':
+            keyfile = os.path.join(args.output_folder, GibberbotProperties.keyfile)
+            if os.path.exists(keyfile):
+                otrapps.util.merge_keydicts(keydict, GibberbotProperties.parse(keyfile))
+            else:
+                print('Gibberbot WARNING: No usable "' + GibberbotProperties.keyfile +
+                    '" file found, not reading keys from Gibberbot!')
+            break
+
+        properties = otrapps.apps[app]
+        if args.test:
+            # example: "tests/gajim/"
+            settings_dir = os.path.join(args.test, app)
+            otrapps.util.merge_keydicts(keydict, properties.parse(settings_dir))
         else:
-            print('Gibberbot WARNING: No usable "' + GibberbotProperties.keyfile +
-                  '" file found, not reading keys from Gibberbot!')
-    if 'jitsi' in args.input:
-        otrapps.util.merge_keydicts(keydict, JitsiProperties.parse())
-    if 'irssi' in args.input:
-        otrapps.util.merge_keydicts(keydict, IrssiProperties.parse())
-    if 'pidgin' in args.input:
-        otrapps.util.merge_keydicts(keydict, PidginProperties.parse())
-    if 'gpg' in args.input:
-        otrapps.util.merge_keydicts(keydict, GPGProperties.parse())
+            otrapps.util.merge_keydicts(keydict, properties.parse())
 
     if keydict:
         if not os.path.exists(args.output_folder):
             os.makedirs(args.output_folder)
-        if 'all' in args.output:
-            AdiumProperties.write(keydict, otrapps.make_outdir(args.output_folder, 'adium'))
-            GajimProperties.write(keydict, otrapps.make_outdir(args.output_folder, 'gajim'))
-            GibberbotProperties.write(keydict, otrapps.make_outdir(args.output_folder, 'gibberbot'))
-            JitsiProperties.write(keydict, otrapps.make_outdir(args.output_folder, 'jitsi'))
-            IrssiProperties.write(keydict, otrapps.make_outdir(args.output_folder, 'irssi'))
-            PidginProperties.write(keydict, otrapps.make_outdir(args.output_folder, 'pidgin'))
-            #GPGProperties.write(keydict, otrapps.make_outdir(args.output_folder, 'gpg'))
-        else:
-            if 'adium' in args.output:
-                AdiumProperties.write(keydict, args.output_folder)
-            if 'gajim' in args.output:
-                GajimProperties.write(keydict, args.output_folder)
+        for app in args.output:
+            # once again special case GB
             if 'gibberbot' in args.output:
                 GibberbotProperties.write(keydict, args.output_folder)
                 if not args.quiet:
@@ -177,15 +167,10 @@ def main(argv):
                         qr = qrcode.QRCode()
                         qr.add_data(GibberbotProperties.password)
                         qr.print_tty()
-            if 'jitsi' in args.output:
-                JitsiProperties.write(keydict, args.output_folder)
-            if 'irssi' in args.output:
-                IrssiProperties.write(keydict, args.output_folder)
-            if 'pidgin' in args.output:
-                PidginProperties.write(keydict, args.output_folder)
-            if 'gpg' in args.output:
-                GPGProperties.write(keydict, args.output_folder)
+                break
 
+            properties = otrapps.apps[app]
+            properties.write(keydict, args.output_folder)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
