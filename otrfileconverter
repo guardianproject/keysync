@@ -166,7 +166,7 @@ def main(argv):
             # once again special case GB
             if 'gibberbot' in args.output:
                 GibberbotProperties.write(keydict, args.output_folder)
-                if not args.quiet:
+                if not args.quiet and GibberbotProperties.password:
                     print('\nenter this password into Gibberbot: ' + GibberbotProperties.password)
                     if not args.no_qrcode and sys.stdout.isatty():
                         print('or just scan this QR Code:')
