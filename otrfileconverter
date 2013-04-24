@@ -99,11 +99,23 @@ def testforfile(files):
 
 
 def main(argv):
+
+    # defaults
+    if platform.system() == 'Darwin':
+        default_input = 'adium'
+    else:
+        default_input = 'pidgin'
+
+    default_output = 'gibberbot'
+
+
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--input', action='append',
-                        help="specify which programs to take as input: adium, gajim, gibberbot, irssi, jitsi, pidgin (if multiple then they'll be merged)")
+                        choices=otrapps.apps_supported, default=default_input,
+                        help="specify which programs to take as input. if multiple then they'll be merged (default: %(default)s)")
     parser.add_argument('-o', '--output', action='append',
-                        help="specify which format to write out: all, adium, gajim, gibberbot, irssi, jitsi, pidgin (if multiple then each will be written out)")
+                        choices=otrapps.apps_supported, default=default_output,
+                        help="specify which format to write out. if multiple then each will be written out (default: %(default)s)")
     # TODO add --input-folder option, it will conflict with '--input all'
     parser.add_argument('--output-folder', default=os.getcwd(),
                         help='the folder to write the output files to (defaults to current folder)')
@@ -113,16 +125,6 @@ def main(argv):
                         help='do not print anything to the terminal')
     parser.add_argument('--version', action='version', version='%(prog)s 0.1')
     args = parser.parse_args()
-
-
-    # set defaults
-    if not args.input:
-        if platform.system() == 'Darwin':
-            args.input = ['adium']
-        else:
-            args.input = ['pidgin']
-    if not args.output:
-        args.output = ['gibberbot']
 
     # downcase all names to be a little more friendly
     args.input = [i.lower() for i in args.input]
