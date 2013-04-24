@@ -32,6 +32,7 @@ List of python dependencies:
 * gnupg-interface - http://py-gnupg.sourceforge.net/
 * pyasn - https://code.google.com/p/pyasn/
 * beautifulsoup 3 - http://www.crummy.com/software/BeautifulSoup/
+* qrcode - https://github.com/lincolnloop/python-qrcode
 
 
 Ubuntu/Mint/Debian:
