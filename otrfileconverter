@@ -3,9 +3,6 @@
 
 import sys
 import os
-import struct
-import base64
-import string
 import platform
 import argparse
 import pprint
