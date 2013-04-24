@@ -7,6 +7,7 @@ import sys
 import pyjavaproperties
 import subprocess
 import tempfile
+import shutil
 import util
 
 class GibberbotProperties():
@@ -101,7 +102,7 @@ class GibberbotProperties():
             GibberbotProperties.password = password
             print(p.communicate(password))
         else:
-            os.rename(filename, os.path.join(savedir, 'otr_keystore'))
+            shutil.move(filename, os.path.join(savedir, 'otr_keystore'))
 
 
 #------------------------------------------------------------------------------#
