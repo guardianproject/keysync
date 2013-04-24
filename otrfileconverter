@@ -99,20 +99,24 @@ def main(argv):
 
     # defaults
     if platform.system() == 'Darwin':
-        default_input = ['adium']
+        default_input = 'adium'
     else:
-        default_input = ['pidgin']
+        default_input = 'pidgin'
 
-    default_output = ['gibberbot']
+    default_output = 'gibberbot'
 
 
     parser = argparse.ArgumentParser()
+    # Note: the 'default' argument is not used with the input and output args
+    # below, because the combination of the append action and default, means
+    # the default will ALWAYS appear in the actions.
+    # this may or may not be an argparse bug.
     parser.add_argument('-i', '--input', action='append',
-                        choices=otrapps.apps_supported, default=default_input,
-                        help="specify which programs to take as input. if multiple then they'll be merged (default: %(default)s)")
+                        choices=otrapps.apps_supported,
+                        help="specify which programs to take as input. if multiple then they'll be merged (default: %s)" % (default_input))
     parser.add_argument('-o', '--output', action='append',
-                        choices=otrapps.apps_supported, default=default_output,
-                        help="specify which format to write out. if multiple then each will be written out (default: %(default)s)")
+                        choices=otrapps.apps_supported,
+                        help="specify which format to write out. if multiple then each will be written out (default: %s)" % (default_output))
     # TODO add --input-folder option, it will conflict with '--input all'
     parser.add_argument('--output-folder', default=os.getcwd(),
                         help='the folder to write the output files to (defaults to current folder)')
@@ -123,6 +127,12 @@ def main(argv):
     parser.add_argument('-t', '--test', help=argparse.SUPPRESS, default=None)
     parser.add_argument('--version', action='version', version='%(prog)s 0.1')
     args = parser.parse_args()
+
+    # manually set defaults, see Note above
+    if len(args.input) == 0:
+        args.input = [default_input]
+    if len(args.output) == 0:
+        args.output = [default_output]
 
     # downcase all names to be a little more friendly
     args.input = [i.lower() for i in args.input]
