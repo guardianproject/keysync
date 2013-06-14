@@ -44,7 +44,13 @@ Ubuntu/Mint/Debian:
     sudo apt-get update
     sudo apt-get install otrfileconverter
 
-	PPA URL: https://launchpad.net/~guardianproject/+archive/ppa
+    PPA URL: https://launchpad.net/~guardianproject/+archive/ppa
+
+    If you want to install the dependencies because you're going to develop
+    otrfileconverter, then install them manually with:
+
+    apt-get install python-pyparsing python-pyasn1.codec python-pyasn1 python-potr \
+      python-pyjavaproperties python-BeautifulSoup
 
     For Debian, you can try using the Ubuntu PPA, with something like
     'oneiric' for wheezy, and 'natty' for squeeze: 
