@@ -180,16 +180,15 @@ Build the package:
 
 ```bash
 cd pyinstaller-pyinstaller-3f7f9a0/
-python pyinstaller.py ../otrfileconverter/otrfileconverter-gui
+python pyinstaller.py --onefile ../otrfileconverter/otrfileconverter-gui
 ```
 
-Optionally pass the `--onefile` to pyinstaller.py to produce a single exe file.
-
-More reading: [PyInstaller Manual](http://htmlpreview.github.io/?https://github.com/pyinstaller/pyinstaller/blob/develop/doc/Manual.html)
+You can omit the `--onefile` parameter, see the [PyInstaller
+Manual](http://htmlpreview.github.io/?https://github.com/pyinstaller/pyinstaller/blob/develop/doc/Manual.html)
+for what exactly the consequences of both modes are.
 
 If the process succeeds, then check the `otrfileconverter/dist` directory
 inside the pyinstaller directory.
-
 
 # Security Considerations
 
