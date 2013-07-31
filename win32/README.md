@@ -1,7 +1,6 @@
 # Building On Windows
 
-Producing a Windows build of otrfileconverter requires a Windows machine. We
-should investigate if this is doable with wine.
+Either a Windows machine or a Linux box with wine installed will do to produce a w32 binary.
 
 ![](w32-screenshot.png)
 
@@ -27,6 +26,12 @@ should investigate if this is doable with wine.
 * [Pidgin][pidgin] ([sig][pidginsig])
 * [Pidgin OTR Plugin][pidgin-otr] ([sig][pidgin-otrsig])
 
+**Builds on Linux**
+
+Install wine:
+
+* Debian/Ubuntu: `sudo apt-get install wine`
+* Fedora: `sudo yum install wine`
 
 
 ## Install Prerequisites
@@ -54,14 +59,18 @@ should investigate if this is doable with wine.
 ### Python
 
 1. Execute the Python installer, use default options
+    * Linux+Wine: you must use `msiexec /i python-2.7.5.msi`
 
 ### Python W32 Bindings
 
 1. Execute the Python installer, use default options
 
+
 ## Post Python Install Configuration
 
 **Configure the PATH environment variable**
+
+Windows:
 
 1. Right-click on My Computer and select properties
 2. Go to the 'Advanced' section and select 'Environment variables'
@@ -71,6 +80,12 @@ should investigate if this is doable with wine.
     ```
     C:\MinGW\bin;C:\MinGW\msys\1.0\bin;C:\Python27;C:\Python27\Scripts;C:\OpenSSL-Win32\bin;
     ```
+
+Linux+Wine:
+
+1. Open regedit using the `regedit` command
+2. Edit `HKEY_CURRENT_USER/Environment`
+3. Add a new String value called `PATH` using the value above
 
 **Set Python to use MinGW**
 
@@ -103,7 +118,11 @@ Note: your $HOME when using MinGW shell is in C:\MinGW\msys\1.0\home\USERNAME
 ### setuptools, distribute, pip
 
 1. Open your MinGW Shell
+    * Windows: Start -> MinGW -> MinGW Shell
+    * Linux+Wine: `wine cmd.exe /C C:\MinGW/msys/1.0/msys.bat`
 2. cd to where you downloaded [ez_setup.py][setuptools]
+    * Windows: Access the normal windows FS using the /c/ path (i.e., /c/ corresponds to C:\)
+    * Linux+Wine: Access your native root fs with /z/
 3. Execute:
 
 ```bash
@@ -114,9 +133,7 @@ Note: your $HOME when using MinGW shell is in C:\MinGW\msys\1.0\home\USERNAME
 
 ### PyCrypto
 
-1. cd to your extracted pycrypto dir
-
-    `cd pycrypt-2.6`
+1. cd to your extracted pycrypto dir: `cd pycrypto-2.6`
 2. `python setup.py build -c mingw32`
 3. `python seutp.py install`
 
