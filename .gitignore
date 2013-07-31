@@ -4,3 +4,5 @@
 output/
 tests/openssl/*.pem
 tests/openssl/*.properties
+
+win32/files/*

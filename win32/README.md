@@ -1,0 +1,203 @@
+# Building On Windows
+
+Producing a Windows build of otrfileconverter requires a Windows machine. We
+should investigate if this is doable with wine.
+
+![](w32-screenshot.png)
+
+## Download Prerequisites 
+
+**Automatic Download** (Recommended) 
+
+1. Execute the`fetch-and-verify.sh` script
+3. Copy all the files to your windows computer
+4. Download the [VS 2008 redistributable][vsredist]
+
+**Manual Download**
+
+* [Python 2.7][py27] ([sig][pysig])
+* [Python Windows 32 Bindings][pywin32]
+* [PyInstaller Development Version][pyinst]
+* [Setuptools Bootstrap][setuptools]
+* [MingW Installer][mingw]
+* [OpenSSL-Win32][openssl]
+* [MS VS 2008 redistributable][vsredist]
+* [PyCrypto Source][pycrypto] ([sig][pycryptosig])
+* [Pure Python OTR Source][potr]
+* [Pidgin][pidgin] ([sig][pidginsig])
+* [Pidgin OTR Plugin][pidgin-otr] ([sig][pidgin-otrsig])
+
+
+
+## Install Prerequisites
+
+### MingW
+
+1. Execute the installer
+2. Follow the wizard
+3. When prompted in the installer choose this options:
+
+```
+    C compiler
+    C++ compiler
+    Msys basic system
+    MinGW Developer Toolkit
+```
+
+### OpenSSL
+
+1. Execute the vcredist_x86.exe package
+2. Install it completely
+3. Execute the OpenSSL installer
+4. When prompted choose "Copy OpenSSL DLLs to:  The OpenSSL binaries (/bin) directory"
+
+### Python
+
+1. Execute the Python installer, use default options
+
+### Python W32 Bindings
+
+1. Execute the Python installer, use default options
+
+## Post Python Install Configuration
+
+**Configure the PATH environment variable**
+
+1. Right-click on My Computer and select properties
+2. Go to the 'Advanced' section and select 'Environment variables'
+3. Select 'Path' from the 'System Variables' and click the 'Edit button'
+4. Append the following to your PATH variable:
+
+    ```
+    C:\MinGW\bin;C:\MinGW\msys\1.0\bin;C:\Python27;C:\Python27\Scripts;C:\OpenSSL-Win32\bin;
+    ```
+
+**Set Python to use MinGW**
+
+1. Create the following file: C:\Python27\Lib\distutils\distutils.cfg
+2. Append:
+
+```
+    [build]
+    compiler=mingw32
+```
+3. Save and close
+
+**Fix -mno-cygwin error**
+
+To prevent the following error when building Python modules, we must edit a distutils file.
+
+    gcc: error: unrecognized command line option '-mno-cygwin'
+
+1. Edit the file `C:\Python27\Lib\distutils\cygwinccompiler.py`
+2. Look for the class: `Mingw32CCompiler` around line 297
+3. Find the block that beings with 'self.set_executables('
+4. Delete all the '-mno-cygwin' flags
+5. Save and close
+
+
+## Install Python Dependencies
+
+Note: your $HOME when using MinGW shell is in C:\MinGW\msys\1.0\home\USERNAME
+
+### setuptools, distribute, pip
+
+1. Open your MinGW Shell
+2. cd to where you downloaded [ez_setup.py][setuptools]
+3. Execute:
+
+```bash
+    python ez_setup.py
+    easy_install distribute
+    easy_install pip
+```
+
+### PyCrypto
+
+1. cd to your extracted pycrypto dir
+
+    `cd pycrypt-2.6`
+2. `python setup.py build -c mingw32`
+3. `python seutp.py install`
+
+### Pillow (the PIL fork)
+
+Note: We use easy_install instead of pip, because pip doesn't download eggs with prebuilt binaries
+
+1. `easy_install Pillow`
+
+### Pure Python OTR
+
+Note: We use the development version (beta6) because it is not on PyPi
+
+1. `cd pure-python-otr-1.0.0beta6`
+2. `python setup.py install`
+
+### Remaining Dependencies
+
+1. `cd otrfileconverter`
+2. `pip install -r python-deps.txt`
+
+## Verify Everything Works
+
+At this point, all the dependencies for otrfileconverter should be installed
+and functioning, so otrfileconverter should work. You can test it by running otrfileconverter-gui:
+
+You'll probably want to install Pidgin, pidgin-otr, and configure an account before running otrfileconverter.
+
+```bash
+cd otrfileconverter
+python otrfileconverter-gui
+```
+Do not proceed unless the GUI pops up and the app functions as expected.
+
+## Create Windows Executable with PyInstaller
+
+Note: Due to [bug 651](http://www.pyinstaller.org/ticket/651) the development version of PyInstaller must be used.
+
+Extract the pyinstaller archive. It is not installed, we will build the package
+inside the pyinstaller directory. PyInstaller works by executing pyinstaller.py
+taking our primary script as the argument.
+
+Build the package:
+
+```bash
+cd pyinstaller-pyinstaller-3f7f9a0/
+python pyinstaller.py ../otrfileconverter/otrfileconverter-gui
+```
+
+Optionally pass the `--onefile` to pyinstaller.py to produce a single exe file.
+
+More reading: [PyInstaller Manual](http://htmlpreview.github.io/?https://github.com/pyinstaller/pyinstaller/blob/develop/doc/Manual.html)
+
+If the process succeeds, then check the `otrfileconverter/dist` directory
+inside the pyinstaller directory.
+
+
+# Security Considerations
+
+Unfortunately most of the dependencies and toolchain used above are not
+available to download over HTTPS nor do they have signatures to verify. Even
+MinGW lacks any sort of secure download, so securely building the dependencies from
+source may not be possible.
+
+Also, according to [this ticket](http://sourceforge.net/p/pywin32/bugs/519/)
+the Python Win32 bindings are not easily buildable with MinGW.
+
+[py27]: http://www.python.org/ftp/python/2.7.5/python-2.7.5.msi
+[pysig]: http://www.python.org/ftp/python/2.7.5/python-2.7.5.msi.asc
+[pywin32]: http://downloads.sourceforge.net/project/pywin32/pywin32/Build%20218/pywin32-218.win32-py2.7.exe?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fpyw#
+[pyinst]: https://github.com/pyinstaller/pyinstaller/tarball/develop
+[setuptools]: https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py
+[mingw]: http://downloads.sourceforge.net/project/mingw/Installer/mingw-get-inst/mingw-get-inst-20120426/mingw-get-inst-20120426.exe?r=&use_mirror=superb#
+[openssl]: https://slproweb.com/download/Win32OpenSSL-1_0_1e.exe
+[vsredist]: http://www.microsoft.com/en-us/download/details.aspx?id=29
+[pycrypto]: https://pypi.python.org/packages/source/p/pycrypto/pycrypto-2.6.tar.gz#md5=88dad0a270d1fe83a39e0467a66a22bb
+[pycryptosig]: https://pypi.python.org/packages/source/p/pycrypto/pycrypto-2.6.tar.gz.asc
+[potr]: https://github.com/afflux/pure-python-otr/archive/1.0.0beta6.zip
+[pidgin]: http://downloads.sourceforge.net/project/pidgin/Pidgin/2.10.7/pidgin-2.10.7-offline.exe?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fpidgin%2Ffil#
+[pidginsig]: http://downloads.sourceforge.net/project/pidgin/Pidgin/2.10.7/pidgin-2.10.7-offline.exe.asc?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fpidgin%2#
+[pidgin-otr]: http://www.cypherpunks.ca/otr/binaries/windows/pidgin-otr-4.0.0-1.exe
+[pidgin-otrsig]: http://www.cypherpunks.ca/otr/binaries/windows/pidgin-otr-4.0.0-1.exe.asc
+
+
