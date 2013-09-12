@@ -147,11 +147,10 @@ class App(Tk):
             otrapps.make_outdir(self.tofolder.get(), '')
             GibberbotProperties.write(keys, self.tofolder.get())
 
-            img = qrcode.make(GibberbotProperties.password)
-            fd, imgfile = tempfile.mkstemp(suffix='.png')
-            f = os.fdopen(fd, 'w')
-            img.save(f)
-            f.close()
+            qr = qrcode.QRCode(border=4)
+            qr.add_data(GibberbotProperties.password)
+            qr.make(fit=True)
+            img = qr.make_image()
 
             self.qrwindow = Toplevel(self)
             self.qrframe = Frame(self.qrwindow)
@@ -161,8 +160,7 @@ class App(Tk):
                      + '\nor just scan this QRCode:')
             self.pwlabel = Label(self.qrframe, text=pwtxt)
             self.pwlabel.pack(side = "top", fill = "both", expand = "yes")
-            self.tkimg = ImageTk.PhotoImage(Image.open(imgfile))
-            os.remove(imgfile)
+            self.tkimg = ImageTk.PhotoImage(img)
             self.qrlabel = Label(self.qrframe, image=self.tkimg)
             self.qrlabel.pack(side = "bottom", fill = "both", expand = "yes")
 
