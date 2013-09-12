@@ -38,16 +38,16 @@ List of python dependencies:
 Ubuntu/Mint/Debian:
 
     We're working to get all packages into Debian/Ubuntu, in the meantime you can 
-    install otrfileconverter by adding our PPA (fingerprint F50EADDD2234F563):
+    install KeySync by adding our PPA (fingerprint F50EADDD2234F563):
 
     sudo add-apt-repository ppa:guardianproject/ppa
     sudo apt-get update
-    sudo apt-get install otrfileconverter
+    sudo apt-get install keysync
 
     PPA URL: https://launchpad.net/~guardianproject/+archive/ppa
 
     If you want to install the dependencies because you're going to develop
-    otrfileconverter, then install them manually with:
+    KeySync, then install them manually with:
 
     apt-get install python-pyparsing python-pyasn1.codec python-pyasn1 python-potr \
       python-pyjavaproperties python-BeautifulSoup
@@ -76,17 +76,12 @@ USAGE
 
 Currently, the code allows for reading multiple file formats into a python
 dictionary form.  The only export method currently activated is for Gibberbot
-format in a file called otr_keystore.  To use, point the 'otrfileconverter
+format in a file called otr_keystore.ofcaes.  To use, point the `keysync`
 script the app that you want to read OTR info from, and it will generate
-'otr_keystore' to send to Gibberbot on your Android device (run
-./otrfileconverter --help to see all currently available options).
+`otr_keystore` to send to Gibberbot on your Android device (run
+`keysync --help` to see all currently available options).
 
-  ./otrfileconverter --pidgin
-
-You currently need to have root on your Android device in order to upload a
-new OTR keystore to Gibberbot.  Here's how:
-
-  adb push otr_keystore /data/data/info.guardianproject.otr.app.im/files/
+  keysync --input pidgin
 
 
 =======

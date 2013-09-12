@@ -1,5 +1,5 @@
 include README.txt
 include LICENSE.txt
-include otrfileconverter
-include otrfileconverter-gui
+include keysync
+include keysync-gui
 recursive-include tests

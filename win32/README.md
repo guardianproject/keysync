@@ -152,19 +152,19 @@ Note: We use the development version (beta6) because it is not on PyPi
 
 ### Remaining Dependencies
 
-1. `cd otrfileconverter`
+1. `cd keysync`
 2. `pip install -r python-deps.txt`
 
 ## Verify Everything Works
 
-At this point, all the dependencies for otrfileconverter should be installed
-and functioning, so otrfileconverter should work. You can test it by running otrfileconverter-gui:
+At this point, all the dependencies for keysync should be installed
+and functioning, so keysync should work. You can test it by running keysync-gui:
 
-You'll probably want to install Pidgin, pidgin-otr, and configure an account before running otrfileconverter.
+You'll probably want to install Pidgin, pidgin-otr, and configure an account before running keysync.
 
 ```bash
-cd otrfileconverter
-python otrfileconverter-gui
+cd keysync
+python keysync-gui
 ```
 Do not proceed unless the GUI pops up and the app functions as expected.
 
@@ -180,14 +180,14 @@ Build the package:
 
 ```bash
 cd pyinstaller-pyinstaller-3f7f9a0/
-python pyinstaller.py --onefile ../otrfileconverter/otrfileconverter-gui
+python pyinstaller.py --onefile ../keysync/keysync-gui
 ```
 
 You can omit the `--onefile` parameter, see the [PyInstaller
 Manual](http://htmlpreview.github.io/?https://github.com/pyinstaller/pyinstaller/blob/develop/doc/Manual.html)
 for what exactly the consequences of both modes are.
 
-If the process succeeds, then check the `otrfileconverter/dist` directory
+If the process succeeds, then check the `keysync/dist` directory
 inside the pyinstaller directory.
 
 # Security Considerations

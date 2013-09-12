@@ -3,15 +3,15 @@
 
 from distutils.core import setup
 
-setup(name='otrfileconverter',
+setup(name='keysync',
       version='0.0.1',
       description='syncs OTR keys between different IM programs',
       author='The Guardian Project',
       author_email='support@guardianproject.info',
       url='https://github.com/guardianproject/otrfileconverter',
       packages=['otrapps'],
-      scripts=['otrfileconverter', 'otrfileconverter-gui'],
-      data_files=[('share/man/man1', ['man/otrfileconverter.1'])],
+      scripts=['keysync', 'keysync-gui'],
+      data_files=[('share/man/man1', ['man/keysync.1'])],
       license='GPLv3+',
       classifiers=[
           'Development Status :: 3 - Alpha',
