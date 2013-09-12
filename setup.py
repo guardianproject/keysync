@@ -5,9 +5,9 @@ from distutils.core import setup
 
 setup(name='otrfileconverter',
       version='0.0.1',
-      description='converts OTR keys between the different IM programs',
-      author='Hans-Christoph Steiner',
-      author_email='hans@eds.org',
+      description='syncs OTR keys between different IM programs',
+      author='The Guardian Project',
+      author_email='support@guardianproject.info',
       url='https://github.com/guardianproject/otrfileconverter',
       packages=['otrapps'],
       scripts=['otrfileconverter', 'otrfileconverter-gui'],
