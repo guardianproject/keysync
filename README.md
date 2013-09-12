@@ -1,23 +1,77 @@
 
-This project is for converting the various OTR file formats between
-each other.  We are focusing on two major versions: libotr format and
-otr4j, and then a few variants of those major formats.
+KeySync - One key for all of your chat apps
+===========================================
 
-It reads Adium, IRSSI, Jitsi, and Pidgin formats and converts to
-Gibberbot format.  It will produce an 'otr_keystore' file, that
-Gibberbot can use directly.  To install that file using adb, do:
+There are many chat apps that support OTR encryption for verifying messages.
+Many of us use multiple chat apps, including one for desktop and another for
+mobile, or one for Mac OS X and another for GNU/Linux or Windows.  The trust
+relationships are only stored locally in the app in a format that is specific
+to that app.  Switching between all of them means that you have to manage your
+trust relationships for each app that you use.
 
-  adb push otr_keystore /data/data/info.guardianproject.otr.app.im/files/otr_keystore
+KeySync addresses this problem by allowing you to sync your OTR identity and
+trust relationships between multiple apps.  It currently works with ChatSecure
+on Android, and Pidgin, Adium, and Jitsi on desktop.
 
-This is very alpha software, do not rely on it for strong identity
-verification.  It is unlikely to mess up so bad as to produce
-compromised private keys, but anything is possible.  Also, keep in
-mind that program is handling your private OTR keys, so make sure that
-you don't leave the otr_keystore file around somewhere unsafe.  All
-that said, testing and feedback is greatly appreciated, so we can get
-it  to the point where we can trust it.
+How to sync
+-----------
 
-=======
+To sync between ChatSecure and your desktop apps, plug in your phone or device
+via USB and run the sync.  Or you can manually copy the `otr_keystore.ofcaes`
+file over to your device's SD Card, where ChatSecure looks for it.  Using
+ChatSecure, you will need to scan the QRCode that KeySync shows you in order
+to complete the sync.  The `otr_keystore.ofcaes` file is encrypted to prevent
+your private information from leaking out.  That QRCode is the password to
+your keystore, so do not share it with anyone.
+
+If you have multiple chat apps that you use, or you are switching from one to
+another, you can use KeySync to sync up the trust relationships between
+multiple desktop apps.  Here's how:
+
+1. quit all of the chat apps that you want to
+2. select whichever apps you want to sync
+3. then run the sync
+
+Now, open your chat apps and you should have synced trust!  In case of
+problems, it saved your original OTR files in place.  They are named using a
+long string of numbers that represent the time when they were backed up.
+
+This is beta software, do not rely on it for strong identity verification.  It
+is unlikely to mess up so bad as to produce compromised private keys, but
+anything is possible.  Also, keep in mind that program is handling your
+private OTR keys, so make sure that you don't copy, send or email the
+`otr_keystore.ofcaes` file somewhere unsafe.  All that said, testing
+and feedback is greatly appreciated, so we can get it to the point where we
+can trust it.
+
+
+Adding apps to KeySync
+----------------------
+
+This project has libraries for converting the various OTR file formats between
+each other.  We have focused on the two major versions: libotr format and otr4j,
+and then a few variants of those major formats.  All OTR implementations can
+be supported as long as they can be read and parsed by Python.
+
+KeySync has preliminary support for Gajim and IRSSI, and it has a modular
+architecture to allow for expansion.  If you want to add an app that is not
+already included, you just need to make a single python file that converts
+between that app's OTR data format and the KeySync internal format (documented
+below).
+
+
+Reporting bugs
+--------------
+
+We appreciate all feedback, be it bug reports, patches, pull requests, feature
+requests, etc.  Please add your bugs and requests to our issue tracker:
+
+https://dev.guardianproject.info/projects/keysync/issues
+
+Email us at support@guardianproject.info with questions, problems, etc., or
+just to let us know that you are using KeySync and find it useful.
+
+
 INSTALL
 =======
 
@@ -35,40 +89,66 @@ List of python dependencies:
 * qrcode - https://github.com/lincolnloop/python-qrcode
 
 
-Ubuntu/Mint/Debian:
+Debian/Ubuntu/Mint/etc
+----------------------
 
-    We're working to get all packages into Debian/Ubuntu, in the meantime you can 
-    install KeySync by adding our PPA (fingerprint F50EADDD2234F563):
+We're working to get all packages into official Debian/Ubuntu/etc. releases,
+in the meantime you can install KeySync by adding our PPA (fingerprint
+F50EADDD2234F563):
 
     sudo add-apt-repository ppa:guardianproject/ppa
     sudo apt-get update
     sudo apt-get install keysync
 
-    PPA URL: https://launchpad.net/~guardianproject/+archive/ppa
+PPA URL: https://launchpad.net/~guardianproject/+archive/ppa
 
-    If you want to install the dependencies because you're going to develop
-    KeySync, then install them manually with:
+If you want to install the dependencies because you're going to develop
+KeySync, then install them manually with:
 
     apt-get install python-pyparsing python-pyasn1.codec python-pyasn1 python-potr \
       python-pyjavaproperties python-BeautifulSoup
 
-    For Debian, you can try using the Ubuntu PPA, with something like
-    'oneiric' for wheezy, and 'natty' for squeeze: 
+For Debian, you can try using the Ubuntu PPA, with something like oneiric for
+wheezy, and natty for squeeze:
 
   deb http://ppa.launchpad.net/guardianproject/ppa/ubuntu oneiric main
 
- Fink: 
+
+Mac OS X
+--------
+
+For Mac OS X, you can download the binary app from our website:
+https://guardianproject.info
+
+
+You can also install KeySync using Fink:
+
     fink install pycrypto-py27 pyparsing-py27 pyjavaproperties-py27 argparse-py27 \
         python-potr-py27 gnupg-interface-py27 pyasn1-py27 beautifulsoup-py27
 
-Local dependencies using pip+virtualenv:
-    Install local build dependencies
-        sudo yum install gmp-devel tk
-    Activate your virtual python environment then:
+
+Windows
+-------
+
+For Windows, you can download the binary app from our website:
+https://guardianproject.info
+
+
+Fedora/Redhat/RPMs
+------------------
+
+Install these build dependencies locally, then follow the instructions for
+pip+virtualenv below:
+
+    sudo yum install gmp-devel tk
+
+
+pip+virtualenv install
+------------------
+
+Activate your virtual python environment then:
         pip install -Ur python-deps.txt
 
-    Currently pure-python-potr is incompatible with setuptools/pip (see bug
-    [#26](https://github.com/afflux/pure-python-otr/issues/26))
 
 =====
 USAGE
@@ -171,8 +251,6 @@ Gajim:
   Windows:
     ~/Application Data/Gajim/
 
-weechat:
-
 
 keyczar
 -------
@@ -216,11 +294,10 @@ specification to get detailed information about the ZID.
   2048 bit Diffie-Helman values
   3072 bit Diffie-Helman values
   256 bit Diffie-Helman elliptic curve
-  384 bit Diffie-Helman elliptic curve 
+  384 bit Diffie-Helman elliptic curve
 
 
 
-==============
 IMPLEMENTATION
 ==============
 
