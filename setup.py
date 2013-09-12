@@ -12,6 +12,8 @@ setup(name='keysync',
       packages=['otrapps'],
       scripts=['keysync', 'keysync-gui'],
       data_files=[('share/man/man1', ['man/keysync.1']),
+                  ('share/icons/hicolor/128x128/apps', ['icons/128x128/keysync.png']),
+                  ('share/icons/hicolor/256x256/apps', ['icons/keysync.png']),
                   ('share/applications', ['keysync.desktop'])],
       license='GPLv3+',
       classifiers=[
