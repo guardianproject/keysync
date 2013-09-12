@@ -15,7 +15,11 @@ from otrapps.gibberbot import GibberbotProperties
 # TODO convert protocol names to a standard format, i.e. prpl-jabber vs. libpurple-Jabber
 # TODO use python-potr's convertkey.py to convert old libotr files
 
-def main(argv):
+# no argv passed in here because argparse just checks sys.argv directly
+def main():
+
+    if len(sys.argv) == 1:
+        sys.argv.append('--help') # if no args, show help
 
     # defaults
     if platform.system() == 'Darwin':
@@ -100,4 +104,4 @@ def main(argv):
             properties.write(keydict, args.output_folder)
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main()
