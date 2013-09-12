@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=KeySync
+GenericName=KeySync
+Comment=Sync all the OTR trust relationships between multiple chat apps
+Exec=keysync-gui
+Terminal=false
+Type=Application
+Icon=keysync.png
+Categories=Utility
+StartupNotify=false
