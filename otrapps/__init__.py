@@ -1,13 +1,14 @@
 import os
-__all__ = ['adium', 'gibberbot', 'irssi', 'jitsi', 'pidgin', 'gajim',]
+__all__ = ['adium', 'gibberbot', 'irssi', 'jitsi', 'pidgin', 'gajim', 'xchat',]
 
-import adium, gibberbot, irssi, jitsi, pidgin, gajim
+import adium, gibberbot, irssi, jitsi, pidgin, gajim, xchat
 apps = { 'adium'     : adium.AdiumProperties,
          'gibberbot' : gibberbot.GibberbotProperties,
          'irssi'     : irssi.IrssiProperties,
          'jitsi'     : jitsi.JitsiProperties,
          'pidgin'    : pidgin.PidginProperties,
          'gajim'     : gajim.GajimProperties,
+         'xchat'     : xchat.XchatProperties,
         }
 apps_supported = apps.keys()
 

@@ -205,6 +205,11 @@ irssi
   differently, basically abbreviated versions of the libotr names.
   Account IDs are used directly in the libotr files.
 
+xchat
+  ~/.xchat2/otr/otr.key
+  ~/.xchat2/otr/otr.fp
+
+  Same as irssi
 
 otr4j
 -----
