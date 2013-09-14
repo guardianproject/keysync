@@ -4,7 +4,7 @@
 from distutils.core import setup
 
 setup(name='keysync',
-      version='0.0.1',
+      version='0.1',
       description='syncs OTR keys between different IM programs',
       author='The Guardian Project',
       author_email='support@guardianproject.info',
