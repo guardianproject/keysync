@@ -8,3 +8,4 @@ Type=Application
 Icon=keysync.png
 Categories=Utility
 StartupNotify=false
+Keywords=secure;private;verified;chat;im;messaging;key;encryption;otr;openpgp;pgp;gpg;gnupg;jabber;xmpp;irc
