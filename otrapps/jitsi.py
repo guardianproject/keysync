@@ -141,15 +141,42 @@ class JitsiProperties():
                 pubkey = (propkey_base + re.sub('[^a-zA-Z0-9_]', '_', key['name'])
                           + '_publicKey')
                 p.setProperty(pubkey, util.ExportDsaX509(key))
-            if 'x' in key and '@' in key['name']:
-                    pubkey = (propkey_base + 'Jabber_' + re.sub('[^a-zA-Z0-9_]', '_', key['name'])
-                               + '_' + re.sub('[^a-zA-Z0-9_]', '_', key['name'].split('@')[1])
-                               + '_publicKey')
+            if 'x' in key:
+                protocol_id = 'UNKNOWN_'
+                domainname = 'unknown'
+                servername = None
+                if '@' in key['name']:
+                    domainname = re.sub('[^a-zA-Z0-9_]', '_', key['name'].split('@')[1])
+                    if 'facebook' in key['name'].split('@')[1]:
+                        protocol_id = 'Facebook_'
+                    elif 'gmail' in key['name'].split('@')[1]:
+                        protocol_id = 'Google_Talk_'
+                        servername = 'talk_google_com'
+                    else:
+                        protocol_id = 'Jabber_'
+                else
+                    if 'icq' in key['protocol']:
+                        protocol_id = 'ICQ_'
+                        domainname = 'icq_com'
+                    elif 'yahoo' in key['protocol']:
+                        protocol_id = 'Yahoo__'
+                        domainname = 'yahoo_com'
+                # Writing
+                pubkey = (propkey_base + protocol_id + re.sub('[^a-zA-Z0-9_]', '_', key['name'])
+                          + '_' + domainname + '_publicKey')
+                p.setProperty(pubkey, util.ExportDsaX509(key))
+                privkey = (propkey_base + protocol_id + re.sub('[^a-zA-Z0-9_]', '_', key['name'])
+                           + '_' + domainname + '_privateKey')
+                p.setProperty(privkey, util.ExportDsaPkcs8(key))
+		   
+                if servername:
+                    pubkey = (propkey_base + protocol_id + re.sub('[^a-zA-Z0-9_]', '_', key['name'])
+                              + '_' + servername + '_publicKey')
                     p.setProperty(pubkey, util.ExportDsaX509(key))
-                    privkey = (propkey_base + 'Jabber_' + re.sub('[^a-zA-Z0-9_]', '_', key['name'])
-                               + '_' + re.sub('[^a-zA-Z0-9_]', '_', key['name'].split('@')[1])
-                               + '_privateKey')
-                    p.setProperty(privkey, util.ExportDsaPkcs8(key))
+                    privkey = (propkey_base + protocol_id + re.sub('[^a-zA-Z0-9_]', '_', key['name'])
+                               + '_' + servername + '_privateKey')
+                    p.setProperty(privkey, util.ExportDsaPkcs8(key))	
+		   		
         p.store(open(savefile, 'w'))
 
 
