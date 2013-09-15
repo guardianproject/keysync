@@ -89,7 +89,7 @@ class App(Tk):
 
     def show_error(self, error_msg):
         print(error_msg)
-        tkMessageBox.showwarning("otrfileconverter error", error_msg)
+        tkMessageBox.showwarning("KeySync error", error_msg)
         return
 
     def select_app(self, app=None):
