@@ -154,7 +154,7 @@ class JitsiProperties():
                         servername = 'talk_google_com'
                     else:
                         protocol_id = 'Jabber_'
-                else
+                else:
                     if 'icq' in key['protocol']:
                         protocol_id = 'ICQ_'
                         domainname = 'icq_com'
