@@ -125,7 +125,7 @@ class JitsiProperties():
         loadfile = os.path.join(savedir, JitsiProperties.propertiesfile)
         savefile = loadfile
         if not os.path.exists(loadfile) and os.path.exists(JitsiProperties.path):
-            print 'Adium WARNING: "' + loadfile + '" does not exist! Reading from:'
+            print 'Jitsi NOTICE: "' + loadfile + '" does not exist! Reading from:'
             loadfile = os.path.join(JitsiProperties.path, JitsiProperties.propertiesfile)
             print '\t"' + loadfile + '"'
 
@@ -143,30 +143,33 @@ class JitsiProperties():
                 p.setProperty(pubkey, util.ExportDsaX509(key))
             if 'x' in key:
                 protocol_id = 'UNKNOWN_'
-                domainname = 'unknown'
+                domain_id = 'unknown'
                 servername = None
                 if '@' in key['name']:
-                    domainname = re.sub('[^a-zA-Z0-9_]', '_', key['name'].split('@')[1])
-                    if 'facebook' in key['name'].split('@')[1]:
+                    domainname = key['name'].split('@')[1]
+                    domain_id = re.sub('[^a-zA-Z0-9_]', '_', domainname)
+                    if domainname == 'chat.facebook.com':
                         protocol_id = 'Facebook_'
-                    elif 'gmail' in key['name'].split('@')[1]:
+                    elif domainname == 'gmail.com' \
+                            or domainname == 'google.com' \
+                            or domainname == 'googlemail.com':
                         protocol_id = 'Google_Talk_'
                         servername = 'talk_google_com'
                     else:
                         protocol_id = 'Jabber_'
                 else:
-                    if 'icq' in key['protocol']:
+                    if key['protocol'] == 'prpl-icq':
                         protocol_id = 'ICQ_'
-                        domainname = 'icq_com'
-                    elif 'yahoo' in key['protocol']:
+                        domain_id = 'icq_com'
+                    elif key['protocol'] == 'prpl-yahoo':
                         protocol_id = 'Yahoo__'
-                        domainname = 'yahoo_com'
+                        domain_id = 'yahoo_com'
                 # Writing
                 pubkey = (propkey_base + protocol_id + re.sub('[^a-zA-Z0-9_]', '_', key['name'])
-                          + '_' + domainname + '_publicKey')
+                          + '_' + domain_id + '_publicKey')
                 p.setProperty(pubkey, util.ExportDsaX509(key))
                 privkey = (propkey_base + protocol_id + re.sub('[^a-zA-Z0-9_]', '_', key['name'])
-                           + '_' + domainname + '_privateKey')
+                           + '_' + domain_id + '_privateKey')
                 p.setProperty(privkey, util.ExportDsaPkcs8(key))
 		   
                 if servername:

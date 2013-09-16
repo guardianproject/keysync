@@ -307,6 +307,11 @@ specification to get detailed information about the ZID.
 IMPLEMENTATION
 ==============
 
+Here are some notes on how things are implemented in KeySync.
+
+Internal key storage
+--------------------
+
 The key idea in the implementation is to get everything into a common format
 internally.  That common format can then be handed to any class for a given
 program, which knows how to output it to the correct file format.  The current
@@ -338,3 +343,19 @@ Sample structure in python dict notation:
         'useridn' : { ... }
     }
 
+
+Protocol IDs
+------------
+
+Unfortunately each app has its own string IDs to represent the different IM
+protocols.  KeySync uses the Pidgin IDs internally.  KeySync is currently
+focused on the widely deployed common standards of XMPP and IRC. We welcome
+contributions for working with the other protocols. These are the IDs that are
+currently working throughout:
+
+prpl-bonjour  XMPP Bonjour (serverless XMPP with mDNS discovery)
+prpl-irc      IRC (Internet Relay Chat)
+prpl-jabber   XMPP (Jabber)
+
+Here is the full list of IDs from Pidgin:
+https://developer.pidgin.im/wiki/prpl_id
