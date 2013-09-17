@@ -171,7 +171,7 @@ class App(Tk):
 root = App()
 windowingsystem = root.tk.call('tk', 'windowingsystem')
 
-root.title('OTRConverter')
+root.title('KeySync')
 root.geometry('520x240')
 root.minsize(280, 220)
 root.mainloop()
