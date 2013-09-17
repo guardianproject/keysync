@@ -24,6 +24,7 @@ format that is commonly used for OTR keys.
 import base64
 import math
 import os
+import re
 try:
     # Import hashlib if Python >= 2.5
     from hashlib import sha1
@@ -437,6 +438,33 @@ def merge_keydicts(kd1, kd2):
             kd1[name] = key
 
 
+def which_apps_are_running(apps):
+    '''
+    Check the process list to see if any of the specified apps are running.
+    It returns a tuple of running apps.
+    '''
+    import psutil
+    running = []
+    for pid in psutil.get_pid_list():
+        p = psutil.Process(pid)
+        for app in apps:
+            r = re.compile('.*' + app + '.*', re.IGNORECASE)
+            m = r.match(p.name)
+            if m:
+                running.append(app)
+            else:
+                for arg in p.cmdline:
+                    m = r.match(arg)
+                    if m and \
+                            (p.name == 'python' or p.name == 'java'):
+                        running.append(app)
+                        break
+    if running == []:
+        return None
+    else:
+        return tuple(running)
+
+
 #------------------------------------------------------------------------------#
 # for testing from the command line:
 def main(argv):
@@ -503,6 +531,12 @@ def main(argv):
     pprint.pprint(keydict3['key'])
     merge_keys(keydict3['key'], key5)
     pprint.pprint(keydict3['key'])
+
+    import otrapps
+    print('\n---------------------------')
+    print('Which supported apps are currently running:')
+    print(which_apps_are_running(otrapps.__all__))
+
 
 
 if __name__ == "__main__":

@@ -87,6 +87,7 @@ List of python dependencies:
 * pyasn - https://code.google.com/p/pyasn/
 * beautifulsoup 3 - http://www.crummy.com/software/BeautifulSoup/
 * qrcode - https://github.com/lincolnloop/python-qrcode
+* psutil - https://code.google.com/p/psutil/
 
 
 Debian/Ubuntu/Mint/etc
@@ -107,7 +108,7 @@ KeySync, then install them manually with:
 
     sudo apt-get install python-pyparsing python-pyasn1 python-potr \
       python-pyjavaproperties python-beautifulsoup python-qrcode \
-      python-pgpdump python-crypto
+      python-pgpdump python-crypto python-psutil
 
 For Debian, you can try using the Ubuntu PPA, with something like oneiric for
 wheezy, and natty for squeeze:
