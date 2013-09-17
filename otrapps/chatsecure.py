@@ -10,7 +10,7 @@ import tempfile
 import shutil
 import util
 
-class GibberbotProperties():
+class ChatSecureProperties():
 
     keyfile = 'otr_keystore'
     path = '/data/data/info.guardianproject.otr.app.im/files/otr_keystore'
@@ -67,10 +67,10 @@ class GibberbotProperties():
 
     @staticmethod
     def write(keydict, savedir, password=None):
-        '''given a keydict, generate a gibberbot file in the savedir'''
+        '''given a keydict, generate a chatsecure file in the savedir'''
         p = pyjavaproperties.Properties()
         for name, key in keydict.iteritems():
-            # only include XMPP keys, since Gibberbot only supports XMPP
+            # only include XMPP keys, since ChatSecure only supports XMPP
             # accounts, so we avoid spreading private keys around
             if key['protocol'] == 'prpl-jabber' or key['protocol'] == 'prpl-bonjour':
                 if 'y' in key:
@@ -99,7 +99,7 @@ class GibberbotProperties():
                    '-out', os.path.join(savedir, 'otr_keystore.ofcaes')]
             p = subprocess.Popen(cmd, stdin=subprocess.PIPE,
                                  stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-            GibberbotProperties.password = password
+            ChatSecureProperties.password = password
             print(p.communicate(password))
         else:
             shutil.move(filename, os.path.join(savedir, 'otr_keystore'))
@@ -110,14 +110,14 @@ class GibberbotProperties():
 def main(argv):
     import pprint
 
-    print 'Gibberbot stores its files in ' + GibberbotProperties.path
+    print 'ChatSecure stores its files in ' + ChatSecureProperties.path
 
     if len(sys.argv) == 2:
         settingsfile = sys.argv[1]
     else:
-        settingsfile = '../tests/gibberbot/otr_keystore'
+        settingsfile = '../tests/chatsecure/otr_keystore'
 
-    p = GibberbotProperties.parse(settingsfile)
+    p = ChatSecureProperties.parse(settingsfile)
     print '----------------------------------------'
     pprint.pprint(p)
     print '----------------------------------------'

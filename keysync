@@ -9,7 +9,7 @@ from pyparsing import *
 
 import otrapps.util
 import otrapps
-from otrapps.gibberbot import GibberbotProperties
+from otrapps.chatsecure import ChatSecureProperties
 
 # TODO merge duplicates in the final keys
 # TODO convert protocol names to a standard format, i.e. prpl-jabber vs. libpurple-Jabber
@@ -27,7 +27,7 @@ def main():
     else:
         default_input = 'pidgin'
 
-    default_output = 'gibberbot'
+    default_output = 'chatsecure'
 
 
     parser = argparse.ArgumentParser()
@@ -45,7 +45,7 @@ def main():
     parser.add_argument('--output-folder', default=os.getcwd(),
                         help='the folder to write the output files to (defaults to current folder)')
     parser.add_argument('--no-qrcode', action='store_true', default=False,
-                        help='do not print the Gibberbot QR Code to the terminal')
+                        help='do not print the ChatSecure QR Code to the terminal')
     parser.add_argument('-q', '--quiet', action='store_true', default=False,
                         help='do not print anything to the terminal')
     parser.add_argument('-t', '--test', help=argparse.SUPPRESS, default=None)
@@ -66,13 +66,13 @@ def main():
     for app in args.input:
         print 'Reading %s files...' % ( app )
         # special case GB for now 'cause of this keyfile business
-        if app == 'gibberbot':
-            keyfile = os.path.join(args.output_folder, GibberbotProperties.keyfile)
+        if app == 'chatsecure':
+            keyfile = os.path.join(args.output_folder, ChatSecureProperties.keyfile)
             if os.path.exists(keyfile):
-                otrapps.util.merge_keydicts(keydict, GibberbotProperties.parse(keyfile))
+                otrapps.util.merge_keydicts(keydict, ChatSecureProperties.parse(keyfile))
             else:
-                print('Gibberbot WARNING: No usable "' + GibberbotProperties.keyfile +
-                    '" file found, not reading keys from Gibberbot!')
+                print('ChatSecure WARNING: No usable "' + ChatSecureProperties.keyfile +
+                    '" file found, not reading keys from ChatSecure!')
             break
 
         properties = otrapps.apps[app]
@@ -88,16 +88,16 @@ def main():
             os.makedirs(args.output_folder)
         for app in args.output:
             # once again special case GB
-            if 'gibberbot' in args.output:
-                GibberbotProperties.write(keydict, args.output_folder)
-                if not args.quiet and GibberbotProperties.password:
+            if 'chatsecure' in args.output:
+                ChatSecureProperties.write(keydict, args.output_folder)
+                if not args.quiet and ChatSecureProperties.password:
                     if not args.no_qrcode and sys.stdout.isatty():
                         print('\nScan this QR Code:')
                         import qrcode
                         qr = qrcode.QRCode()
-                        qr.add_data(GibberbotProperties.password)
+                        qr.add_data(ChatSecureProperties.password)
                         qr.print_tty()
-                    print('\nor enter this password into Gibberbot: \n\t' + GibberbotProperties.password)
+                    print('\nor enter this password into ChatSecure: \n\t' + ChatSecureProperties.password)
                 break
 
             properties = otrapps.apps[app]

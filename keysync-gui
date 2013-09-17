@@ -8,7 +8,7 @@ import tkFileDialog
 import tkMessageBox
 
 import otrapps
-from otrapps.gibberbot import GibberbotProperties
+from otrapps.chatsecure import ChatSecureProperties
 
 class MenuBar(Menu):
 
@@ -145,18 +145,18 @@ class App(Tk):
             import tempfile
 
             otrapps.make_outdir(self.tofolder.get(), '')
-            GibberbotProperties.write(keys, self.tofolder.get())
+            ChatSecureProperties.write(keys, self.tofolder.get())
 
             qr = qrcode.QRCode(border=4)
-            qr.add_data(GibberbotProperties.password)
+            qr.add_data(ChatSecureProperties.password)
             qr.make(fit=True)
             img = qr.make_image()
 
             self.qrwindow = Toplevel(self)
             self.qrframe = Frame(self.qrwindow)
             self.qrframe.pack(side = "top", fill = "both", expand = "yes")
-            pwtxt = ('Enter this password into Gibberbot: \n'
-                     + GibberbotProperties.password
+            pwtxt = ('Enter this password into ChatSecure: \n'
+                     + ChatSecureProperties.password
                      + '\nor just scan this QRCode:')
             self.pwlabel = Label(self.qrframe, text=pwtxt)
             self.pwlabel.pack(side = "top", fill = "both", expand = "yes")
