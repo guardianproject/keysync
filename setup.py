@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from distutils.core import setup
+from setuptools import setup
 
 setup(name='keysync',
     version='0.1',
@@ -30,5 +30,17 @@ setup(name='keysync',
         'Topic :: Software Development :: Libraries',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Utilities',
+    ],
+    install_requires=[
+        'BeautifulSoup',
+        'psutil',
+        'python-potr',
+        'pyasn1',
+        'pycrypto',
+        'pyparsing',
+        'pyjavaproperties',
+        'pgpdump',
+        'PIL',
+        'qrcode',
     ],
 )

@@ -10,3 +10,4 @@ win32/files/*
 MANIFEST
 build/
 dist/
+keysync.egg-info/

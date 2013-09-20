@@ -77,18 +77,23 @@ INSTALL
 
 List of python dependencies:
 
-* pycrypto - https://www.dlitz.net/software/pycrypto/
+* beautifulsoup 3 - http://www.crummy.com/software/BeautifulSoup
+* gnupg-interface - http://py-gnupg.sourceforge.net
+* psutil - https://code.google.com/p/psutil
+* pure-python-otr - https://github.com/afflux/pure-python-otr
+* pyasn1 - http://pyasn1.sourceforge.net/
+* pycrypto - https://www.dlitz.net/software/pycrypto
 * pyparsing - http://pyparsing.wikispaces.com
 * pyjavaproperties - http://pypi.python.org/pypi/pyjavaproperties
-* python-pgpdump - https://pypi.python.org/pypi/pgpdump/
-* argparse - native in >= 2.7, else https://code.google.com/p/argparse/
-* pure-python-otr - https://github.com/afflux/pure-python-otr
-* gnupg-interface - http://py-gnupg.sourceforge.net/
-* pyasn - https://code.google.com/p/pyasn/
-* beautifulsoup 3 - http://www.crummy.com/software/BeautifulSoup/
+* python-pgpdump - https://pypi.python.org/pypi/pgpdump
+* Python Imaging Library - http://www.pythonware.com/products/pil
 * qrcode - https://github.com/lincolnloop/python-qrcode
-* psutil - https://code.google.com/p/psutil/
+* Tkinter - https://wiki.python.org/moin/TkInter
 
+If you are trying to run KeySync using Python older than 2.7, then
+you'll need to also install `argparse`:
+
+* argparse - https://pypi.python.org/pypi/argparse
 
 Debian/Ubuntu/Mint/etc
 ----------------------
@@ -108,7 +113,7 @@ KeySync, then install them manually with:
 
     sudo apt-get install python-pyparsing python-pyasn1 python-potr \
       python-pyjavaproperties python-beautifulsoup python-qrcode \
-      python-pgpdump python-crypto python-psutil
+      python-pgpdump python-crypto python-psutil python-tk python-imaging-tk
 
 For Debian, you can try using the Ubuntu PPA, with something like oneiric for
 wheezy, and natty for squeeze:
