@@ -11,3 +11,5 @@ MANIFEST
 build/
 dist/
 keysync.egg-info/
+# recommended virtualenv folder
+env/

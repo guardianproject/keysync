@@ -127,11 +127,28 @@ Mac OS X
 For Mac OS X, you can download the binary app from our website:
 https://guardianproject.info
 
+You use Brew, Fink, or MacPorts to install pip and virtualenv, then
+use those tools to install KeySync (see the *pip+virtualenv install*
+section):
 
-You can also install KeySync using Fink:
+    fink install pip-systempython26 virtualenv-systempython26
+    sudo port install py27-pip py27-virtualenv
 
-    fink install pycrypto-py27 pyparsing-py27 pyjavaproperties-py27 argparse-py27 \
-        python-potr-py27 gnupg-interface-py27 pyasn1-py27 beautifulsoup-py27
+For homebrew, see: https://gist.github.com/pithyless/1208841
+
+Once you have pip and virtualenv, then you can start to build the
+whole thing.  First follow the pip+virtualenv instructions below.
+Then come back here and do the following in your virtualenv:
+
+    rm -rf build dist
+    pip install py2app
+    python setup.py py2app
+    ls dist/
+
+If you are using py2app older than 0.7.4 on Mac OS X 10.6, then you
+need to patch py2app to make it work with python2.6:
+
+    patch env/lib/python2.6/site-packages/py2app/build_app.py py2app-python2.6.patch
 
 
 Windows
@@ -153,9 +170,16 @@ pip+virtualenv below:
 pip+virtualenv install
 ------------------
 
-Activate your virtual python environment then:
-        pip install -Ur python-deps.txt
+Activate your virtual python environment then run pip to install the dependencies:
 
+    virtualenv ./env
+    . env/bin/activate
+    pip install --pre python-potr
+    pip install -e .
+    ./keysync
+
+For a nice step-by-step HOWTO, see:
+http://exyr.org/2011/virtualenv-HOWTO/slides.html
 
 =====
 USAGE

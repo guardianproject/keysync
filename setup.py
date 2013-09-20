@@ -2,9 +2,42 @@
 # -*- coding: utf-8 -*-
 
 from setuptools import setup
+import sys
+
+if sys.platform == 'darwin':
+     extra_options = dict(
+         setup_requires=['py2app'],
+         app=['keysync-gui'],
+         # Cross-platform applications generally expect sys.argv to
+         # be used for opening files.
+         options=dict(
+             py2app=dict(
+                 argv_emulation=True,
+                 semi_standalone=True,
+                 use_pythonpath=False,
+                 iconfile='icons/keysync.icns',
+                 plist={
+                     'CFBundleIdentifier': 'info.guardianproject.keysync',
+                     'CFBundleName': 'KeySync',
+                     'CFBundleLocalizations': ['en'],
+                 },
+             ),
+         ),
+     )
+elif sys.platform == 'win32':
+     extra_options = dict(
+         setup_requires=['py2exe'],
+         app=['keysync-gui'],
+     )
+else:
+     extra_options = dict(
+         # Normally unix-like platforms will use "setup.py install"
+         # and install the main script as such
+         scripts=['keysync-gui'],
+     )
 
 setup(name='keysync',
-    version='0.1',
+    version='0.1.1',
     description='syncs OTR keys between different IM programs',
     author='The Guardian Project',
     author_email='support@guardianproject.info',
@@ -43,4 +76,5 @@ setup(name='keysync',
         'PIL',
         'qrcode',
     ],
+    **extra_options
 )
