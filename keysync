@@ -64,15 +64,15 @@ def main():
 
     keydict = dict()
     for app in args.input:
-        print 'Reading %s files...' % ( app )
+        print('Reading %s files...' % ( app ))
         # special case GB for now 'cause of this keyfile business
         if app == 'chatsecure':
             keyfile = os.path.join(args.output_folder, ChatSecureProperties.keyfile)
             if os.path.exists(keyfile):
                 otrapps.util.merge_keydicts(keydict, ChatSecureProperties.parse(keyfile))
             else:
-                print('ChatSecure WARNING: No usable "' + ChatSecureProperties.keyfile +
-                    '" file found, not reading keys from ChatSecure!')
+                print(('ChatSecure WARNING: No usable "' + ChatSecureProperties.keyfile +
+                    '" file found, not reading keys from ChatSecure!'))
             break
 
         properties = otrapps.apps[app]
@@ -97,7 +97,7 @@ def main():
                         qr = qrcode.QRCode()
                         qr.add_data(ChatSecureProperties.password)
                         qr.print_tty()
-                    print('\nor enter this password into ChatSecure: \n\t' + ChatSecureProperties.password)
+                    print(('\nor enter this password into ChatSecure: \n\t' + ChatSecureProperties.password))
                 break
 
             properties = otrapps.apps[app]

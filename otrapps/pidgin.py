@@ -105,7 +105,7 @@ if __name__ == '__main__':
 
     import pprint
 
-    print 'Pidgin stores its files in ' + PidginProperties.path
+    print('Pidgin stores its files in ' + PidginProperties.path)
 
     if len(sys.argv) == 2:
         settingsdir = sys.argv[1]

@@ -39,7 +39,7 @@ class GajimProperties():
 def main(argv):
     import pprint
 
-    print 'Gajim stores its files in ' + GajimProperties.path
+    print('Gajim stores its files in ' + GajimProperties.path)
 
     if len(sys.argv) == 2:
         settingsdir = sys.argv[1]
@@ -47,9 +47,9 @@ def main(argv):
         settingsdir = '../tests/gajim'
 
     keydict = GajimProperties.parse(settingsdir)
-    print '----------------------------------------'
+    print('----------------------------------------')
     pprint.pprint(keydict)
-    print '----------------------------------------'
+    print('----------------------------------------')
     GajimProperties.write(keydict, '/tmp')
 
 if __name__ == "__main__":

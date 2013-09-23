@@ -119,7 +119,7 @@ class App(Tk):
         try:
             return otrapps.apps[app].path
         except KeyError:
-            print "Invalid app: %s" % ( app )
+            print("Invalid app: %s" % ( app ))
             return None
 
     def detectfiles(self):
@@ -134,11 +134,11 @@ class App(Tk):
         '''run the conversion from one file set to another'''
         app = self.fromapp.get()
         keys = None
-        print 'Parsing ', app
+        print('Parsing ', app)
         try:
             keys = otrapps.apps[app].parse()
         except KeyError:
-            print "Invalid app: %s" % ( app )
+            print("Invalid app: %s" % ( app ))
             return None
         if keys:
             import qrcode

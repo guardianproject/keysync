@@ -125,9 +125,9 @@ class JitsiProperties():
         loadfile = os.path.join(savedir, JitsiProperties.propertiesfile)
         savefile = loadfile
         if not os.path.exists(loadfile) and os.path.exists(JitsiProperties.path):
-            print 'Jitsi NOTICE: "' + loadfile + '" does not exist! Reading from:'
+            print('Jitsi NOTICE: "' + loadfile + '" does not exist! Reading from:')
             loadfile = os.path.join(JitsiProperties.path, JitsiProperties.propertiesfile)
-            print '\t"' + loadfile + '"'
+            print('\t"' + loadfile + '"')
 
         propkey_base = 'net.java.sip.communicator.plugin.otr.'
         p = Properties()
@@ -189,7 +189,7 @@ class JitsiProperties():
 def main(argv):
     import pprint
 
-    print 'Jitsi stores its files in ' + JitsiProperties.path
+    print('Jitsi stores its files in ' + JitsiProperties.path)
 
     if len(sys.argv) == 2:
         settingsdir = sys.argv[1]
@@ -197,9 +197,9 @@ def main(argv):
         settingsdir = '../tests/jitsi'
 
     p = JitsiProperties.parse(settingsdir)
-    print '----------------------------------------'
+    print('----------------------------------------')
     pprint.pprint(p)
-    print '----------------------------------------'
+    print('----------------------------------------')
 
 if __name__ == "__main__":
     import sys

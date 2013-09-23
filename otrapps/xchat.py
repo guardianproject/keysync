@@ -55,7 +55,7 @@ if __name__ == '__main__':
 
     import pprint
 
-    print 'Xchat stores its files in ' + XchatProperties.path
+    print('Xchat stores its files in ' + XchatProperties.path)
 
     if len(sys.argv) == 2:
         settingsdir = sys.argv[1]

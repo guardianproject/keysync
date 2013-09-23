@@ -100,7 +100,7 @@ class ChatSecureProperties():
             p = subprocess.Popen(cmd, stdin=subprocess.PIPE,
                                  stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             ChatSecureProperties.password = password
-            print(p.communicate(password))
+            print((p.communicate(password)))
         else:
             shutil.move(filename, os.path.join(savedir, 'otr_keystore'))
 
@@ -110,7 +110,7 @@ class ChatSecureProperties():
 def main(argv):
     import pprint
 
-    print 'ChatSecure stores its files in ' + ChatSecureProperties.path
+    print('ChatSecure stores its files in ' + ChatSecureProperties.path)
 
     if len(sys.argv) == 2:
         settingsfile = sys.argv[1]
@@ -118,9 +118,9 @@ def main(argv):
         settingsfile = '../tests/chatsecure/otr_keystore'
 
     p = ChatSecureProperties.parse(settingsfile)
-    print '----------------------------------------'
+    print('----------------------------------------')
     pprint.pprint(p)
-    print '----------------------------------------'
+    print('----------------------------------------')
 
 if __name__ == "__main__":
     import sys

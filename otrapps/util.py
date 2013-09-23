@@ -476,18 +476,18 @@ def main(argv):
     try:
         check_and_set(key, 'test', 'no, this should break')
     except Exception as e:
-        print 'Exception: ',
-        print e
-    print key['test']
+        print('Exception: ', end=' ')
+        print(e)
+    print(key['test'])
     check_and_set(key, 'test', 'yes, testing')
-    print key['test']
+    print(key['test'])
     check_and_set(key, 'new', 'this is a new value')
 
     key2 = dict()
     key2['name'] = 'key'
     key2['yat'] = 'yet another test';
     merge_keys(key, key2)
-    print 'key: ',
+    print('key: ', end=' ')
     pprint.pprint(key)
 
     # now make trouble again
@@ -495,8 +495,8 @@ def main(argv):
     try:
         merge_keys(key, key2)
     except Exception as e:
-        print 'Exception: ',
-        print e
+        print('Exception: ', end=' ')
+        print(e)
 
     # now let's try dicts of dicts aka 'keydict'
     keydict = dict()
@@ -535,7 +535,7 @@ def main(argv):
     import otrapps
     print('\n---------------------------')
     print('Which supported apps are currently running:')
-    print(which_apps_are_running(otrapps.__all__))
+    print((which_apps_are_running(otrapps.__all__)))
 
 
 

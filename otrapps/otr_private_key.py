@@ -48,9 +48,9 @@ class OtrPrivateKeys():
             sexpr = sexp.parseString(data)
             return sexpr.asList()[0][1:]
         except ParseFatalException, pfe:
-            print "Error:", pfe.msg
-            print line(pfe.loc,t)
-            print pfe.markInputline()
+            print("Error:", pfe.msg)
+            print(line(pfe.loc,t))
+            print(pfe.markInputline())
 
     @staticmethod
     def parse(filename):

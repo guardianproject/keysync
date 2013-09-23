@@ -54,7 +54,7 @@ if __name__ == '__main__':
 
     import pprint
 
-    print 'Irssi stores its files in ' + IrssiProperties.path
+    print('Irssi stores its files in ' + IrssiProperties.path)
 
     if len(sys.argv) == 2:
         settingsdir = sys.argv[1]

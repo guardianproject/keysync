@@ -63,7 +63,7 @@ if __name__ == '__main__':
 
     import pprint
 
-    print 'GPG stores its files in ' + GPGProperties.path
+    print('GPG stores its files in ' + GPGProperties.path)
 
     if len(sys.argv) == 2:
         settingsdir = sys.argv[1]
