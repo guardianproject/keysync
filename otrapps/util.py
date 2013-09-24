@@ -477,6 +477,13 @@ def _fullcopy(src, dst):
         f.writelines(content)
 
 
+def make_conffile_backup(filename):
+    '''makes a in-place backup of the given config file name'''
+    realpath = os.path.realpath(filename) # eliminate symlinks
+    s = os.stat(realpath)
+    timestamp = s.st_mtime
+    _fullcopy(realpath, realpath + '.' +  str(timestamp))
+
 
 def mtp_is_mounted():
     '''checks if an MTP device is mounted, i.e. an Android 4.x device'''
@@ -598,6 +605,16 @@ def main(argv):
     print('\n---------------------------')
     print('Which supported apps are currently running:')
     print((which_apps_are_running(otrapps.__all__)))
+
+    print('\n---------------------------')
+    print('make backup conf file: ')
+    import tempfile
+    tmpdir = tempfile.mkdtemp(prefix='.keysync-util-test-')
+    testfile = os.path.join(tmpdir, 'keysync-util-conffile-backup-test')
+    with open(testfile, 'w') as f:
+        f.write('this is just a test!\n')
+    make_conffile_backup(testfile)
+    print('Backed up "%s"' % testfile)
 
     if mtp_is_mounted():
         print('\n---------------------------')
