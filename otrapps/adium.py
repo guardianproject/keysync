@@ -35,7 +35,8 @@ class AdiumProperties():
                 return []
         # TODO convert this to use python-biplist
         # make sure the plist is in XML format, not binary
-        os.system("plutil -convert xml1 '" + accountsfile + "'")
+        if platform.system() == 'Darwin':
+            os.system("plutil -convert xml1 '" + accountsfile + "'")
         return plistlib.readPlist(accountsfile)['Accounts']
 
     @staticmethod
