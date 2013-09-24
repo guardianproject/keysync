@@ -466,6 +466,17 @@ def which_apps_are_running(apps):
     else:
         return tuple(running)
 
+def _fullcopy(src, dst):
+    '''
+    A simple full file copy that ignores perms, since MTP doesn't play well
+    with them.  shutil.copy() tries to dup perms...
+    '''
+    with open(src) as f:
+        content = f.readlines()
+    with open(dst, 'w') as f:
+        f.writelines(content)
+
+
 
 def mtp_is_mounted():
     '''checks if an MTP device is mounted, i.e. an Android 4.x device'''
@@ -509,11 +520,8 @@ def copy_to_mtp_mount(filename):
                         foundit = True
         if not foundit:
             raise Exception('No MTP mount found!')
-        with open(filename) as f:
-            content = f.readlines()
         writeto = os.path.join(mtpdir, os.path.basename(filename))
-        with open(writeto, 'w') as f:
-            f.writelines(content)
+        _fullcopy(filename, writeto)
         if not os.path.exists(writeto):
             raise Exception('Copying "%s" failed!' % writeto)
 
