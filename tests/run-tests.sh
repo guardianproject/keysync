@@ -4,7 +4,7 @@ set -e
 
 cd ../otrapps
 
-for app in adium chatsecure gajim gpg irssi jitsi pidgin xchat; do
+for app in adium chatsecure gajim gpg irssi jitsi pidgin xchat util; do
     echo ''
     echo ''
     echo '------------------------------------------------------------------------'

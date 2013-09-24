@@ -25,6 +25,7 @@ from __future__ import print_function
 import base64
 import math
 import os
+import platform
 import re
 try:
     # Import hashlib if Python >= 2.5
@@ -466,6 +467,58 @@ def which_apps_are_running(apps):
         return tuple(running)
 
 
+def mtp_is_mounted():
+    '''checks if an MTP device is mounted, i.e. an Android 4.x device'''
+    if platform.system() == 'Darwin':
+        # TODO implement!
+        pass
+    elif platform.system() == 'Windows':
+        # TODO implement!
+        pass
+    else:
+        # this assumes that gvfs is mounting the MTP device
+        return os.path.exists(os.path.join(os.getenv('HOME'), '.gvfs', 'mtp'))
+
+
+def copy_to_mtp_mount(filename):
+    '''copy a file to the relevant MTP mount'''
+    if platform.system() == 'Darwin':
+        # TODO implement!
+        pass
+    elif platform.system() == 'Windows':
+        # TODO implement!
+        pass
+    else:
+        foundit = False
+        # this assumes that gvfs is mounting the MTP device
+        mtpbase = os.path.join(os.getenv('HOME'), '.gvfs', 'mtp')
+        if os.path.isdir(os.path.join(mtpbase, 'Internal storage')):
+            mtpdir = os.path.join(mtpbase, 'Internal storage')
+            foundit = True
+        elif os.path.isdir(os.path.join(mtpbase, 'SD card')):
+            mtpdir = os.path.join(mtpbase, 'SD card')
+            foundit = True
+        else:
+            # if no standard names, try the first dir we find
+            files = os.listdir(mtpbase)
+            if len(files) > 0:
+                for f in files:
+                    fp = os.path.join(mtpbase, f)
+                    if os.path.isdir(fp):
+                        mtpdir = fp
+                        foundit = True
+        if not foundit:
+            raise Exception('No MTP mount found!')
+        with open(filename) as f:
+            content = f.readlines()
+        writeto = os.path.join(mtpdir, os.path.basename(filename))
+        with open(writeto, 'w') as f:
+            f.writelines(content)
+        if not os.path.exists(writeto):
+            raise Exception('Copying "%s" failed!' % writeto)
+
+
+
 #------------------------------------------------------------------------------#
 # for testing from the command line:
 def main(argv):
@@ -538,6 +591,10 @@ def main(argv):
     print('Which supported apps are currently running:')
     print((which_apps_are_running(otrapps.__all__)))
 
+    if mtp_is_mounted():
+        print('\n---------------------------')
+        print('MTP is mounted, attempting copy...')
+        copy_to_mtp_mount('../keysync')
 
 
 if __name__ == "__main__":
