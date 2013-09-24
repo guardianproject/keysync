@@ -21,6 +21,7 @@ format that is commonly used for OTR keys.
 @author: hans@eds.org (Hans-Christoph Steiner)
 """
 
+from __future__ import print_function
 import base64
 import math
 import os
