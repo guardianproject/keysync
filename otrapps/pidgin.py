@@ -80,6 +80,9 @@ class PidginProperties():
         elif os.path.exists(os.path.join(PidginProperties.path,
                                          PidginProperties.accountsfile)):
             accountsdir = PidginProperties.path
+        else:
+            raise Exception('Cannot find "' + PidginProperties.accountsfile
+                            + '" in "' + savedir + '"')
         resources = PidginProperties._get_resources(accountsdir)
 
         pidginkeydict = dict()
@@ -105,6 +108,7 @@ class PidginProperties():
 if __name__ == '__main__':
 
     import pprint
+    import shutil
 
     print('Pidgin stores its files in ' + PidginProperties.path)
 
@@ -116,4 +120,7 @@ if __name__ == '__main__':
     keydict = PidginProperties.parse(settingsdir)
     pprint.pprint(keydict)
 
+    if not os.path.exists(os.path.join('/tmp', PidginProperties.accountsfile)):
+        shutil.copy(os.path.join(settingsdir, PidginProperties.accountsfile),
+                    '/tmp')
     PidginProperties.write(keydict, '/tmp')
