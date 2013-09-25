@@ -601,6 +601,7 @@ def main(argv):
     merge_keys(keydict3['key'], key5)
     pprint.pprint(keydict3['key'])
 
+    sys.path.insert(0, os.path.abspath('..'))
     import otrapps
     print('\n---------------------------')
     print('Which supported apps are currently running:')
