@@ -12,7 +12,7 @@ for app in adium chatsecure gajim gpg irssi jitsi pidgin xchat util; do
     echo ''
     echo ''
     echo '------------------------------------------------------------------------'
-    echo $app
+    echo "Run $app's __main__ tests"
     echo '------------------------------------------------------------------------'
     python ./$app.py
 done
@@ -23,14 +23,16 @@ echo '========================================================================'
 cd ..
 for app in adium chatsecure gajim irssi jitsi pidgin xchat; do
     echo '------------------------------------------------------------------------'
-    echo $app
+    echo "Merge all test files into $app's format"
     echo '------------------------------------------------------------------------'
     outdir=$tmpdir/merge-into-$app
     mkdir $outdir
     if [ $app = 'adium' ]; then
         cp tests/adium/Accounts.plist $outdir/
     elif [ $app = 'jitsi' ]; then
-        cp tests/jitsi/contactlist.xml $outdir/
+        cp tests/jitsi/contactlist.xml \
+            tests/jitsi/sip-communicator.properties \
+            $outdir/
     fi
     ./keysync --test tests/ \
         -i adium -i irssi -i jitsi -i pidgin -i xchat \
