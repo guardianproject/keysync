@@ -33,6 +33,8 @@ for app in adium chatsecure gajim irssi jitsi pidgin xchat; do
         cp tests/jitsi/contactlist.xml \
             tests/jitsi/sip-communicator.properties \
             $outdir/
+    elif [ $app = 'pidgin' ]; then
+        cp tests/pidgin/accounts.xml $outdir/
     fi
     ./keysync --test tests/ \
         -i adium -i irssi -i jitsi -i pidgin -i xchat \
