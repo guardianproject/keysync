@@ -4,12 +4,16 @@
 from __future__ import print_function
 import os, sys
 from Tkinter import *
+# Mac OS X 10.6's python doesn't ship with ttk because its 2.6 not 2.7 :-(
+if sys.platform != 'darwin':
+    from ttk import *
 from PIL import ImageTk, Image
 import tkFileDialog
 import tkMessageBox
 
 import otrapps
 from otrapps.chatsecure import ChatSecureProperties
+
 
 class MenuBar(Menu):
 
@@ -35,11 +39,7 @@ class App(Tk):
         self.setupwindow(self)
 
     def setupwindow(self, master):
-        fromcolor = 'grey'
-        tocolor = 'lightblue'
-
-        self.fromframe = LabelFrame(master, text='Convert from:',
-                               bg=fromcolor, padx=5, pady=5)
+        self.fromframe = LabelFrame(master, text='Convert from:')
         self.fromframe.pack(side=TOP, padx=5, pady=5, expand=True, fill=BOTH)
 
         optionslist = self.detectfiles()
@@ -51,7 +51,7 @@ class App(Tk):
         self.fromapp.set(optionslist[0]) # initial value
         self.option = OptionMenu(self.fromframe, self.fromapp, *optionslist,
                                            command=self.select_app)
-        self.option.configure(bg=fromcolor, relief=RAISED, width=20)
+        self.option.configure(width=20)
         self.option.pack(side=TOP)
         self.option['menu'].add_separator()
         self.option['menu'].add_command(label='Selected Folder...',
@@ -59,29 +59,25 @@ class App(Tk):
 
         self.fromfolder = StringVar()
         self.fromfolder.set(self.getpath(optionslist[0]))
-        self.fromentry = Entry(self.fromframe, highlightbackground=fromcolor,
+        self.fromentry = Entry(self.fromframe,
                                textvariable=self.fromfolder,
                                state='readonly')
         self.fromentry.pack(side=LEFT, expand=True, fill=X)
         self.fromchoosebutton = Button(self.fromframe, text='Choose...',
-                                       highlightbackground=fromcolor,
                                        command=self.choose_fromfolder,
                                        state='disabled')
         self.fromchoosebutton.pack(side=LEFT)
 
-        self.toframe = LabelFrame(master, text='to:',
-                        bg=tocolor, padx=5, pady=5)
+        self.toframe = LabelFrame(master, text='to:')
         self.toframe.pack(side=TOP, padx=5, pady=5, expand=True, fill=BOTH)
-        self.wherelabel = Label(self.toframe, text='Your converted keys will be written to:',
-                           bg=tocolor)
+        self.wherelabel = Label(self.toframe, text='Your converted keys will be written to:')
         self.wherelabel.pack(side=TOP, expand=True, fill=X, anchor=NW)
         self.tofolder = StringVar()
         self.tofolder.set(os.path.expanduser('~/Desktop'))
-        self.filenameentry = Entry(self.toframe, highlightbackground=tocolor,
+        self.filenameentry = Entry(self.toframe,
                                    textvariable=self.tofolder)
         self.filenameentry.pack(side=LEFT, expand=True, fill=X)
         self.choosebutton = Button(self.toframe, text='Choose...',
-                                   highlightbackground=tocolor,
                                    command=self.choose_tofolder)
         self.choosebutton.pack(side=LEFT)
 
@@ -176,4 +172,3 @@ root.title('KeySync')
 root.geometry('520x240')
 root.minsize(280, 220)
 root.mainloop()
-
