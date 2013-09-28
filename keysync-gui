@@ -34,6 +34,12 @@ class App(Tk):
 
     def __init__(self):
         Tk.__init__(self)
+        scriptdir = os.path.dirname(sys.argv[0])
+        # installed path, should work on all platforms
+        self.iconsdir = os.path.join(scriptdir, '..', 'share', 'keysync')
+        if not os.path.isdir(self.iconsdir):
+            # path when running in-place in the git repo
+            self.iconsdir = os.path.join(scriptdir, 'icons')
         menubar = MenuBar(self)
         self.config(menu=menubar)
         self.setupwindow(self)
