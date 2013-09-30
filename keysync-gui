@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
-import os, sys
 import functools
+import os
+import qrcode
+import sys
+import tempfile
 from Tkinter import *
 # Mac OS X 10.6's python doesn't ship with ttk because its 2.6 not 2.7 :-(
 if sys.platform != 'darwin':
@@ -132,6 +135,24 @@ class App(Tk):
                 haveapps.append(app)
         return haveapps
 
+    def show_qrcode(self):
+        qr = qrcode.QRCode(border=4)
+        qr.add_data(ChatSecureProperties.password)
+        qr.make(fit=True)
+        img = qr.make_image()
+
+        self.qrwindow = Toplevel(self)
+        self.qrframe = Frame(self.qrwindow)
+        self.qrframe.pack(side = "top", fill = "both", expand = "yes")
+        pwtxt = ('Enter this password into ChatSecure: \n'
+                 + ChatSecureProperties.password
+                 + '\nor just scan this QRCode with ChatSecure:')
+        self.pwlabel = Label(self.qrframe, text=pwtxt)
+        self.pwlabel.pack(side = "top", fill = "both", expand = "yes")
+        self.tkimg = ImageTk.PhotoImage(img)
+        self.qrlabel = Label(self.qrframe, image=self.tkimg)
+        self.qrlabel.pack(side = "bottom", fill = "both", expand = "yes")
+
     def convert(self):
         '''run the conversion from one file set to another'''
         keydict = dict()
@@ -147,28 +168,9 @@ class App(Tk):
                 self.show_error("Invalid app: %s" % ( app ))
                 return None
         if len(keydict.keys()) > 0:
-            import qrcode
-            import tempfile
-
             otrapps.make_outdir(self.tofolder.get(), '')
             ChatSecureProperties.write(keydict, self.tofolder.get())
-
-            qr = qrcode.QRCode(border=4)
-            qr.add_data(ChatSecureProperties.password)
-            qr.make(fit=True)
-            img = qr.make_image()
-
-            self.qrwindow = Toplevel(self)
-            self.qrframe = Frame(self.qrwindow)
-            self.qrframe.pack(side = "top", fill = "both", expand = "yes")
-            pwtxt = ('Enter this password into ChatSecure: \n'
-                     + ChatSecureProperties.password
-                     + '\nor just scan this QRCode with ChatSecure:')
-            self.pwlabel = Label(self.qrframe, text=pwtxt)
-            self.pwlabel.pack(side = "top", fill = "both", expand = "yes")
-            self.tkimg = ImageTk.PhotoImage(img)
-            self.qrlabel = Label(self.qrframe, image=self.tkimg)
-            self.qrlabel.pack(side = "bottom", fill = "both", expand = "yes")
+            self.show_qrcode()
 
 
 #------------------------------------------------------------------------------#
