@@ -142,6 +142,13 @@ class App(Tk):
         img = qr.make_image()
 
         self.qrwindow = Toplevel(self)
+        self.qrwindow.transient(root)
+        self.qrwindow.resizable(False, False)
+        # place QR window right above KeySync main window
+        x = self.winfo_x()
+        y = self.winfo_y()
+        self.qrwindow.geometry('+%d+%d' % (x, y))
+
         self.qrframe = Frame(self.qrwindow)
         self.qrframe.pack(side = "top", fill = "both", expand = "yes")
         pwtxt = ('Enter this password into ChatSecure: \n'
