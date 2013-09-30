@@ -14,8 +14,10 @@ from otr_fingerprints import OtrFingerprints
 class AdiumProperties():
 
     path = os.path.expanduser('~/Library/Application Support/Adium 2.0/Users/Default')
+    accountsfile = 'Accounts.plist'
     keyfile = 'otr.private_key'
     fingerprintfile = 'otr.fingerprints'
+    files = (accountsfile, keyfile, fingerprintfile)
 
     @staticmethod
     def _get_accounts_from_plist(settingsdir):
@@ -26,7 +28,7 @@ class AdiumProperties():
         print(accountsfile)
         if not os.path.exists(accountsfile):
             oldaccountsfile = accountsfile
-            accountsfile = os.path.join(AdiumProperties.path, 'Accounts.plist')
+            accountsfile = os.path.join(AdiumProperties.path, AdiumProperties.accountsfile)
             if platform.system() == 'Darwin' and os.path.exists(accountsfile):
                 print('Adium WARNING: "' + oldaccountsfile + '" does not exist! Using:')
                 print('\t"' + accountsfile + '"')

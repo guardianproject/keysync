@@ -16,6 +16,7 @@ class XchatProperties():
     path = os.path.expanduser('~/.xchat2/otr')
     keyfile = 'otr.key'
     fingerprintfile = 'otr.fp'
+    files = (keyfile, fingerprintfile)
 
     @staticmethod
     def parse(settingsdir=None):

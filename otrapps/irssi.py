@@ -16,6 +16,7 @@ class IrssiProperties():
     path = os.path.expanduser('~/.irssi/otr')
     keyfile = 'otr.key'
     fingerprintfile = 'otr.fp'
+    files = (keyfile, fingerprintfile)
 
     @staticmethod
     def parse(settingsdir=None):

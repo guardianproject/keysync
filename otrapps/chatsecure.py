@@ -13,8 +13,10 @@ import util
 
 class ChatSecureProperties():
 
-    keyfile = 'otr_keystore'
     path = '/data/data/info.guardianproject.otr.app.im/files/otr_keystore'
+    keyfile = 'otr_keystore'
+    encryptedkeyfile = keyfile + '.ofcaes'
+    files = (keyfile, encryptedkeyfile)
 
     password = None
 

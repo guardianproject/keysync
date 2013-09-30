@@ -24,6 +24,7 @@ class JitsiProperties():
         path = os.path.expanduser('~/.jitsi')
     propertiesfile = 'sip-communicator.properties'
     contactsfile = 'contactlist.xml'
+    files = (propertiesfile, contactsfile)
 
     @staticmethod
     def _parse_account_uid(uidstring):
