@@ -44,6 +44,7 @@ class App(Tk):
         if not os.path.isdir(self.iconsdir):
             # path when running in-place in the git repo
             self.iconsdir = os.path.join(scriptdir, 'icons')
+        self.disableable = []
         menubar = MenuBar(self)
         self.config(menu=menubar)
         self.setupwindow(self)
@@ -58,6 +59,7 @@ class App(Tk):
         self.addframe.pack(side=RIGHT)
         self.addbutton = Button(self.addframe, text="add other...",
                                 image=self.addimage)
+        self.disableable.append(self.addbutton)
         # TODO add a command to the Button here, i.e.  command=self.dosomething
         self.addbutton.pack(side=TOP, padx=16)
         self.addlabel = Label(self.addframe, text='other...')
@@ -79,6 +81,7 @@ class App(Tk):
                             command=functools.partial(self.toggle_app_button, app))
             button.pack(side=TOP)
             self.app_buttons[app] = button
+            self.disableable.append(button)
             label = Label(frame, text=app.title())
             label.pack(side=BOTTOM)
             self.app_labels[app] = label
@@ -98,13 +101,16 @@ class App(Tk):
         self.filenameentry = Entry(self.toframe,
                                    textvariable=self.tofolder)
         self.filenameentry.pack(side=LEFT, expand=True, fill=X)
+        self.disableable.append(self.filenameentry)
         self.choosebutton = Button(self.toframe, text='Choose...',
                                    command=self.choose_tofolder)
         self.choosebutton.pack(side=LEFT)
+        self.disableable.append(self.choosebutton)
 
         self.button = Button(self.bottomframe, command=self.convert,
                              text="Write to ChatSecure otr_keystore.ofcaes file")
         self.button.pack(side=TOP, padx=5, pady=5)
+        self.disableable.append(self.button)
 
     def show_error(self, error_msg):
         print(error_msg)
@@ -120,6 +126,14 @@ class App(Tk):
         else:
             button.configure(image=self.app_enabled[app])
             label.configure(state=NORMAL)
+
+    def set_app_enabled_state(self, enable):
+        if enable:
+            for widget in self.disableable:
+                widget.configure(state=NORMAL)
+        else:
+            for widget in self.disableable:
+                widget.configure(state=DISABLED)
 
     def choose_tofolder(self):
         dirname = tkFileDialog.askdirectory(initialdir=self.tofolder.get(),
@@ -144,6 +158,7 @@ class App(Tk):
         self.qrwindow = Toplevel(self)
         self.qrwindow.transient(root)
         self.qrwindow.resizable(False, False)
+        self.qrwindow.bind('<Destroy>', self.after_qrwindow_destroy)
         # place QR window right above KeySync main window
         x = self.winfo_x()
         y = self.winfo_y()
@@ -160,8 +175,12 @@ class App(Tk):
         self.qrlabel = Label(self.qrframe, image=self.tkimg)
         self.qrlabel.pack(side = "bottom", fill = "both", expand = "yes")
 
+    def after_qrwindow_destroy(self, event=None):
+        self.set_app_enabled_state(True)
+
     def convert(self):
         '''run the conversion from one file set to another'''
+        self.set_app_enabled_state(False)
         keydict = dict()
         for app in self.app_labels.keys():
             if str(self.app_labels[app].cget('state')) == 'disabled':
