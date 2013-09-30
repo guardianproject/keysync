@@ -9,6 +9,8 @@ import re
 import sys
 import util
 
+from otr_fingerprints import OtrFingerprints
+
 # the private key is stored in ~/.local/share/gajim/_SERVERNAME_.key3
 # the fingerprints are stored in ~/.local/share/gajim/_SERVERNAME_.fpr
 # the accounts are stored in ~/.config/gajim/config
@@ -25,8 +27,10 @@ class GajimProperties():
         if settingsdir == None:
             settingsdir = GajimProperties.path
         keydict = dict()
-        for f in glob.glob(settingsdir + '*.key3'):
-            pass
+        for fpf in glob.glob(os.path.join(settingsdir, '*.fpr')):
+            print('Reading in ' + fpf)
+            util.merge_keydicts(keydict, OtrFingerprints.parse(fpf))
+        return keydict
 
     @staticmethod
     def write(keys, savedir):
