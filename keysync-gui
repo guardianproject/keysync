@@ -3,6 +3,7 @@
 
 from __future__ import print_function
 import os, sys
+import functools
 from Tkinter import *
 # Mac OS X 10.6's python doesn't ship with ttk because its 2.6 not 2.7 :-(
 if sys.platform != 'darwin':
@@ -45,39 +46,50 @@ class App(Tk):
         self.setupwindow(self)
 
     def setupwindow(self, master):
-        self.fromframe = LabelFrame(master, text='Convert from:')
-        self.fromframe.pack(side=TOP, padx=5, pady=5, expand=True, fill=BOTH)
+        self.fromframe = Frame(master)
+        self.fromframe.pack(side=TOP, padx=5, pady=5)
 
-        optionslist = self.detectfiles()
-        if len(optionslist) == 0:
-            self.show_error("No supported OTR applications found.")
-            sys.exit(1)
-            return
-        self.fromapp = StringVar(master)
-        self.fromapp.set(optionslist[0]) # initial value
-        self.option = OptionMenu(self.fromframe, self.fromapp, *optionslist,
-                                           command=self.select_app)
-        self.option.configure(width=20)
-        self.option.pack(side=TOP)
-        self.option['menu'].add_separator()
-        self.option['menu'].add_command(label='Selected Folder...',
-                                        command=self.select_folder)
+        img = Image.open(os.path.join(self.iconsdir, 'add.png'))
+        self.addimage = ImageTk.PhotoImage(img.resize((32, 32), Image.ANTIALIAS))
+        self.addframe = Frame(self.fromframe)
+        self.addframe.pack(side=RIGHT)
+        self.addbutton = Button(self.addframe, text="add other...",
+                                image=self.addimage)
+        # TODO add a command to the Button here, i.e.  command=self.dosomething
+        self.addbutton.pack(side=TOP, padx=16)
+        self.addlabel = Label(self.addframe, text='other...')
+        self.addlabel.pack(side=BOTTOM, padx=16)
 
-        self.fromfolder = StringVar()
-        self.fromfolder.set(self.getpath(optionslist[0]))
-        self.fromentry = Entry(self.fromframe,
-                               textvariable=self.fromfolder,
-                               state='readonly')
-        self.fromentry.pack(side=LEFT, expand=True, fill=X)
-        self.fromchoosebutton = Button(self.fromframe, text='Choose...',
-                                       command=self.choose_fromfolder,
-                                       state='disabled')
-        self.fromchoosebutton.pack(side=LEFT)
+        # store these to query if they are enabled/disabled
+        self.app_buttons = dict()
+        self.app_labels = dict()
+        self.app_enabled = dict()
+        self.app_disabled = dict()
+        for app in self.detectfiles():
+            filename = os.path.join(self.iconsdir, app + '.png')
+            img = Image.open(filename).resize((64, 64), Image.ANTIALIAS)
+            self.app_enabled[app] = ImageTk.PhotoImage(img)
+            self.app_disabled[app] = ImageTk.PhotoImage(img.convert('LA'))
+            frame = Frame(self.fromframe)
+            frame.pack(side=RIGHT)
+            button = Button(frame, text=app, image=self.app_enabled[app],
+                            command=functools.partial(self.toggle_app_button, app))
+            button.pack(side=TOP)
+            self.app_buttons[app] = button
+            label = Label(frame, text=app.title())
+            label.pack(side=BOTTOM)
+            self.app_labels[app] = label
 
-        self.toframe = LabelFrame(master, text='to:')
-        self.toframe.pack(side=TOP, padx=5, pady=5, expand=True, fill=BOTH)
-        self.wherelabel = Label(self.toframe, text='Your converted keys will be written to:')
-        self.wherelabel.pack(side=TOP, expand=True, fill=X, anchor=NW)
+        self.bottomframe = Frame(master)
+        self.bottomframe.pack(side=BOTTOM, expand=True, fill=X, anchor=S)
+
+        self.toframe = LabelFrame(self.bottomframe, text='Write ChatSecure Keystore')
+        self.toframe.pack(side=TOP, padx=5, pady=5, expand=True, fill=X)
+        self.nosyncmessage = Text(self.toframe, bg='pink', borderwidth=0,
+                                  insertborderwidth=0, height=4)
+        self.nosyncmessage.insert('1.0', """KeySync cannot find your Android device.  Make sure it is plugged into this computer's USB and visible in your file browser!  Otherwise, you can write the otr_keystore.ofcaes file to the folder that you choose below.""")
+        self.nosyncmessage.configure(state=DISABLED, wrap='word')
+        self.nosyncmessage.pack(side=TOP, expand=True, fill=X, anchor=NW, padx=5, pady=5)
         self.tofolder = StringVar()
         self.tofolder.set(os.path.expanduser('~/Desktop'))
         self.filenameentry = Entry(self.toframe,
@@ -87,43 +99,30 @@ class App(Tk):
                                    command=self.choose_tofolder)
         self.choosebutton.pack(side=LEFT)
 
-        self.button = Button(master, text="Convert!", command=self.convert)
-        self.button.pack(side=BOTTOM, padx=5, pady=5)
+        self.button = Button(self.bottomframe, command=self.convert,
+                             text="Write to ChatSecure otr_keystore.ofcaes file")
+        self.button.pack(side=TOP, padx=5, pady=5)
 
     def show_error(self, error_msg):
         print(error_msg)
         tkMessageBox.showwarning("KeySync error", error_msg)
         return
 
-    def select_app(self, app=None):
-        self.fromfolder.set(self.getpath(app))
-        self.fromentry.configure(state='readonly')
-        self.fromchoosebutton.configure(state='disabled')
-
-    def select_folder(self):
-        self.fromapp.set('Select Folder...')
-        self.fromentry.configure(state='normal')
-        self.fromchoosebutton.configure(state='normal')
-
-    def choose_fromfolder(self):
-        dirname = tkFileDialog.askdirectory(initialdir=self.fromfolder.get(),
-                                            title='Please select a directory')
-        if len(dirname) > 0:
-            self.fromfolder.set(dirname)
+    def toggle_app_button(self, app):
+        button = self.app_buttons[app]
+        label = self.app_labels[app]
+        if str(label.cget('state')) == 'normal':
+            button.configure(image=self.app_disabled[app])
+            label.configure(state=DISABLED)
+        else:
+            button.configure(image=self.app_enabled[app])
+            label.configure(state=NORMAL)
 
     def choose_tofolder(self):
         dirname = tkFileDialog.askdirectory(initialdir=self.tofolder.get(),
                                             title='Please select a directory')
         if len(dirname) > 0:
             self.tofolder.set(dirname)
-
-    def getpath(self, app):
-        '''output the standard path of a given app'''
-        try:
-            return otrapps.apps[app].path
-        except KeyError:
-            print("Invalid app: %s" % ( app ))
-            return None
 
     def detectfiles(self):
         '''detect which apps are installed based on the existence of OTR files'''
@@ -135,20 +134,24 @@ class App(Tk):
 
     def convert(self):
         '''run the conversion from one file set to another'''
-        app = self.fromapp.get()
-        keys = None
-        print('Parsing ', app)
-        try:
-            keys = otrapps.apps[app].parse()
-        except KeyError:
-            print("Invalid app: %s" % ( app ))
-            return None
-        if keys:
+        keydict = dict()
+        for app in self.app_labels.keys():
+            if str(self.app_labels[app].cget('state')) == 'disabled':
+                continue
+            print('Parsing ', app)
+            try:
+                properties = otrapps.apps[app]
+                otrapps.util.merge_keydicts(keydict, properties.parse())
+            except KeyError:
+                print("Invalid app: %s" % ( app ))
+                self.show_error("Invalid app: %s" % ( app ))
+                return None
+        if len(keydict.keys()) > 0:
             import qrcode
             import tempfile
 
             otrapps.make_outdir(self.tofolder.get(), '')
-            ChatSecureProperties.write(keys, self.tofolder.get())
+            ChatSecureProperties.write(keydict, self.tofolder.get())
 
             qr = qrcode.QRCode(border=4)
             qr.add_data(ChatSecureProperties.password)
@@ -160,7 +163,7 @@ class App(Tk):
             self.qrframe.pack(side = "top", fill = "both", expand = "yes")
             pwtxt = ('Enter this password into ChatSecure: \n'
                      + ChatSecureProperties.password
-                     + '\nor just scan this QRCode:')
+                     + '\nor just scan this QRCode with ChatSecure:')
             self.pwlabel = Label(self.qrframe, text=pwtxt)
             self.pwlabel.pack(side = "top", fill = "both", expand = "yes")
             self.tkimg = ImageTk.PhotoImage(img)
@@ -175,6 +178,5 @@ root = App()
 windowingsystem = root.tk.call('tk', 'windowingsystem')
 
 root.title('KeySync')
-root.geometry('520x240')
-root.minsize(280, 220)
+root.minsize(450, 300)
 root.mainloop()
