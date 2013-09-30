@@ -58,7 +58,7 @@ class App(Tk):
         self.addframe = Frame(self.fromframe)
         self.addframe.pack(side=RIGHT)
         self.addbutton = Button(self.addframe, text="add other...",
-                                image=self.addimage)
+                                image=self.addimage, command=self.show_otherwindow)
         self.disableable.append(self.addbutton)
         # TODO add a command to the Button here, i.e.  command=self.dosomething
         self.addbutton.pack(side=TOP, padx=16)
@@ -143,6 +143,61 @@ class App(Tk):
                                             title='Please select a directory')
         if len(dirname) > 0:
             self.tofolder.set(dirname)
+
+    def choose_fromfolder(self):
+        dirname = tkFileDialog.askdirectory(initialdir=self.fromfolder.get(),
+                                            title='Please select a directory')
+        if len(dirname) > 0:
+            self.fromfolder.set(dirname)
+
+    def show_otherwindow(self):
+        self.otherwindow = Toplevel(self)
+        self.otherwindow.title('Choose an OTR app to read from')
+        self.otherwindow.transient(root)
+        self.otherwindow.resizable(False, False)
+        self.otherwindow.minsize(400, 150)
+
+        optionslist = sorted(otrapps.apps_supported)
+        self.fromframe = Frame(self.otherwindow)
+        self.fromframe.pack(side=TOP, fill=X, padx=5, pady=5)
+
+        self.fromfolder = StringVar()
+        self.fromfolder.set(self.getpath(optionslist[0]))
+        self.fromentry = Entry(self.fromframe, textvariable=self.fromfolder)
+        self.fromentry.pack(side=LEFT, expand=True, fill=X)
+        self.fromchoosebutton = Button(self.fromframe, text='Choose...',
+                                       command=self.choose_fromfolder)
+        self.fromchoosebutton.pack(side=LEFT)
+
+        self.appframe = Frame(self.otherwindow, borderwidth='3')
+        self.appframe.pack(side=TOP, fill=X, padx=5, pady=5)
+        self.fromapp = StringVar(root)
+        self.fromapp.set(optionslist[0]) # initial value
+        self.option = OptionMenu(self.appframe, self.fromapp, *optionslist,
+                                 command=self.select_app)
+        self.option.configure(width=20)
+        self.option.pack(side=LEFT)
+        self.applabel = Label(self.appframe, image=self.app_icons[self.fromapp.get()])
+        self.applabel.pack(side=RIGHT, anchor=W)
+
+        self.buttonframe = Frame(self.otherwindow)
+        self.buttonframe.pack(side=BOTTOM, anchor=SE, padx=5, pady=5)
+        self.cancelbutton = Button(self.buttonframe, text='Cancel',
+                                   command=self.otherwindow.destroy)
+        self.cancelbutton.pack(side=LEFT)
+        self.okbutton = Button(self.buttonframe, text='OK', state=DISABLED)
+        self.okbutton.pack(side=LEFT)
+
+    def select_app(self, app=None):
+        self.applabel.configure(image=self.app_icons[self.fromapp.get()])
+
+    def getpath(self, app):
+        '''output the standard path of a given app'''
+        try:
+            return otrapps.apps[app].path
+        except KeyError:
+            print("Invalid app: %s" % ( app ))
+            return None
 
     def detectfiles(self):
         '''detect which apps are installed based on the existence of OTR files'''
