@@ -65,19 +65,22 @@ class App(Tk):
         self.addlabel = Label(self.addframe, text='other...')
         self.addlabel.pack(side=BOTTOM, padx=16)
 
+        # load all the app icons
+        self.app_icons = dict()
+        self.disabled_icons = dict()
+        for app in otrapps.apps_supported:
+            filename = os.path.join(self.iconsdir, app + '.png')
+            img = Image.open(filename).resize((64, 64), Image.ANTIALIAS)
+            self.app_icons[app] = ImageTk.PhotoImage(img)
+            self.disabled_icons[app] = ImageTk.PhotoImage(img.convert('LA'))
+
         # store these to query if they are enabled/disabled
         self.app_buttons = dict()
         self.app_labels = dict()
-        self.app_enabled = dict()
-        self.app_disabled = dict()
         for app in self.detectfiles():
-            filename = os.path.join(self.iconsdir, app + '.png')
-            img = Image.open(filename).resize((64, 64), Image.ANTIALIAS)
-            self.app_enabled[app] = ImageTk.PhotoImage(img)
-            self.app_disabled[app] = ImageTk.PhotoImage(img.convert('LA'))
             frame = Frame(self.fromframe)
             frame.pack(side=RIGHT)
-            button = Button(frame, text=app, image=self.app_enabled[app],
+            button = Button(frame, text=app, image=self.app_icons[app],
                             command=functools.partial(self.toggle_app_button, app))
             button.pack(side=TOP)
             self.app_buttons[app] = button
@@ -121,10 +124,10 @@ class App(Tk):
         button = self.app_buttons[app]
         label = self.app_labels[app]
         if str(label.cget('state')) == 'normal':
-            button.configure(image=self.app_disabled[app])
+            button.configure(image=self.disabled_icons[app])
             label.configure(state=DISABLED)
         else:
-            button.configure(image=self.app_enabled[app])
+            button.configure(image=self.app_icons[app])
             label.configure(state=NORMAL)
 
     def set_app_enabled_state(self, enable):
