@@ -8,7 +8,6 @@ import sys
 import pyjavaproperties
 import subprocess
 import tempfile
-import shutil
 import util
 
 class ChatSecureProperties():
@@ -94,18 +93,21 @@ class ChatSecureProperties():
         f = os.fdopen(fd, 'w')
         p.store(f)
 
-        # if there is no password, then one has not been set, or there are not
-        # private keys included in the file, so no way or need to encrypt
-        if password:
-            # create passphrase file from the first private key
-            cmd = ['openssl', 'aes-256-cbc', '-pass', 'stdin', '-in', filename,
-                   '-out', os.path.join(savedir, 'otr_keystore.ofcaes')]
-            p = subprocess.Popen(cmd, stdin=subprocess.PIPE,
-                                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-            ChatSecureProperties.password = password
-            print((p.communicate(password)))
-        else:
-            shutil.move(filename, os.path.join(savedir, 'otr_keystore'))
+        # if there is no password, then one has not been set, or there
+        # are not private keys included in the file, so its a lower
+        # risk file. Encryption only needs to protect the meta data,
+        # not the private keys.  Therefore, its not as bad to generate
+        # a "random" password here
+        if not password:
+            password = os.urandom(32).encode('base64')
+
+        # create passphrase file from the first private key
+        cmd = ['openssl', 'aes-256-cbc', '-pass', 'stdin', '-in', filename,
+               '-out', os.path.join(savedir, 'otr_keystore.ofcaes')]
+        p = subprocess.Popen(cmd, stdin=subprocess.PIPE,
+                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        ChatSecureProperties.password = password
+        print((p.communicate(password)))
 
 
 #------------------------------------------------------------------------------#
