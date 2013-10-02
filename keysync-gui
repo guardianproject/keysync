@@ -19,6 +19,14 @@ import otrapps
 from otrapps.chatsecure import ChatSecureProperties
 
 
+def bind_close_window(toplevel, func):
+    toplevel.bind('<KeyPress-Escape>', func)
+    if sys.platform == 'darwin':
+        toplevel.bind('<Mod1-Key-w>', func)
+    else:
+        toplevel.bind('<Control-Key-w>', func)
+
+
 class MenuBar(Menu):
 
     def __init__(self, parent):
@@ -152,6 +160,7 @@ class App(Tk):
 
     def show_otherwindow(self):
         self.otherwindow = Toplevel(self)
+        bind_close_window(self.otherwindow, self.destroy_otherwindow)
         self.otherwindow.title('Choose an OTR app to read from')
         self.otherwindow.transient(root)
         self.otherwindow.resizable(False, False)
@@ -188,6 +197,10 @@ class App(Tk):
         self.okbutton = Button(self.buttonframe, text='OK', state=DISABLED)
         self.okbutton.pack(side=LEFT)
 
+    def destroy_otherwindow(self, event=None):
+        if self.otherwindow:
+            self.otherwindow.destroy()
+
     def select_app(self, app=None):
         self.applabel.configure(image=self.app_icons[self.fromapp.get()])
 
@@ -207,7 +220,7 @@ class App(Tk):
                 haveapps.append(app)
         return haveapps
 
-    def show_qrcode(self):
+    def show_qrwindow(self):
         qr = qrcode.QRCode(border=4)
         qr.add_data(ChatSecureProperties.password)
         qr.make(fit=True)
@@ -217,6 +230,7 @@ class App(Tk):
         self.qrwindow.transient(root)
         self.qrwindow.resizable(False, False)
         self.qrwindow.bind('<Destroy>', self.after_qrwindow_destroy)
+        bind_close_window(self.qrwindow, self.destroy_qrwindow)
         # place QR window right above KeySync main window
         x = self.winfo_x()
         y = self.winfo_y()
@@ -232,6 +246,10 @@ class App(Tk):
         self.tkimg = ImageTk.PhotoImage(img)
         self.qrlabel = Label(self.qrframe, image=self.tkimg)
         self.qrlabel.pack(side = "bottom", fill = "both", expand = "yes")
+
+    def destroy_qrwindow(self, event=None):
+        if self.qrwindow:
+            self.qrwindow.destroy()
 
     def after_qrwindow_destroy(self, event=None):
         self.set_app_enabled_state(True)
@@ -254,7 +272,7 @@ class App(Tk):
         if len(keydict.keys()) > 0:
             otrapps.make_outdir(self.tofolder.get(), '')
             ChatSecureProperties.write(keydict, self.tofolder.get())
-            self.show_qrcode()
+            self.show_qrwindow()
 
 
 #------------------------------------------------------------------------------#
