@@ -148,6 +148,7 @@ Then come back here and do the following in your virtualenv:
 If you are using py2app older than 0.7.4 on Mac OS X 10.6, then you
 need to patch py2app to make it work with python2.6:
 
+    pip install --upgrade py2app
     patch env/lib/python2.6/site-packages/py2app/build_app.py py2app-python2.6.patch
 
 
