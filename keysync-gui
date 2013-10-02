@@ -50,6 +50,15 @@ class App(Tk):
         self.disableable = []
         menubar = MenuBar(self)
         self.config(menu=menubar)
+        if sys.platform == 'darwin':
+            self.macgrey = '#E8E8E8'
+            self.config(background=self.macgrey)
+            self.option_add('*Button.highlightBackground', self.macgrey)
+            self.option_add('*Entry.highlightBackground', self.macgrey)
+            self.option_add('*Frame.background', self.macgrey)
+            self.option_add('*Label.background', self.macgrey)
+            self.option_add('*Labelframe.background', self.macgrey)
+            self.option_add('*Menubutton.background', self.macgrey)
         self.setupwindow(self)
 
     def find_iconsdir(self):
@@ -67,7 +76,7 @@ class App(Tk):
 
     def setupwindow(self, master):
         self.fromframe = Frame(master)
-        self.fromframe.pack(side=TOP, padx=5, pady=5)
+        self.fromframe.pack(side=TOP, padx=15, pady=15)
 
         img = Image.open(os.path.join(self.iconsdir, 'add.png'))
         self.addimage = ImageTk.PhotoImage(img.resize((32, 32), Image.ANTIALIAS))
@@ -109,8 +118,9 @@ class App(Tk):
         self.bottomframe.pack(side=BOTTOM, expand=True, fill=X, anchor=S)
 
         self.toframe = LabelFrame(self.bottomframe, text='Write ChatSecure Keystore')
-        self.toframe.pack(side=TOP, padx=5, pady=5, expand=True, fill=X)
-        self.nosyncmessage = Text(self.toframe, bg='pink', borderwidth=0,
+        self.toframe.pack(side=TOP, padx=15, pady=5, expand=True, fill=X)
+        self.nosyncmessage = Text(self.toframe, borderwidth=0,
+                                  background='pink', highlightbackground='pink',
                                   insertborderwidth=0, height=4)
         self.nosyncmessage.insert('1.0', """KeySync cannot find your Android device.  Make sure it is plugged into this computer's USB and visible in your file browser!  Otherwise, you can write the otr_keystore.ofcaes file to the folder that you choose below.""")
         self.nosyncmessage.configure(state=DISABLED, wrap='word')
@@ -169,6 +179,8 @@ class App(Tk):
     def show_otherwindow(self):
         self.otherwindow = Toplevel(self)
         bind_close_window(self.otherwindow, self.destroy_otherwindow)
+        if sys.platform == 'darwin':
+            self.otherwindow.configure(background=self.macgrey)
         self.otherwindow.title('Choose an OTR app to read from')
         self.otherwindow.transient(root)
         self.otherwindow.resizable(False, False)
@@ -176,7 +188,7 @@ class App(Tk):
 
         optionslist = sorted(otrapps.apps_supported)
         self.fromframe = Frame(self.otherwindow)
-        self.fromframe.pack(side=TOP, fill=X, padx=5, pady=5)
+        self.fromframe.pack(side=TOP, fill=X, padx=15, pady=15)
 
         self.fromfolder = StringVar()
         self.fromfolder.set(self.getpath(optionslist[0]))
@@ -187,7 +199,9 @@ class App(Tk):
         self.fromchoosebutton.pack(side=LEFT)
 
         self.appframe = Frame(self.otherwindow, borderwidth='3')
-        self.appframe.pack(side=TOP, fill=X, padx=5, pady=5)
+        self.appframe.pack(side=TOP, fill=X, padx=15, pady=15)
+        self.applabel = Label(self.appframe, text='App:')
+        self.applabel.pack(side=LEFT)
         self.fromapp = StringVar(root)
         self.fromapp.set(optionslist[0]) # initial value
         self.option = OptionMenu(self.appframe, self.fromapp, *optionslist,
@@ -195,14 +209,14 @@ class App(Tk):
         self.option.configure(width=20)
         self.option.pack(side=LEFT)
         self.applabel = Label(self.appframe, image=self.app_icons[self.fromapp.get()])
-        self.applabel.pack(side=RIGHT, anchor=W)
+        self.applabel.pack(side=RIGHT, expand=True, fill=X)
 
         self.buttonframe = Frame(self.otherwindow)
-        self.buttonframe.pack(side=BOTTOM, anchor=SE, padx=5, pady=5)
+        self.buttonframe.pack(side=BOTTOM, anchor=SE, padx=15, pady=15)
         self.cancelbutton = Button(self.buttonframe, text='Cancel',
                                    command=self.otherwindow.destroy)
         self.cancelbutton.pack(side=LEFT)
-        self.okbutton = Button(self.buttonframe, text='OK', state=DISABLED)
+        self.okbutton = Button(self.buttonframe, text='OK', width=6, state=DISABLED)
         self.okbutton.pack(side=LEFT)
 
     def destroy_otherwindow(self, event=None):
