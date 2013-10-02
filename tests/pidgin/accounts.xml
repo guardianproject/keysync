@@ -50,7 +50,7 @@
 	</account>
 	<account>
 		<protocol>prpl-bonjour</protocol>
-		<name>gptest</name>
+		<name>gptest@mycomputer</name>
 		<statuses>
 			<status type='available' name='Available' active='true'>
 				<attributes/>
