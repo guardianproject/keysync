@@ -498,7 +498,7 @@ def mtp_is_mounted():
         return os.path.exists(os.path.join(os.getenv('HOME'), '.gvfs', 'mtp'))
 
 
-def copy_to_mtp_mount(filename):
+def get_mtp_mount_path():
     '''copy a file to the relevant MTP mount'''
     if platform.system() == 'Darwin':
         # TODO implement!
@@ -525,13 +525,8 @@ def copy_to_mtp_mount(filename):
                     if os.path.isdir(fp):
                         mtpdir = fp
                         foundit = True
-        if not foundit:
-            raise Exception('No MTP mount found!')
-        writeto = os.path.join(mtpdir, os.path.basename(filename))
-        _fullcopy(filename, writeto)
-        if not os.path.exists(writeto):
-            raise Exception('Copying "%s" failed!' % writeto)
-
+        if foundit:
+            return mtpdir
 
 
 #------------------------------------------------------------------------------#

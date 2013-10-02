@@ -60,6 +60,11 @@ class App(Tk):
             self.option_add('*Labelframe.background', self.macgrey)
             self.option_add('*Menubutton.background', self.macgrey)
         self.setupwindow(self)
+        if otrapps.util.mtp_is_mounted():
+            self.show_sync(True)
+        else:
+            self.show_sync(False)
+
 
     def find_iconsdir(self):
         scriptdir = os.path.dirname(sys.argv[0])
@@ -73,6 +78,16 @@ class App(Tk):
         for path in paths:
             if os.path.isdir(path):
                 return path
+
+
+    def show_sync(self, sync):
+        if sync:
+            self.bottomframe.pack_forget()
+            self.syncframe.pack()
+        else:
+            self.bottomframe.pack()
+            self.syncframe.pack_forget()
+
 
     def setupwindow(self, master):
         self.fromframe = Frame(master)
@@ -136,10 +151,21 @@ class App(Tk):
         self.choosebutton.pack(side=LEFT)
         self.disableable.append(self.choosebutton)
 
-        self.button = Button(self.bottomframe, command=self.convert,
+        self.writebutton = Button(self.bottomframe, command=self.convert,
                              text="Write to ChatSecure otr_keystore.ofcaes file")
-        self.button.pack(side=TOP, padx=5, pady=5)
-        self.disableable.append(self.button)
+        self.writebutton.pack(side=TOP, padx=15, pady=15)
+        self.disableable.append(self.writebutton)
+
+        # self.syncframe will be shown if direct ChatSecure syncing is
+        # available and self.bottomframe will be hidden.  If direct MTP
+        # syncing is not available, then vice versa.
+        self.syncframe = Frame(master)
+        self.syncframe.pack(side=BOTTOM, expand=True, fill=X, anchor=S)
+        self.syncbutton = Button(self.syncframe, width='25',
+                                 command=self.convert_and_copy,
+                                 text="Sync to ChatSecure")
+        self.syncbutton.pack(side=BOTTOM, padx=15, pady=15)
+        self.disableable.append(self.syncbutton)
 
     def show_error(self, error_msg):
         print(error_msg)
@@ -316,6 +342,14 @@ class App(Tk):
             otrapps.make_outdir(self.tofolder.get(), '')
             ChatSecureProperties.write(keydict, self.tofolder.get())
             self.show_qrwindow()
+
+    def convert_and_copy(self):
+        '''run the conversion and copy the ChatSecure file into place on the
+        device's MTP mount'''
+        if otrapps.util.mtp_is_mounted():
+            print("convert and copy!")
+            self.tofolder.set(otrapps.util.get_mtp_mount_path())
+            self.convert()
 
 
 #------------------------------------------------------------------------------#
