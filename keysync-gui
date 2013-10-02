@@ -46,16 +46,24 @@ class App(Tk):
 
     def __init__(self):
         Tk.__init__(self)
-        scriptdir = os.path.dirname(sys.argv[0])
-        # installed path, should work on all platforms
-        self.iconsdir = os.path.join(scriptdir, '..', 'share', 'keysync')
-        if not os.path.isdir(self.iconsdir):
-            # path when running in-place in the git repo
-            self.iconsdir = os.path.join(scriptdir, 'icons')
+        self.iconsdir = self.find_iconsdir()
         self.disableable = []
         menubar = MenuBar(self)
         self.config(menu=menubar)
         self.setupwindow(self)
+
+    def find_iconsdir(self):
+        scriptdir = os.path.dirname(sys.argv[0])
+        paths = []
+        # Mac OS X py2app
+        paths.append(os.path.join(scriptdir, 'share', 'keysync'))
+        # UNIX and Windows
+        paths.append(os.path.join(scriptdir, '..', 'share', 'keysync'))
+        # when running in-place in the git repo
+        paths.append(os.path.join(scriptdir, 'icons'))
+        for path in paths:
+            if os.path.isdir(path):
+                return path
 
     def setupwindow(self, master):
         self.fromframe = Frame(master)
