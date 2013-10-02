@@ -96,7 +96,7 @@ class OtrPrivateKeys():
     @staticmethod
     def write(keydict, filename):
         privkeys = '(privkeys\n'
-        for name, key in keydict.iteritems():
+        for name, key in keydict.items():
             if 'x' in key:
                 dsa = '  (p #' + ('%0258X' % key['p']) + '#)\n'
                 dsa += '  (q #' + ('%042X' % key['q']) + '#)\n'

@@ -425,7 +425,7 @@ def check_and_set(key, k, v):
 
 def merge_keys(key1, key2):
     '''merge the second key data into the first, checking for conflicts'''
-    for k, v in key2.iteritems():
+    for k, v in key2.items():
         check_and_set(key1, k, v)
 
 
@@ -433,7 +433,7 @@ def merge_keydicts(kd1, kd2):
     '''
     given two keydicts, merge the second one into the first one and report errors
     '''
-    for name, key in kd2.iteritems():
+    for name, key in kd2.items():
         if name in kd1:
             merge_keys(kd1[name], key)
         else:

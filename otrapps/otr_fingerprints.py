@@ -27,7 +27,7 @@ class OtrFingerprints():
         # keys in the keydict in order to support apps like Adium that
         # don't use the actual account ID as the index in the files.
         tsv = csv.writer(open(filename, 'w'), delimiter='\t')
-        for name, key in keydict.iteritems():
+        for name, key in keydict.items():
             if 'fingerprint' in key:
                 for account in accounts:
                     row = [key['name'], account, key['protocol'], key['fingerprint']]

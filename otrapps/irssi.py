@@ -45,7 +45,7 @@ class IrssiProperties():
 
         accounts = []
         # look for all private keys and use them for the accounts list
-        for name, key in keydict.iteritems():
+        for name, key in keydict.items():
             if 'x' in key:
                 accounts.append(name)
         fpf = os.path.join(savedir, IrssiProperties.fingerprintfile)

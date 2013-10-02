@@ -134,7 +134,7 @@ class JitsiProperties():
         propkey_base = 'net.java.sip.communicator.plugin.otr.'
         p = Properties()
         p.load(open(loadfile))
-        for name, key in keydict.iteritems():
+        for name, key in keydict.items():
             if 'verification' in key and key['verification'] != '':
                 verifiedkey = (propkey_base + re.sub('[^a-zA-Z0-9_]', '_', key['name'])
                                + '_publicKey_verified')

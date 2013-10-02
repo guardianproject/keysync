@@ -59,7 +59,7 @@ class PidginProperties():
             util.merge_keydicts(keydict, OtrFingerprints.parse(fpf))
 
         resources = PidginProperties._get_resources(settingsdir)
-        for name, key in keydict.iteritems():
+        for name, key in keydict.items():
             if key['protocol'] == 'prpl-jabber' \
                     and 'x' in key.keys() \
                     and name in resources.keys():
@@ -86,7 +86,7 @@ class PidginProperties():
         resources = PidginProperties._get_resources(accountsdir)
 
         pidginkeydict = dict()
-        for name, key in keydict.iteritems():
+        for name, key in keydict.items():
             # pidgin requires the XMPP Resource in the account name for otr.private_keys
             if key['protocol'] == 'prpl-jabber' and 'x' in key.keys():
                 if name in resources.keys():
@@ -98,7 +98,7 @@ class PidginProperties():
 
         accounts = []
         # look for all private keys and use them for the accounts list
-        for name, key in keydict.iteritems():
+        for name, key in keydict.items():
             if 'x' in key:
                 accounts.append(name)
         fpf = os.path.join(savedir, PidginProperties.fingerprintfile)

@@ -54,7 +54,7 @@ class AdiumProperties():
 
         accounts = AdiumProperties._get_accounts_from_plist(settingsdir)
         newkeydict = dict()
-        for adiumIndex, key in keydict.iteritems():
+        for adiumIndex, key in keydict.items():
             for account in accounts:
                 if account['ObjectID'] == key['name']:
                     name = account['UID']
@@ -78,7 +78,7 @@ class AdiumProperties():
 
         kf = os.path.join(savedir, AdiumProperties.keyfile)
         adiumkeydict = dict()
-        for name, key in keydict.iteritems():
+        for name, key in keydict.items():
             name = key['name']
             for account in accountsplist:
                 if account['UID'] == name:

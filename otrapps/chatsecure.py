@@ -71,7 +71,7 @@ class ChatSecureProperties():
     def write(keydict, savedir, password=None):
         '''given a keydict, generate a chatsecure file in the savedir'''
         p = pyjavaproperties.Properties()
-        for name, key in keydict.iteritems():
+        for name, key in keydict.items():
             # only include XMPP keys, since ChatSecure only supports XMPP
             # accounts, so we avoid spreading private keys around
             if key['protocol'] == 'prpl-jabber' or key['protocol'] == 'prpl-bonjour':
