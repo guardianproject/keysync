@@ -218,6 +218,9 @@ class App(Tk):
         self.cancelbutton.pack(side=LEFT)
         self.okbutton = Button(self.buttonframe, text='OK', width=6, state=DISABLED)
         self.okbutton.pack(side=LEFT)
+        # this needs to happen last to make sure self.okbutton exists
+        # before self._validate_entry() is ever run
+        self.fromentry.configure(validate='focus', validatecommand=self._validate_entry)
 
     def destroy_otherwindow(self, event=None):
         if self.otherwindow:
@@ -225,6 +228,24 @@ class App(Tk):
 
     def select_app(self, app=None):
         self.applabel.configure(image=self.app_icons[self.fromapp.get()])
+
+    def _validate_entry(self):
+        dir = self.fromfolder.get()
+        if os.path.exists(dir):
+            self.okbutton.configure(state=NORMAL)
+        else:
+            self.okbutton.configure(state=DISABLED)
+        for app in otrapps.apps_supported:
+            found = True
+            for f in otrapps.apps[app].files:
+                if not os.path.exists(f):
+                    found = False
+                    continue
+            if found:
+                # TODO set Options menu to app
+                self.applabel.configure(image=self.app_icons[app])
+                break
+
 
     def getpath(self, app):
         '''output the standard path of a given app'''
