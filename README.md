@@ -75,25 +75,23 @@ just to let us know that you are using KeySync and find it useful.
 INSTALL
 =======
 
-List of python dependencies:
+KeySync uses lots of Python modules to achieve a smooth syncing
+experience.  To see a complete list of python modules used on your
+platform, see the `dependencies` list in setup.py.  Here are some of
+the key libraries:
 
-* beautifulsoup 3 - http://www.crummy.com/software/BeautifulSoup
-* gnupg-interface - http://py-gnupg.sourceforge.net
+* BeautifulSoup 3 - http://www.crummy.com/software/BeautifulSoup
 * psutil - https://code.google.com/p/psutil
 * pure-python-otr - https://github.com/afflux/pure-python-otr
 * pyasn1 - http://pyasn1.sourceforge.net/
 * pycrypto - https://www.dlitz.net/software/pycrypto
-* pyparsing - http://pyparsing.wikispaces.com
 * pyjavaproperties - http://pypi.python.org/pypi/pyjavaproperties
+* pyparsing - http://pyparsing.wikispaces.com
 * python-pgpdump - https://pypi.python.org/pypi/pgpdump
 * Python Imaging Library - http://www.pythonware.com/products/pil
 * qrcode - https://github.com/lincolnloop/python-qrcode
 * Tkinter - https://wiki.python.org/moin/TkInter
 
-If you are trying to run KeySync using Python older than 2.7, then
-you'll need to also install `argparse`:
-
-* argparse - https://pypi.python.org/pypi/argparse
 
 Debian/Ubuntu/Mint/etc
 ----------------------
