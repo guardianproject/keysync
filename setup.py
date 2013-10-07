@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 
 from setuptools import setup
+import os
 import sys
+
+def read(fname):
+    return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 dependencies = [
         'BeautifulSoup',
@@ -55,6 +59,7 @@ else:
 setup(name='keysync',
     version='0.1.1',
     description='syncs OTR keys between different IM programs',
+    long_description=read('README.md'),
     author='The Guardian Project',
     author_email='support@guardianproject.info',
     url='https://guardianproject.info/apps/keysync',
