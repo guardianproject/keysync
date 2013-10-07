@@ -14,10 +14,11 @@ dependencies = [
         'python-potr',
         'pyasn1',
         'pycrypto',
-        'pyparsing',
         'pyjavaproperties',
+        'pyparsing',
         'pgpdump',
         'qrcode',
+        'six',
     ]
 
 if sys.platform == 'darwin':
