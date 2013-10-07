@@ -1,6 +1,9 @@
 mkdir -p files/
 cd files/
 
+# git 
+wget -c https://msysgit.googlecode.com/files/Git-1.8.4-preview20130916.exe
+
 # python
 wget -c http://www.python.org/ftp/python/2.7.5/python-2.7.5.msi
 wget -c http://www.python.org/ftp/python/2.7.5/python-2.7.5.msi.asc

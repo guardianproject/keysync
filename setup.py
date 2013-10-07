@@ -4,7 +4,20 @@
 from setuptools import setup
 import sys
 
+dependencies = [
+        'BeautifulSoup',
+        'psutil',
+        'python-potr',
+        'pyasn1',
+        'pycrypto',
+        'pyparsing',
+        'pyjavaproperties',
+        'pgpdump',
+        'qrcode',
+    ]
+
 if sys.platform == 'darwin':
+     dependencies.append('PIL')
      extra_options = dict(
          setup_requires=['py2app'],
          app=['keysync-gui'],
@@ -25,11 +38,14 @@ if sys.platform == 'darwin':
          ),
      )
 elif sys.platform == 'win32':
-     extra_options = dict(
-         setup_requires=['py2exe'],
-         app=['keysync-gui'],
-     )
+     dependencies.append('pyinstaller')
+     dependencies.append('pywin32')
+     # PIL doesn't build on Windows, so use Pillow instead, pegged at
+     # 2.1.0 until pyinstaller supports newer version
+     dependencies.append('Pillow==2.1.0')
+     extra_options = dict()
 else:
+     dependencies.append('PIL')
      extra_options = dict(
          # Normally unix-like platforms will use "setup.py install"
          # and install the main script as such
@@ -68,17 +84,6 @@ setup(name='keysync',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Utilities',
     ],
-    install_requires=[
-        'BeautifulSoup',
-        'psutil',
-        'python-potr',
-        'pyasn1',
-        'pycrypto',
-        'pyparsing',
-        'pyjavaproperties',
-        'pgpdump',
-        'PIL',
-        'qrcode',
-    ],
+    install_requires=dependencies,
     **extra_options
 )

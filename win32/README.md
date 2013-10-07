@@ -14,6 +14,7 @@ Either a Windows machine or a Linux box with wine installed will do to produce a
 
 **Manual Download**
 
+* [Git][git]
 * [Python 2.7][py27] ([sig][pysig])
 * [Python Windows 32 Bindings][pywin32]
 * [PyInstaller Development Version][pyinst]
@@ -48,6 +49,11 @@ Install wine:
     Msys basic system
     MinGW Developer Toolkit
 ```
+
+### Git
+
+1. Execute the installer
+2. Choose to add git to the PATH
 
 ### OpenSSL
 
@@ -115,7 +121,7 @@ To prevent the following error when building Python modules, we must edit a dist
 
 Note: your $HOME when using MinGW shell is in C:\MinGW\msys\1.0\home\USERNAME
 
-### setuptools, distribute, pip
+### setuptools
 
 1. Open your MinGW Shell
     * Windows: Start -> MinGW -> MinGW Shell
@@ -127,40 +133,31 @@ Note: your $HOME when using MinGW shell is in C:\MinGW\msys\1.0\home\USERNAME
 
 ```bash
     python ez_setup.py
-    easy_install distribute
-    easy_install pip
 ```
 
 ### PyCrypto
 
+For some reason we must install PyCrypto this way, instead of relying on it to
+be installed via setup.py along with the rest of the dependencies.
+
 1. cd to your extracted pycrypto dir: `cd pycrypto-2.6`
-2. `python setup.py build -c mingw32`
-3. `python seutp.py install`
+2. `python seutp.py install`
 
-### Pillow (the PIL fork)
 
-Note: We use easy_install instead of pip, because pip doesn't download eggs with prebuilt binaries
-
-1. `easy_install Pillow`
-
-### Pure Python OTR
-
-Note: We use the development version (beta6) because it is not on PyPi
-
-1. `cd pure-python-otr-1.0.0beta6`
-2. `python setup.py install`
-
-### Remaining Dependencies
+### KeySync
 
 1. `cd keysync`
-2. `pip install -r python-deps.txt`
+2. `python setup.py install`
+
+This will download, compile, and install all the remaining python modules.
 
 ## Verify Everything Works
 
 At this point, all the dependencies for keysync should be installed
 and functioning, so keysync should work. You can test it by running keysync-gui:
 
-You'll probably want to install Pidgin, pidgin-otr, and configure an account before running keysync.
+You'll probably want to install Pidgin, pidgin-otr, and configure an account
+before running keysync.
 
 ```bash
 cd keysync
@@ -170,24 +167,22 @@ Do not proceed unless the GUI pops up and the app functions as expected.
 
 ## Create Windows Executable with PyInstaller
 
-Note: Due to [bug 651](http://www.pyinstaller.org/ticket/651) the development version of PyInstaller must be used.
+Note: Due to [bug 651](http://www.pyinstaller.org/ticket/651) the development
+version of PyInstaller must be used.
 
-Extract the pyinstaller archive. It is not installed, we will build the package
-inside the pyinstaller directory. PyInstaller works by executing pyinstaller.py
-taking our primary script as the argument.
-
-Build the package:
+KeySync's setup.py script automatically installs pyinstaller, so all you need
+to do is execute pyinstaller and point it at the script you want to turn into
+an EXE.  Build the package:
 
 ```bash
-cd pyinstaller-pyinstaller-3f7f9a0/
-python pyinstaller.py --onefile ../keysync/keysync-gui
+pyinstaller --onefile keysync-gui
 ```
 
 You can omit the `--onefile` parameter, see the [PyInstaller
 Manual](http://htmlpreview.github.io/?https://github.com/pyinstaller/pyinstaller/blob/develop/doc/Manual.html)
 for what exactly the consequences of both modes are.
 
-If the process succeeds, then check the `keysync/dist` directory
+If the process succeeds, then check the `dist/` directory
 inside the pyinstaller directory.
 
 # Security Considerations
@@ -200,6 +195,7 @@ source may not be possible.
 Also, according to [this ticket](http://sourceforge.net/p/pywin32/bugs/519/)
 the Python Win32 bindings are not easily buildable with MinGW.
 
+[git]: http://git-scm.com/download/win
 [py27]: http://www.python.org/ftp/python/2.7.5/python-2.7.5.msi
 [pysig]: http://www.python.org/ftp/python/2.7.5/python-2.7.5.msi.asc
 [pywin32]: http://downloads.sourceforge.net/project/pywin32/pywin32/Build%20218/pywin32-218.win32-py2.7.exe?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fpyw#
