@@ -60,10 +60,7 @@ class App(Tk):
             self.option_add('*Labelframe.background', self.macgrey)
             self.option_add('*Menubutton.background', self.macgrey)
         self.setupwindow(self)
-        if otrapps.util.mtp_is_mounted():
-            self.show_sync(True)
-        else:
-            self.show_sync(False)
+        self.check_mtp_mount()
 
 
     def find_iconsdir(self):
@@ -78,6 +75,17 @@ class App(Tk):
         for path in paths:
             if os.path.isdir(path):
                 return path
+
+
+    def check_mtp_mount(self):
+        '''this checks whether MTP is mounted on a regular timer'''
+        if otrapps.util.mtp_is_mounted():
+            self.synclabel.configure(text=otrapps.util.mtp.devicename)
+            self.show_sync(True)
+        else:
+            self.synclabel.configure(text='')
+            self.show_sync(False)
+        self.after(2000, self.check_mtp_mount)
 
 
     def show_sync(self, sync):
