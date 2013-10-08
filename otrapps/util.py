@@ -25,7 +25,9 @@ from __future__ import print_function
 import base64
 import math
 import os
+import psutil
 import re
+import signal
 import sys
 try:
     # Import hashlib if Python >= 2.5
@@ -449,26 +451,48 @@ def which_apps_are_running(apps):
     Check the process list to see if any of the specified apps are running.
     It returns a tuple of running apps.
     '''
-    import psutil
     running = []
     for pid in psutil.get_pid_list():
         p = psutil.Process(pid)
         for app in apps:
-            r = re.compile('.*' + app + '.*', re.IGNORECASE)
-            m = r.match(p.name)
-            if m:
+            if app == p.name:
                 running.append(app)
+                print('found: ' + p.name)
             else:
+                r = re.compile('.*' + app + '.*', re.IGNORECASE)
+                try:
+                    for arg in p.cmdline:
+                        m = r.match(arg)
+                        if m and (p.name == 'python' or p.name == 'java'):
+                            running.append(app)
+                            break
+                except:
+                    pass
+    return tuple(running)
+
+
+def killall(app):
+    '''
+    terminates all instances of an app
+    '''
+    running = []
+    for pid in psutil.get_pid_list():
+        p = psutil.Process(pid)
+        if app == p.name:
+            print('killing: ' + p.name)
+            os.kill(pid, signal.SIGKILL)
+        else:
+            r = re.compile('.*' + app + '.*', re.IGNORECASE)
+            try:
                 for arg in p.cmdline:
                     m = r.match(arg)
-                    if m and \
-                            (p.name == 'python' or p.name == 'java'):
-                        running.append(app)
+                    if m and (p.name == 'python' or p.name == 'java'):
+                        print('killing: ' + p.name)
+                        os.kill(pid, signal.SIGKILL)
                         break
-    if running == []:
-        return None
-    else:
-        return tuple(running)
+            except:
+                pass
+
 
 def _fullcopy(src, dst):
     '''

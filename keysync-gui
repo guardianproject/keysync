@@ -60,7 +60,9 @@ class App(Tk):
             self.option_add('*Labelframe.background', self.macgrey)
             self.option_add('*Menubutton.background', self.macgrey)
         self.setupwindow(self)
-        self.check_mtp_mount()
+        self.check_timer()
+        if sys.platform == 'darwin':
+            self.check_android_file_transfer()
 
 
     def find_iconsdir(self):
@@ -77,22 +79,48 @@ class App(Tk):
                 return path
 
 
+    def check_timer(self):
+        self.check_mtp_mount()
+        self.check_android_file_transfer()
+        self.after(5000, self.check_timer)
+
+
     def check_mtp_mount(self):
         '''this checks whether MTP is mounted on a regular timer'''
         if otrapps.util.mtp_is_mounted():
+            self.device_attached = True
             self.synclabel.configure(text=otrapps.util.mtp.devicename)
-            self.show_sync(True)
+            self.show_sync('sync')
         else:
+            self.device_attached = False
             self.synclabel.configure(text='')
-            self.show_sync(False)
-        self.after(2000, self.check_mtp_mount)
+            self.show_sync('localcopy')
 
 
-    def show_sync(self, sync):
-        if sync:
+    def check_android_file_transfer(self):
+        '''
+        Check if the "Android File Transfer" app is running, it will
+        claim the MTP device, and therefore prevent KeySync from
+        syncing to that device
+        '''
+        if self.device_attached:
+            apps = otrapps.util.which_apps_are_running(['Android File Transfer'])
+            if len(apps) > 0:
+                self.show_sync('androidfiletransfer')
+
+
+    def show_sync(self, status):
+        if status == 'sync':
+            self.androidfiletransferframe.pack_forget()
             self.bottomframe.pack_forget()
             self.syncframe.pack()
+        elif status == 'androidfiletransfer':
+            self.androidfiletransferframe.pack()
+            self.bottomframe.pack_forget()
+            self.syncframe.pack_forget()
         else:
+            # the failsafe is syncing to a local file
+            self.androidfiletransferframe.pack_forget()
             self.bottomframe.pack()
             self.syncframe.pack_forget()
 
@@ -176,6 +204,27 @@ class App(Tk):
                                  text="Sync to ChatSecure")
         self.syncbutton.pack(padx=15, pady=15)
         self.disableable.append(self.syncbutton)
+
+        # self.androidfiletransferframe will be shown if Google's
+        # Android File Transfer app is running.  It also uses libmtp
+        # to access the files on the device, and it conflicts with
+        # KeySync's use of libmtp.  Therefore it must not be running
+        # in order for the sync to work.
+        self.androidfiletransferframe = Frame(master)
+        self.androidfiletransferframe.pack(expand=True, fill=BOTH, anchor=S)
+        self.aftlabel = Label(self.androidfiletransferframe, bg='pink',
+                              text='Android File Transfer cannot be running when KeySync is running!')
+        self.aftlabel.pack(padx=15, pady=15)
+        self.aftclosebutton = Button(self.androidfiletransferframe,
+                                      command=self.close_androidfiletransfer,
+                                      text='Close Android File Transfer')
+        self.aftclosebutton.pack(padx=15, pady=15)
+        self.disableable.append(self.aftclosebutton)
+
+
+    def close_androidfiletransfer(self):
+        otrapps.util.killall('Android File Transfer')
+
 
     def show_error(self, error_msg):
         print(error_msg)
