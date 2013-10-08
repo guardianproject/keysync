@@ -34,7 +34,7 @@ class MenuBar(Menu):
 
         fileMenu = Menu(self, tearoff=False)
         self.add_cascade(label="File",underline=0, menu=fileMenu)
-        fileMenu.add_command(label='Convert', underline=1, command=parent.convert)
+        fileMenu.add_command(label='Convert', underline=1, command=parent.convert_to_local)
         fileMenu.add_separator()
         fileMenu.add_command(label="Exit", underline=1, command=self.quit)
 
@@ -187,7 +187,7 @@ class App(Tk):
         self.choosebutton.pack(side=LEFT)
         self.disableable.append(self.choosebutton)
 
-        self.writebutton = Button(self.bottomframe, command=self.convert,
+        self.writebutton = Button(self.bottomframe, command=self.convert_to_local,
                              text="Write to ChatSecure otr_keystore.ofcaes file")
         self.writebutton.pack(side=TOP, padx=15, pady=15)
         self.disableable.append(self.writebutton)
@@ -390,6 +390,7 @@ class App(Tk):
 
     def convert(self):
         '''run the conversion from one file set to another'''
+        ret = False
         self.set_app_enabled_state(False)
         keydict = dict()
         for app in self.app_labels.keys():
@@ -406,11 +407,20 @@ class App(Tk):
         if len(keydict.keys()) > 0:
             otrapps.make_outdir(self.tofolder.get(), '')
             ChatSecureProperties.write(keydict, self.tofolder.get())
+            if os.path.exists(os.path.join(self.tofolder.get(),
+                                           ChatSecureProperties.encryptedkeyfile)):
+                ret = True
+        return ret
+
+    def convert_to_local(self):
+        '''write the result to a local file'''
+        if self.convert():
             self.show_qrwindow()
 
     def convert_and_copy(self):
         '''run the conversion and copy the ChatSecure file into place on the
         device's MTP mount'''
+        synced = False
         if otrapps.util.mtp_is_mounted():
             savedir = otrapps.util.get_mtp_mount_path()
             self.tofolder.set(savedir)
@@ -420,8 +430,19 @@ class App(Tk):
                 target = ChatSecureProperties.encryptedkeyfile
                 mtp = otrapps.util.mtp
                 mtp.connect()
-                mtp.send_file_from_file(source, target, 0, callback=self._mtp_callback)
-                mtp.disconnect()
+                try:
+                    mtp.send_file_from_file(source, target, 0, callback=self._mtp_callback)
+                    synced = True
+                except Exception as e:
+                    synced = False
+                    print('send_file_from_file failed with Exception: ', end=' ')
+                    print(e)
+                finally:
+                    mtp.disconnect()
+        if synced:
+            self.show_qrwindow()
+        else:
+            self.synclabel.configure(text='Last sync attempt failed!')
 
 
 #------------------------------------------------------------------------------#
