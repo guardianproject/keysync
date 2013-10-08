@@ -27,6 +27,7 @@ if sys.version_info[0] == 2 and sys.version_info[1] < 7:
 
 if sys.platform == 'darwin':
      dependencies.append('PIL')
+     dependencies.append('pymtp==0.0.5')
      extra_options = dict(
          setup_requires=['py2app'],
          app=['keysync-gui'],

@@ -130,7 +130,7 @@ class App(Tk):
             self.app_labels[app] = label
 
         self.bottomframe = Frame(master)
-        self.bottomframe.pack(side=BOTTOM, expand=True, fill=X, anchor=S)
+        self.bottomframe.pack(expand=True, fill=X, anchor=S)
 
         self.toframe = LabelFrame(self.bottomframe, text='Write ChatSecure Keystore')
         self.toframe.pack(side=TOP, padx=15, pady=5, expand=True, fill=X)
@@ -160,11 +160,13 @@ class App(Tk):
         # available and self.bottomframe will be hidden.  If direct MTP
         # syncing is not available, then vice versa.
         self.syncframe = Frame(master)
-        self.syncframe.pack(side=BOTTOM, expand=True, fill=X, anchor=S)
+        self.syncframe.pack(expand=True, fill=BOTH, anchor=S)
+        self.synclabel = Label(self.syncframe)
+        self.synclabel.pack(padx=15, pady=15)
         self.syncbutton = Button(self.syncframe, width='25',
                                  command=self.convert_and_copy,
                                  text="Sync to ChatSecure")
-        self.syncbutton.pack(side=BOTTOM, padx=15, pady=15)
+        self.syncbutton.pack(padx=15, pady=15)
         self.disableable.append(self.syncbutton)
 
     def show_error(self, error_msg):
@@ -323,6 +325,12 @@ class App(Tk):
     def after_qrwindow_destroy(self, event=None):
         self.set_app_enabled_state(True)
 
+    def _mtp_callback(self, sent, total):
+        '''a callback from mtp to update progress'''
+        print('MTP progress: ' + str(sent) + ' of ' + str(total))
+        self.synclabel.configure(text='Sent ' + str(sent) + ' of ' + str(total) + 'bytes...')
+        self.update_idletasks()
+
     def convert(self):
         '''run the conversion from one file set to another'''
         self.set_app_enabled_state(False)
@@ -347,9 +355,16 @@ class App(Tk):
         '''run the conversion and copy the ChatSecure file into place on the
         device's MTP mount'''
         if otrapps.util.mtp_is_mounted():
-            print("convert and copy!")
-            self.tofolder.set(otrapps.util.get_mtp_mount_path())
+            savedir = otrapps.util.get_mtp_mount_path()
+            self.tofolder.set(savedir)
             self.convert()
+            if sys.platform == 'darwin':
+                source = os.path.join(savedir, ChatSecureProperties.encryptedkeyfile)
+                target = ChatSecureProperties.encryptedkeyfile
+                mtp = otrapps.util.mtp
+                mtp.connect()
+                mtp.send_file_from_file(source, target, 0, callback=self._mtp_callback)
+                mtp.disconnect()
 
 
 #------------------------------------------------------------------------------#

@@ -86,6 +86,7 @@ the key libraries:
 * pyasn1 - http://pyasn1.sourceforge.net/
 * pycrypto - https://www.dlitz.net/software/pycrypto
 * pyjavaproperties - http://pypi.python.org/pypi/pyjavaproperties
+* pymtp - https://github.com/eighthave/pymtp
 * pyparsing - http://pyparsing.wikispaces.com
 * python-pgpdump - https://pypi.python.org/pypi/pgpdump
 * Python Imaging Library - http://www.pythonware.com/products/pil
@@ -109,8 +110,8 @@ PPA URL: https://launchpad.net/~guardianproject/+archive/ppa
 If you want to install the dependencies because you're going to develop
 KeySync, then install them manually with:
 
-    sudo apt-get install python-pyparsing python-pyasn1 python-potr \
-      python-pyjavaproperties python-beautifulsoup python-qrcode \
+    sudo apt-get install python-pyparsing python-pyasn1 python-potr python-pymtp \
+      python-pyjavaproperties python-beautifulsoup python-qrcode libmtp-dev \
       python-pgpdump python-crypto python-psutil python-tk python-imaging-tk
 
 For Debian, you can try using the Ubuntu PPA, with something like oneiric for
@@ -179,6 +180,7 @@ Activate your virtual python environment then run pip to install the dependencie
 
 For a nice step-by-step HOWTO, see:
 http://exyr.org/2011/virtualenv-HOWTO/slides.html
+
 
 =====
 USAGE

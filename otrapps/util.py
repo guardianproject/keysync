@@ -25,8 +25,8 @@ from __future__ import print_function
 import base64
 import math
 import os
-import platform
 import re
+import sys
 try:
     # Import hashlib if Python >= 2.5
     from hashlib import sha1
@@ -41,6 +41,10 @@ from potr.utils import bytes_to_long
 from potr.compatcrypto import DSAKey
 
 import errors
+
+if sys.platform == 'darwin':
+    import pymtp
+    mtp = pymtp.MTP()
 
 HLEN = sha1().digest_size  # length of the hash output
 
@@ -487,25 +491,40 @@ def make_conffile_backup(filename):
 
 def mtp_is_mounted():
     '''checks if an MTP device is mounted, i.e. an Android 4.x device'''
-    if platform.system() == 'Darwin':
-        # TODO implement!
+    if sys.platform == 'win32':
+        # TODO implement, probably using wmdlib
         pass
-    elif platform.system() == 'Windows':
-        # TODO implement!
-        pass
-    else:
-        # this assumes that gvfs is mounting the MTP device
+    elif os.path.exists(os.path.join(os.getenv('HOME'), '.gvfs')):
+        # this assumes that gvfs is mounting the MTP device.  gvfs is
+        # part of GNOME, but is probably included in other systems too
         return os.path.exists(os.path.join(os.getenv('HOME'), '.gvfs', 'mtp'))
+    else:
+        # if all else fails, try libmtp/pymtp, it works on Mac OS X at least!
+        try:
+            devices = mtp.detect_devices()
+            if len(devices) > 0:
+                e = devices[0].device_entry
+                mtp.devicename = e.vendor + ' ' + e.product
+                return True
+            else:
+                mtp.devicename = ''
+                return False
+        except Exception as e:
+            print('except' + str(e))
+            return False
 
 
 def get_mtp_mount_path():
     '''copy a file to the relevant MTP mount'''
-    if platform.system() == 'Darwin':
+    if sys.platform == 'win32':
         # TODO implement!
         pass
-    elif platform.system() == 'Windows':
-        # TODO implement!
-        pass
+    elif sys.platform == 'darwin':
+        # Mac OS X does not have native MTP support, so no MTP
+        # mount. So a temp dir is created, and otr_keystore is written
+        # there, then copied into place using pymtp.
+        import tempfile
+        return tempfile.mkdtemp(prefix='.keysync-')
     else:
         foundit = False
         # this assumes that gvfs is mounting the MTP device
