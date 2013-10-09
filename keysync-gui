@@ -238,7 +238,7 @@ class App(Tk):
         # in order for the sync to work.
         self.androidfiletransferframe = Frame(master)
         self.androidfiletransferframe.pack(expand=True, fill=BOTH, anchor=S)
-        self.aftlabel = Label(self.androidfiletransferframe, bg='pink',
+        self.aftlabel = Label(self.androidfiletransferframe, background='pink',
                               text='Android File Transfer cannot be running when KeySync is running!')
         self.aftlabel.pack(padx=15, pady=15)
         self.aftclosebutton = Button(self.androidfiletransferframe,
@@ -260,7 +260,7 @@ class App(Tk):
         # section for an error.
         self.errorframe = Frame(master)
         self.errorframe.pack(expand=True, fill=BOTH, anchor=S)
-        self.messagelabel = Label(self.errorframe, bg='pink',
+        self.messagelabel = Label(self.errorframe, background='pink',
                               text='Sync failed! Maybe the file is already on your device?')
         self.messagelabel.pack(padx=15, pady=15)
         self.tryagainlabel = Label(self.errorframe,
