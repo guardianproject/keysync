@@ -67,11 +67,6 @@ Install wine:
 1. Execute the Python installer, use default options
     * Linux+Wine: you must use `msiexec /i python-2.7.5.msi`
 
-### Python W32 Bindings
-
-1. Execute the Python installer, use default options
-
-
 ## Post Python Install Configuration
 
 **Configure the PATH environment variable**
@@ -134,6 +129,19 @@ Note: your $HOME when using MinGW shell is in C:\MinGW\msys\1.0\home\USERNAME
 ```bash
     python ez_setup.py
 ```
+
+### Python W32 Bindings
+
+1. Execute the Python installer, use default options
+
+*Note*: If using a virtual environment (virtualenv), then you must open a
+command shell that has your virtualenv activated and execute:
+
+    easy_install /c/path/to/pywin32-218.win32-py2.7.exe
+
+Otherwise pywin32 will be installed into the system site-packages dir, and not
+be available to your virtualenv.
+
 
 ### PyCrypto
 
