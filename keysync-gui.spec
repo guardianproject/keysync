@@ -9,7 +9,7 @@ icon_dir = Tree('icons', prefix='icons')
 exe = EXE(pyz,
           a.scripts,
           exclude_binaries=True,
-          name='keysync-gui.exe',
+          name='KeySync.exe',
           debug=False,
           strip=None,
           upx=True,
@@ -21,4 +21,4 @@ coll = COLLECT(exe,
                icon_dir,
                strip=None,
                upx=True,
-               name='keysync-gui')
+               name='KeySync')
