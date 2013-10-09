@@ -183,7 +183,7 @@ to do is execute pyinstaller and point it at the script you want to turn into
 an EXE.  Build the package:
 
 ```bash
-pyinstaller --onefile keysync-gui
+pyinstaller --onefile keysync-gui.spec
 ```
 
 You can omit the `--onefile` parameter, see the [PyInstaller

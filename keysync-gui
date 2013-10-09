@@ -76,13 +76,16 @@ class App(Tk):
         paths = []
         # Mac OS X py2app
         paths.append(os.path.join(scriptdir, 'share', 'keysync'))
-        # UNIX and Windows
+        # Windows w/ pyinstaller
+        paths.append(os.path.join(os.environ.get('_MEIPASS2',scriptdir), 'icons'))
+        # UNIX
         paths.append(os.path.join(scriptdir, '..', 'share', 'keysync'))
         # when running in-place in the git repo
         paths.append(os.path.join(scriptdir, 'icons'))
         for path in paths:
             if os.path.isdir(path):
                 return path
+        self.show_error("Could not find the icons folder!")
 
 
     def check_timer(self):
