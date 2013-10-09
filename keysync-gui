@@ -117,11 +117,13 @@ class App(Tk):
             self.androidfiletransferframe.pack_forget()
             self.bottomframe.pack_forget()
             self.errorframe.pack_forget()
+            self.qrframe.pack_forget()
             self.syncframe.pack()
         elif status == 'androidfiletransfer':
             self.androidfiletransferframe.pack()
             self.bottomframe.pack_forget()
             self.errorframe.pack_forget()
+            self.qrframe.pack_forget()
             self.syncframe.pack_forget()
         elif status == 'error':
             self.pollagain = False
@@ -129,12 +131,23 @@ class App(Tk):
             self.androidfiletransferframe.pack_forget()
             self.bottomframe.pack_forget()
             self.errorframe.pack()
+            self.qrframe.pack_forget()
+            self.syncframe.pack_forget()
+        elif status == 'qrcode':
+            self.pollagain = False
+            self.after_cancel(self._pendingjob)
+            self.androidfiletransferframe.pack_forget()
+            self.bottomframe.pack_forget()
+            self.errorframe.pack_forget()
+            self.setup_qrframe()
+            self.qrframe.pack()
             self.syncframe.pack_forget()
         else:
             # the failsafe is syncing to a local file
             self.androidfiletransferframe.pack_forget()
             self.bottomframe.pack()
             self.errorframe.pack_forget()
+            self.qrframe.pack_forget()
             self.syncframe.pack_forget()
 
 
@@ -233,6 +246,15 @@ class App(Tk):
                                       text='Close Android File Transfer')
         self.aftclosebutton.pack(padx=15, pady=15)
         self.disableable.append(self.aftclosebutton)
+
+        # show the QRCode upon successful conversion, the Labels are
+        # filled in later once the required data is generated
+        self.qrframe = Frame(master)
+        self.qrframe.pack(expand=True, fill=BOTH, anchor=S)
+        self.pwlabel = Label(self.qrframe)
+        self.pwlabel.pack(expand=True, fill=BOTH)
+        self.qrlabel = Label(self.qrframe)
+        self.qrlabel.pack(side=BOTTOM, expand=True, fill=BOTH)
 
         # if the sync fails for whatever reason, show a special
         # section for an error.
@@ -372,39 +394,17 @@ class App(Tk):
                 haveapps.append(app)
         return haveapps
 
-    def show_qrwindow(self):
+    def setup_qrframe(self):
         qr = qrcode.QRCode(border=4)
         qr.add_data(ChatSecureProperties.password)
         qr.make(fit=True)
         img = qr.make_image()
-
-        self.qrwindow = Toplevel(self)
-        self.qrwindow.transient(root)
-        self.qrwindow.resizable(False, False)
-        self.qrwindow.bind('<Destroy>', self.after_qrwindow_destroy)
-        bind_close_window(self.qrwindow, self.destroy_qrwindow)
-        # place QR window right above KeySync main window
-        x = self.winfo_x()
-        y = self.winfo_y()
-        self.qrwindow.geometry('+%d+%d' % (x, y))
-
-        self.qrframe = Frame(self.qrwindow)
-        self.qrframe.pack(side = "top", fill = "both", expand = "yes")
+        self.tkimg = ImageTk.PhotoImage(img)
+        self.qrlabel.configure(image=self.tkimg)
         pwtxt = ('Enter this password into ChatSecure: \n'
                  + ChatSecureProperties.password
                  + '\nor just scan this QRCode with ChatSecure:')
-        self.pwlabel = Label(self.qrframe, text=pwtxt)
-        self.pwlabel.pack(side = "top", fill = "both", expand = "yes")
-        self.tkimg = ImageTk.PhotoImage(img)
-        self.qrlabel = Label(self.qrframe, image=self.tkimg)
-        self.qrlabel.pack(side = "bottom", fill = "both", expand = "yes")
-
-    def destroy_qrwindow(self, event=None):
-        if self.qrwindow:
-            self.qrwindow.destroy()
-
-    def after_qrwindow_destroy(self, event=None):
-        self.set_app_enabled_state(True)
+        self.pwlabel.configure(text=pwtxt)
 
     def _mtp_callback(self, sent, total):
         '''a callback from mtp to update progress'''
