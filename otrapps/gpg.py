@@ -17,6 +17,8 @@ class GPGProperties():
 
     path = os.path.expanduser('~/.gnupg')
     secring = 'secring.gpg'
+    pubring = 'pubring.gpg'
+    files = (secring, pubring)
 
     @staticmethod
     def parse(settingsdir=None):
