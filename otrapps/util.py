@@ -659,10 +659,11 @@ def main(argv):
     make_conffile_backup(testfile)
     print('Backed up "%s"' % testfile)
 
-    if mtp_is_mounted():
+    if sys.platform == 'darwin' and  mtp_is_mounted():
         print('\n---------------------------')
-        print('MTP is mounted, attempting copy...')
-        copy_to_mtp_mount('../keysync')
+        print('MTP is mounted here:', end=' ')
+        print(get_mtp_mount_path())
+
 
 
 if __name__ == "__main__":
