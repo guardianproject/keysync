@@ -453,7 +453,11 @@ def which_apps_are_running(apps):
     '''
     running = []
     for pid in psutil.get_pid_list():
-        p = psutil.Process(pid)
+        try:
+            p = psutil.Process(pid)
+        except Exception as e:
+            print(e)
+            continue
         for app in apps:
             if app == p.name:
                 running.append(app)
