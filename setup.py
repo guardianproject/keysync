@@ -36,13 +36,16 @@ if sys.platform == 'darwin':
          options=dict(
              py2app=dict(
                  argv_emulation=True,
-                 semi_standalone=True,
+                 semi_standalone=False,
                  use_pythonpath=False,
+                 site_packages=True,
+                 frameworks='/sw/lib/libmtp.9.dylib',
                  iconfile='icons/keysync.icns',
                  plist={
                      'CFBundleIdentifier': 'info.guardianproject.keysync',
                      'CFBundleName': 'KeySync',
                      'CFBundleLocalizations': ['en'],
+                     'PyRuntimeLocations': ['/System/Library/Frameworks/Python.framework/Versions/2.6/Python'],
                  },
              ),
          ),
