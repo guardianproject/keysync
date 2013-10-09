@@ -3,7 +3,6 @@
 
 from __future__ import print_function
 import os
-import platform
 import sys
 import plistlib
 import util
@@ -14,8 +13,8 @@ from otr_fingerprints import OtrFingerprints
 
 class PidginProperties():
 
-    if platform.system() == 'Windows':
-        path = os.path.expanduser('~/Application Data/.purple')
+    if sys.platform == 'win32':
+        path = os.path.join(os.environ.get('APPDATA'), '.purple')
     else:
         path = os.path.expanduser('~/.purple')
     accountsfile = 'accounts.xml'
