@@ -93,11 +93,11 @@ class App(Tk):
         if otrapps.util.mtp_is_mounted():
             self.device_attached = True
             self.synclabel.configure(text=otrapps.util.mtp.devicename)
-            self.show_sync('sync')
+            self.show('sync')
         else:
             self.device_attached = False
             self.synclabel.configure(text='')
-            self.show_sync('localcopy')
+            self.show('localcopy')
 
 
     def check_android_file_transfer(self):
@@ -109,10 +109,10 @@ class App(Tk):
         if self.device_attached:
             apps = otrapps.util.which_apps_are_running(['Android File Transfer'])
             if len(apps) > 0:
-                self.show_sync('androidfiletransfer')
+                self.show('androidfiletransfer')
 
 
-    def show_sync(self, status):
+    def show(self, status):
         if status == 'sync':
             self.androidfiletransferframe.pack_forget()
             self.bottomframe.pack_forget()
@@ -439,9 +439,9 @@ class App(Tk):
     def convert_to_local(self):
         '''write the result to a local file'''
         if self.convert():
-            self.show_qrwindow()
+            self.show('qrcode')
         else:
-            self.show_sync('error')
+            self.show('error')
 
     def convert_and_copy(self):
         '''run the conversion and copy the ChatSecure file into place on the
@@ -466,9 +466,9 @@ class App(Tk):
                 finally:
                     mtp.disconnect()
         if synced:
-            self.show_qrwindow()
+            self.show('qrcode')
         else:
-            self.show_sync('error')
+            self.show('error')
 
 
 #------------------------------------------------------------------------------#
