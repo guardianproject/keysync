@@ -60,6 +60,8 @@ class App(Tk):
             self.option_add('*Labelframe.background', self.macgrey)
             self.option_add('*Menubutton.background', self.macgrey)
         self.setupwindow(self)
+
+        self.pollagain = True
         self.check_timer()
         if sys.platform == 'darwin':
             self.check_android_file_transfer()
@@ -82,7 +84,8 @@ class App(Tk):
     def check_timer(self):
         self.check_mtp_mount()
         self.check_android_file_transfer()
-        self.after(5000, self.check_timer)
+        if self.pollagain:
+            self._pendingjob = self.after(5000, self.check_timer)
 
 
     def check_mtp_mount(self):
@@ -113,15 +116,25 @@ class App(Tk):
         if status == 'sync':
             self.androidfiletransferframe.pack_forget()
             self.bottomframe.pack_forget()
+            self.errorframe.pack_forget()
             self.syncframe.pack()
         elif status == 'androidfiletransfer':
             self.androidfiletransferframe.pack()
             self.bottomframe.pack_forget()
+            self.errorframe.pack_forget()
+            self.syncframe.pack_forget()
+        elif status == 'error':
+            self.pollagain = False
+            self.after_cancel(self._pendingjob)
+            self.androidfiletransferframe.pack_forget()
+            self.bottomframe.pack_forget()
+            self.errorframe.pack()
             self.syncframe.pack_forget()
         else:
             # the failsafe is syncing to a local file
             self.androidfiletransferframe.pack_forget()
             self.bottomframe.pack()
+            self.errorframe.pack_forget()
             self.syncframe.pack_forget()
 
 
@@ -220,6 +233,17 @@ class App(Tk):
                                       text='Close Android File Transfer')
         self.aftclosebutton.pack(padx=15, pady=15)
         self.disableable.append(self.aftclosebutton)
+
+        # if the sync fails for whatever reason, show a special
+        # section for an error.
+        self.errorframe = Frame(master)
+        self.errorframe.pack(expand=True, fill=BOTH, anchor=S)
+        self.messagelabel = Label(self.errorframe, bg='pink',
+                              text='Sync failed! Maybe the file is already on your device?')
+        self.messagelabel.pack(padx=15, pady=15)
+        self.tryagainlabel = Label(self.errorframe,
+                              text='Restart KeySync and try again.')
+        self.tryagainlabel.pack(padx=15, pady=15)
 
 
     def close_androidfiletransfer(self):
@@ -416,6 +440,8 @@ class App(Tk):
         '''write the result to a local file'''
         if self.convert():
             self.show_qrwindow()
+        else:
+            self.show_sync('error')
 
     def convert_and_copy(self):
         '''run the conversion and copy the ChatSecure file into place on the
@@ -442,7 +468,7 @@ class App(Tk):
         if synced:
             self.show_qrwindow()
         else:
-            self.synclabel.configure(text='Last sync attempt failed!')
+            self.show_sync('error')
 
 
 #------------------------------------------------------------------------------#
