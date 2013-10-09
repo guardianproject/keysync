@@ -11,6 +11,10 @@ from Tkinter import *
 # Mac OS X 10.6's python doesn't ship with ttk because its 2.6 not 2.7 :-(
 if sys.platform != 'darwin':
     from ttk import *
+# On Windows we need to force an early import of pkg_resources
+# to appease pyinstaller
+elif sys.platform == 'win32':
+    import pkg_resources
 from PIL import ImageTk, Image
 import tkFileDialog
 import tkMessageBox
