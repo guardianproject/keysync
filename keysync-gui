@@ -489,4 +489,14 @@ windowingsystem = root.tk.call('tk', 'windowingsystem')
 
 root.title('KeySync')
 root.minsize(450, 300)
+
+# set the icon used in title bars and the system tray
+app_icon = ''
+if sys.platform == 'win32':
+    app_icon = os.path.join(root.find_iconsdir(), 'keysync.ico')
+#TODO implement darwin and unix
+
+if len(app_icon) > 0 :
+    root.tk.call('wm', 'iconbitmap', root, '-default', app_icon)
+
 root.mainloop()
