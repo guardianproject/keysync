@@ -59,11 +59,8 @@ elif sys.platform == 'win32':
      extra_options = dict()
 else:
      dependencies.append('PIL')
-     extra_options = dict(
-         # Normally unix-like platforms will use "setup.py install"
-         # and install the main script as such
-         scripts=['keysync-gui'],
-     )
+     extra_options = dict()
+
 
 setup(name='keysync',
     version='0.1.1',
