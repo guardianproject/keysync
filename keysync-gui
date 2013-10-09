@@ -92,7 +92,8 @@ class App(Tk):
         '''this checks whether MTP is mounted on a regular timer'''
         if otrapps.util.mtp_is_mounted():
             self.device_attached = True
-            self.synclabel.configure(text=otrapps.util.mtp.devicename)
+            if hasattr(otrapps.util, 'mtp'):
+                self.synclabel.configure(text=otrapps.util.mtp.devicename)
             self.show('sync')
         else:
             self.device_attached = False
