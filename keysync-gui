@@ -211,7 +211,7 @@ class App(Tk):
         self.nosyncmessage.configure(state=DISABLED, wrap='word')
         self.nosyncmessage.pack(side=TOP, expand=True, fill=X, anchor=NW, padx=5, pady=5)
         self.tofolder = StringVar()
-        self.tofolder.set(os.path.expanduser('~/Desktop'))
+        self.tofolder.set(os.path.normpath(os.path.expanduser('~/Desktop')))
         self.filenameentry = Entry(self.toframe,
                                    textvariable=self.tofolder)
         self.filenameentry.pack(side=LEFT, expand=True, fill=X)
@@ -307,12 +307,14 @@ class App(Tk):
         dirname = tkFileDialog.askdirectory(initialdir=self.tofolder.get(),
                                             title='Please select a directory')
         if len(dirname) > 0:
+            dirname = os.path.normpath(dirname)
             self.tofolder.set(dirname)
 
     def choose_fromfolder(self):
         dirname = tkFileDialog.askdirectory(initialdir=self.fromfolder.get(),
                                             title='Please select a directory')
         if len(dirname) > 0:
+            dirname = os.path.normpath(dirname)
             self.fromfolder.set(dirname)
 
     def show_otherwindow(self):
@@ -389,7 +391,7 @@ class App(Tk):
     def getpath(self, app):
         '''output the standard path of a given app'''
         try:
-            return otrapps.apps[app].path
+            return os.path.normpath(otrapps.apps[app].path)
         except KeyError:
             print("Invalid app: %s" % ( app ))
             return None
