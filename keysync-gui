@@ -474,7 +474,7 @@ class App(Tk):
                 mtp = otrapps.util.mtp
                 mtp.connect()
                 try:
-                    mtp.send_file_from_file(source, target, 0, callback=self._mtp_callback)
+                    mtp.send_file_from_file(source, target, callback=self._mtp_callback)
                     synced = True
                 except Exception as e:
                     synced = False
