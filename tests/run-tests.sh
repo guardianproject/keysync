@@ -3,8 +3,9 @@
 set -e
 
 copy_accounts_files () {
-    tests="$1"
-    outdir="$2"
+    app=$1
+    tests="$2"
+    outdir="$3"
     test -d $outdir || mkdir -p $outdir
     if [ $app = 'adium' ]; then
         cp $tests/adium/Accounts.plist $outdir/
@@ -27,21 +28,25 @@ echo '========================================================================'
 echo "Run each SAMENESS test"
 echo '========================================================================'
 cd $projectbase
-for app in adium pidgin; do
-    echo ''
-    echo ''
-    echo '------------------------------------------------------------------------'
-    echo "Run $app's SAMENESS tests"
-    echo '------------------------------------------------------------------------'
-    tests=$testbase/SAMENESS
-    outdir=$tmpdir/SAMENESS-$app
-    copy_accounts_files $tests $outdir
-    ./keysync --test $tests -i $app -o $app --output-folder $outdir
-    for f in $tests/$app/*; do
-        echo '--------------------------------'
-        echo $f
+for inapp in adium pidgin; do
+    for outapp in adium pidgin; do
+        echo ''
+        echo ''
+        echo '------------------------------------------------------------------------'
+        echo "Run $inapp-$outapp SAMENESS tests"
+        echo '------------------------------------------------------------------------'
+        tests=$testbase/SAMENESS
+        outdir=$tmpdir/SAMENESS-$inapp-$outapp
+        copy_accounts_files $outapp $tests $outdir
+        ./keysync --test $tests -i $inapp -o $outapp --output-folder $outdir
+        for f in $tests/$outapp/*; do
+            echo '--------------------------------'
+            echo $f
 # remove '|| true' once these tests actually pass:
-        diff -u $f $outdir/$(basename $f) || true
+            diff -u $f $outdir/$(basename $f) || true
+# nice way to see the diff:
+#            meld $f  $outdir/$(basename $f)
+        done
     done
 done
 
@@ -70,7 +75,7 @@ for app in adium chatsecure gajim irssi jitsi pidgin xchat; do
     tests=$testbase
     outdir=$tmpdir/merge-into-$app
     mkdir $outdir
-    copy_accounts_files $tests $outdir
+    copy_accounts_files $app $tests $outdir
     ./keysync --test $tests \
         -i adium -i irssi -i jitsi -i pidgin -i xchat \
         -o $app \
