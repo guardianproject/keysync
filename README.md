@@ -10,8 +10,14 @@ to that app.  Switching between all of them means that you have to manage your
 trust relationships for each app that you use.
 
 KeySync addresses this problem by allowing you to sync your OTR identity and
-trust relationships between multiple apps.  It currently works with ChatSecure
-on Android, and Pidgin, Adium, and Jitsi on desktop.
+trust relationships between multiple apps, which eliminates the need to
+re-establish those relationships on each new client/device. It currently works
+with ChatSecure on Android, and Pidgin, Adium, and Jitsi on desktop.
+
+Please note: KeySync does not make it easier to have simultaneous encrypted
+chats with the same account logged into multiple clients or devices.  There
+are limitations in the OTR protocol that make this impossible.
+
 
 How to sync
 -----------
