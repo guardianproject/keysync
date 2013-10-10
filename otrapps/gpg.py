@@ -38,17 +38,27 @@ class GPGProperties():
         #    otr_key = re.search(r'otr\\x3a(.{8})', uid ).group(1)
         # until then we assume all dsa private subkeys are otr keys
 
+        names = []
         keydict = dict()
         for packet in packets:
+            values = dict()
             if isinstance(packet, pgpdump.packet.SecretSubkeyPacket):
                 if packet.pub_algorithm_type == "dsa":
-                    values = dict()
                     values['p'] = packet.prime
                     values['q'] = packet.group_order
                     values['g'] = packet.group_gen
                     values['y'] = packet.key_value
                     values['x'] = packet.exponent_x
-                    keydict[packet.key_id] = values
+                    # the data comes directly from secret key, mark verified
+                    values['verification'] = 'verified'
+                    values['fingerprint'] = packet.fingerprint
+            elif isinstance(packet, pgpdump.packet.UserIDPacket):
+                names.append(packet.user_email)
+                values['protocol'] = 'prpl-jabber' # assume XMPP for now
+            if 'fingerprint' in values.keys():
+                for name in names:
+                    keydict[name] = values
+                    keydict[name]['name'] = name
         return keydict
 
     @staticmethod
