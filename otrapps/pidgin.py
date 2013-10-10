@@ -83,17 +83,7 @@ class PidginProperties():
             raise Exception('Cannot find "' + PidginProperties.accountsfile
                             + '" in "' + savedir + '"')
         resources = PidginProperties._get_resources(accountsdir)
-
-        pidginkeydict = dict()
-        for name, key in keydict.items():
-            # pidgin requires the XMPP Resource in the account name for otr.private_keys
-            if key['protocol'] == 'prpl-jabber' and 'x' in key.keys():
-                if name in resources.keys():
-                    key['name'] = key['name'] + '/' + resources[name]
-                else:
-                    key['name'] = key['name'] + '/' + 'REPLACEME'
-            pidginkeydict[name] = key
-        OtrPrivateKeys.write(pidginkeydict, kf)
+        OtrPrivateKeys.write(keydict, kf, resources=resources)
 
         accounts = []
         # look for all private keys and use them for the accounts list
@@ -101,7 +91,7 @@ class PidginProperties():
             if 'x' in key:
                 accounts.append(name)
         fpf = os.path.join(savedir, PidginProperties.fingerprintfile)
-        OtrFingerprints.write(keydict, fpf, accounts)
+        OtrFingerprints.write(keydict, fpf, accounts, resources=resources)
 
 
 if __name__ == '__main__':

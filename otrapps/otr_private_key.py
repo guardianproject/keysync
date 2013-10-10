@@ -92,9 +92,20 @@ class OtrPrivateKeys():
                 keydict[name] = key
         return keydict
 
+    @staticmethod
+    def _getaccountname(key, resources):
+        if resources:
+            # pidgin requires the XMPP Resource in the account name for otr.private_keys
+            if key['protocol'] == 'prpl-jabber' and 'x' in key.keys():
+                name = key['name']
+                if name in resources.keys():
+                    return key['name'] + '/' + resources[name]
+                else:
+                    return key['name'] + '/' + 'ReplaceMeWithActualXMPPResource'
+        return key['name']
 
     @staticmethod
-    def write(keydict, filename):
+    def write(keydict, filename, resources=None):
         privkeys = '(privkeys\n'
         for name, key in keydict.items():
             if 'x' in key:
@@ -103,7 +114,8 @@ class OtrPrivateKeys():
                 dsa += '  (g #' + ('%0258X' % key['g']) + '#)\n'
                 dsa += '  (y #' + ('%0256X' % key['y']) + '#)\n'
                 dsa += '  (x #' + ('%042X' % key['x']) + '#)\n'
-                contents = ('(name "' + key['name'] + '")\n' +
+                account = OtrPrivateKeys._getaccountname(key, resources)
+                contents = ('(name "' + account + '")\n' +
                              '(protocol ' + key['protocol'] + ')\n' +
                              '(private-key \n (dsa \n' + dsa + '  )\n )\n')
                 privkeys += ' (account\n' + contents + ' )\n'

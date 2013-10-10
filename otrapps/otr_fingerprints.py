@@ -22,7 +22,20 @@ class OtrFingerprints():
         return keydict
 
     @staticmethod
-    def write(keydict, filename, accounts):
+    def _includexmppresource(accounts, resources):
+        '''pidgin requires the XMPP Resource in the name of the associated account'''
+        returnlist = []
+        for account in accounts:
+            if account in resources.keys():
+                returnlist.append(account + '/' + resources[account])
+            else:
+                returnlist.append(account + '/' + 'ReplaceMeWithActualXMPPResource')
+        return returnlist
+
+    @staticmethod
+    def write(keydict, filename, accounts, resources=None):
+        if resources:
+            accounts = OtrFingerprints._includexmppresource(accounts, resources)
         # we have to use this list 'accounts' rather than the private
         # keys in the keydict in order to support apps like Adium that
         # don't use the actual account ID as the index in the files.
