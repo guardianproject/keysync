@@ -43,7 +43,7 @@ class OtrFingerprints():
         for name, key in keydict.items():
             if 'fingerprint' in key:
                 for account in accounts:
-                    row = [key['name'], account, key['protocol'], key['fingerprint']]
+                    row = [name, account, key['protocol'], key['fingerprint']]
                     if 'verification' in key and key['verification'] != None:
                         row.append(key['verification'])
                     tsv.writerow(row)
