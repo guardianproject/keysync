@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Accounts</key>
+	<array>
+		<dict>
+			<key>ObjectID</key>
+			<string>1</string>
+			<key>Service</key>
+			<string>Jabber</string>
+			<key>Type</key>
+			<string>libpurple-Jabber</string>
+			<key>UID</key>
+			<string>gptest@jabber.org</string>
+		</dict>
+		<dict>
+			<key>ObjectID</key>
+			<string>2</string>
+			<key>Service</key>
+			<string>GTalk</string>
+			<key>Type</key>
+			<string>libpurple-jabber-gtalk</string>
+			<key>UID</key>
+			<string>gptest@slipjack.com</string>
+		</dict>
+	</array>
+	<key>TopAccountID</key>
+	<integer>3</integer>
+</dict>
+</plist>

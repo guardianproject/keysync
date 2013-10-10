@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<account version='1.0'>
+	<account>
+		<protocol>prpl-jabber</protocol>
+		<name>gptest@jabber.org/palatschinken-3</name>
+		<statuses>
+			<status type='available' name='Available' active='true'>
+				<attributes>
+					<attribute id='priority' value='0'/>
+				</attributes>
+			</status>
+			<status type='mood' name='Feeling' active='false'>
+				<attributes/>
+			</status>
+			<status type='freeforchat' name='Chatty' active='false'>
+				<attributes/>
+			</status>
+			<status type='away' name='Away' active='false'>
+				<attributes/>
+			</status>
+			<status type='extended_away' name='Extended away' active='false'>
+				<attributes/>
+			</status>
+			<status type='dnd' name='Do Not Disturb' active='false'>
+				<attributes/>
+			</status>
+			<status type='offline' name='Offline' active='false'>
+				<attributes/>
+			</status>
+		</statuses>
+		<userinfo>&lt;vCard xmlns=&apos;vcard-temp&apos;/&gt;</userinfo>
+		<settings>
+			<setting name='check-mail' type='bool'>0</setting>
+			<setting name='buddy_icon'/>
+			<setting name='buddy_icon_timestamp' type='int'>0</setting>
+			<setting name='connect_server' type='string'></setting>
+			<setting name='bosh_url' type='string'></setting>
+			<setting name='auth_plain_in_clear' type='bool'>0</setting>
+			<setting name='ft_proxies' type='string'>proxy.eu.jabber.org</setting>
+			<setting name='custom_smileys' type='bool'>1</setting>
+			<setting name='server' type='string'>jabber.org</setting>
+			<setting name='port' type='int'>5222</setting>
+			<setting name='connection_security' type='string'>opportunistic_tls</setting>
+		</settings>
+		<settings ui='Adium'>
+			<setting name='auto-login' type='bool'>1</setting>
+		</settings>
+		<current_error/>
+	</account>
+	<account>
+		<protocol>prpl-jabber</protocol>
+		<name>gptest@slipjack.com/Adium</name>
+		<statuses>
+			<status type='available' name='Available' active='true'>
+				<attributes>
+					<attribute id='priority' value='0'/>
+				</attributes>
+			</status>
+			<status type='mood' name='Feeling' active='false'>
+				<attributes/>
+			</status>
+			<status type='freeforchat' name='Chatty' active='false'>
+				<attributes/>
+			</status>
+			<status type='away' name='Away' active='false'>
+				<attributes/>
+			</status>
+			<status type='extended_away' name='Extended away' active='false'>
+				<attributes/>
+			</status>
+			<status type='dnd' name='Do Not Disturb' active='false'>
+				<attributes/>
+			</status>
+			<status type='offline' name='Offline' active='false'>
+				<attributes/>
+			</status>
+		</statuses>
+		<userinfo>&lt;vCard xmlns=&apos;vcard-temp&apos;&gt;&lt;FN&gt;Guardian Project Test&lt;/FN&gt;&lt;/vCard&gt;</userinfo>
+		<settings>
+			<setting name='check-mail' type='bool'>0</setting>
+			<setting name='buddy_icon'/>
+			<setting name='buddy_icon_timestamp' type='int'>0</setting>
+			<setting name='connect_server' type='string'>talk.google.com</setting>
+			<setting name='bosh_url' type='string'></setting>
+			<setting name='auth_plain_in_clear' type='bool'>0</setting>
+			<setting name='ft_proxies' type='string'>proxy.eu.jabber.org</setting>
+			<setting name='custom_smileys' type='bool'>1</setting>
+			<setting name='server' type='string'>talk.google.com</setting>
+			<setting name='port' type='int'>5222</setting>
+			<setting name='connection_security' type='string'>opportunistic_tls</setting>
+		</settings>
+		<settings ui='Adium'>
+			<setting name='auto-login' type='bool'>1</setting>
+		</settings>
+		<current_error/>
+	</account>
+</account>

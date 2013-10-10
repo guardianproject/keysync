@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<capabilities>
+	<client node='http://pidgin.im/' ver='lV6i//bt2U8Rm0REcX8h4F3Nk3M=' hash='sha-1'>
+		<identity category='client' type='pc' name='Pidgin'/>
+		<feature var='http://jabber.org/protocol/bytestreams'/>
+		<feature var='http://jabber.org/protocol/caps'/>
+		<feature var='http://jabber.org/protocol/chatstates'/>
+		<feature var='http://jabber.org/protocol/disco#info'/>
+		<feature var='http://jabber.org/protocol/disco#items'/>
+		<feature var='http://jabber.org/protocol/ibb'/>
+		<feature var='http://jabber.org/protocol/mood+notify'/>
+		<feature var='http://jabber.org/protocol/muc'/>
+		<feature var='http://jabber.org/protocol/muc#user'/>
+		<feature var='http://jabber.org/protocol/nick+notify'/>
+		<feature var='http://jabber.org/protocol/si'/>
+		<feature var='http://jabber.org/protocol/si/profile/file-transfer'/>
+		<feature var='http://jabber.org/protocol/tune+notify'/>
+		<feature var='http://jabber.org/protocol/xhtml-im'/>
+		<feature var='http://www.google.com/xmpp/protocol/camera/v1'/>
+		<feature var='http://www.google.com/xmpp/protocol/session'/>
+		<feature var='http://www.google.com/xmpp/protocol/video/v1'/>
+		<feature var='http://www.google.com/xmpp/protocol/voice/v1'/>
+		<feature var='jabber:iq:last'/>
+		<feature var='jabber:iq:oob'/>
+		<feature var='jabber:iq:version'/>
+		<feature var='jabber:x:conference'/>
+		<feature var='urn:xmpp:attention:0'/>
+		<feature var='urn:xmpp:avatar:metadata+notify'/>
+		<feature var='urn:xmpp:bob'/>
+		<feature var='urn:xmpp:jingle:1'/>
+		<feature var='urn:xmpp:jingle:apps:rtp:1'/>
+		<feature var='urn:xmpp:jingle:apps:rtp:audio'/>
+		<feature var='urn:xmpp:jingle:apps:rtp:video'/>
+		<feature var='urn:xmpp:jingle:transports:ice-udp:1'/>
+		<feature var='urn:xmpp:jingle:transports:raw-udp:1'/>
+		<feature var='urn:xmpp:ping'/>
+		<feature var='urn:xmpp:time'/>
+	</client>
+	<client node='http://pidgin.im/' ver='VUFD6HcFmUT2NxJkBGCiKlZnS3M=' hash='sha-1'>
+		<identity category='client' type='pc' name='Adium'/>
+		<feature var='http://jabber.org/protocol/bytestreams'/>
+		<feature var='http://jabber.org/protocol/caps'/>
+		<feature var='http://jabber.org/protocol/chatstates'/>
+		<feature var='http://jabber.org/protocol/commands'/>
+		<feature var='http://jabber.org/protocol/disco#info'/>
+		<feature var='http://jabber.org/protocol/disco#items'/>
+		<feature var='http://jabber.org/protocol/ibb'/>
+		<feature var='http://jabber.org/protocol/mood+notify'/>
+		<feature var='http://jabber.org/protocol/muc'/>
+		<feature var='http://jabber.org/protocol/muc#user'/>
+		<feature var='http://jabber.org/protocol/nick+notify'/>
+		<feature var='http://jabber.org/protocol/si'/>
+		<feature var='http://jabber.org/protocol/si/profile/file-transfer'/>
+		<feature var='http://jabber.org/protocol/tune+notify'/>
+		<feature var='http://jabber.org/protocol/xhtml-im'/>
+		<feature var='jabber:iq:last'/>
+		<feature var='jabber:iq:oob'/>
+		<feature var='jabber:iq:version'/>
+		<feature var='jabber:x:conference'/>
+		<feature var='urn:xmpp:attention:0'/>
+		<feature var='urn:xmpp:avatar:metadata+notify'/>
+		<feature var='urn:xmpp:bob'/>
+		<feature var='urn:xmpp:jingle:1'/>
+		<feature var='urn:xmpp:ping'/>
+		<feature var='urn:xmpp:time'/>
+	</client>
+	<client node='http://pidgin.im/' ver='DdnydQG7RGhP9E3k9Sf+b+bF0zo=' hash='sha-1'>
+		<identity category='client' type='pc' name='Adium'/>
+		<feature var='http://jabber.org/protocol/bytestreams'/>
+		<feature var='http://jabber.org/protocol/caps'/>
+		<feature var='http://jabber.org/protocol/chatstates'/>
+		<feature var='http://jabber.org/protocol/commands'/>
+		<feature var='http://jabber.org/protocol/disco#info'/>
+		<feature var='http://jabber.org/protocol/disco#items'/>
+		<feature var='http://jabber.org/protocol/ibb'/>
+		<feature var='http://jabber.org/protocol/mood'/>
+		<feature var='http://jabber.org/protocol/mood+notify'/>
+		<feature var='http://jabber.org/protocol/muc'/>
+		<feature var='http://jabber.org/protocol/muc#user'/>
+		<feature var='http://jabber.org/protocol/nick'/>
+		<feature var='http://jabber.org/protocol/nick+notify'/>
+		<feature var='http://jabber.org/protocol/si'/>
+		<feature var='http://jabber.org/protocol/si/profile/file-transfer'/>
+		<feature var='http://jabber.org/protocol/tune'/>
+		<feature var='http://jabber.org/protocol/tune+notify'/>
+		<feature var='http://jabber.org/protocol/xhtml-im'/>
+		<feature var='jabber:iq:last'/>
+		<feature var='jabber:iq:oob'/>
+		<feature var='jabber:iq:version'/>
+		<feature var='jabber:x:conference'/>
+		<feature var='urn:xmpp:attention:0'/>
+		<feature var='urn:xmpp:avatar:data'/>
+		<feature var='urn:xmpp:avatar:metadata'/>
+		<feature var='urn:xmpp:avatar:metadata+notify'/>
+		<feature var='urn:xmpp:bob'/>
+		<feature var='urn:xmpp:jingle:1'/>
+		<feature var='urn:xmpp:ping'/>
+		<feature var='urn:xmpp:time'/>
+	</client>
+	<client node='http://telepathy.freedesktop.org/caps' ver='0.6.2.1'>
+		<feature var='http://laptop.org/xmpp/activity-properties+notify'/>
+		<feature var='http://laptop.org/xmpp/activity-properties'/>
+		<feature var='http://laptop.org/xmpp/current-activity+notify'/>
+		<feature var='http://laptop.org/xmpp/current-activity'/>
+		<feature var='http://laptop.org/xmpp/activities+notify'/>
+		<feature var='http://laptop.org/xmpp/activities'/>
+		<feature var='http://laptop.org/xmpp/buddy-properties+notify'/>
+		<feature var='http://laptop.org/xmpp/buddy-properties'/>
+		<feature var='http://jabber.org/protocol/nick+notify'/>
+		<feature var='http://jabber.org/protocol/nick'/>
+		<feature var='http://jabber.org/protocol/chatstates'/>
+		<feature var='http://jabber.org/protocol/jingle'/>
+		<feature var='http://www.google.com/transport/p2p'/>
+		<feature var='http://www.google.com/xmpp/protocol/session'/>
+		<ext identifier='jingle-audio'>
+			<feature var='http://jabber.org/protocol/jingle/description/audio'/>
+		</ext>
+		<ext identifier='jingle-video'>
+			<feature var='http://jabber.org/protocol/jingle/description/video'/>
+		</ext>
+		<ext identifier='voice-v1'>
+			<feature var='http://www.google.com/xmpp/protocol/voice/v1'/>
+		</ext>
+	</client>
+</capabilities>

@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<purple version='1.0'>
+	<blist>
+		<group name='Buddies'>
+			<contact>
+				<buddy account='gptest@jabber.org/palatschinken-3' proto='prpl-jabber'>
+					<name>gptest@slipjack.com</name>
+				</buddy>
+			</contact>
+			<contact>
+				<buddy account='gptest@jabber.org/palatschinken-3' proto='prpl-jabber'>
+					<name>hans@eds.org</name>
+					<alias>hans@eds.org</alias>
+					<setting name='icon_checksum' type='string'>14c6c6f5962a46bebb7f866af4f246bc899f954c</setting>
+					<setting name='buddy_icon' type='string'>14c6c6f5962a46bebb7f866af4f246bc899f954c.png</setting>
+				</buddy>
+			</contact>
+			<contact>
+				<buddy account='gptest@slipjack.com/Adium' proto='prpl-jabber'>
+					<name>hans@eds.org</name>
+					<setting name='icon_checksum' type='string'>14c6c6f5962a46bebb7f866af4f246bc899f954c</setting>
+					<setting name='buddy_icon' type='string'>14c6c6f5962a46bebb7f866af4f246bc899f954c.png</setting>
+				</buddy>
+			</contact>
+			<contact>
+				<buddy account='gptest@slipjack.com/Adium' proto='prpl-jabber'>
+					<name>update@identi.ca</name>
+					<alias>update</alias>
+				</buddy>
+			</contact>
+			<contact>
+				<buddy account='gptest@slipjack.com/Adium' proto='prpl-jabber'>
+					<name>walker@slipjack.com</name>
+					<alias>walker</alias>
+					<setting name='icon_checksum' type='string'>6fb356c6b00475b847823999b6269d16cc56ae89</setting>
+					<setting name='buddy_icon' type='string'>6fb356c6b00475b847823999b6269d16cc56ae89.png</setting>
+				</buddy>
+			</contact>
+			<contact>
+				<buddy account='gptest@slipjack.com/Adium' proto='prpl-jabber'>
+					<name>gptest@jabber.org</name>
+				</buddy>
+			</contact>
+			<contact>
+				<buddy account='gptest@slipjack.com/Adium' proto='prpl-jabber'>
+					<name>pdgsocmentor@gmail.com</name>
+				</buddy>
+			</contact>
+		</group>
+		<group name='General'>
+			<contact>
+				<buddy account='gptest@jabber.org/palatschinken-3' proto='prpl-jabber'>
+					<name>guardian.djh@gmail.com</name>
+					<alias>guardian.djh@gmail.com</alias>
+				</buddy>
+			</contact>
+			<contact>
+				<buddy account='gptest@jabber.org/palatschinken-3' proto='prpl-jabber'>
+					<name>gptest@jabber.ccc.de</name>
+					<alias>gptest@jabber.ccc.de</alias>
+				</buddy>
+			</contact>
+			<contact>
+				<buddy account='gptest@jabber.org/palatschinken-3' proto='prpl-jabber'>
+					<name>gp.test@jabber.org</name>
+					<alias>gp.test@jabber.org</alias>
+				</buddy>
+			</contact>
+			<contact>
+				<buddy account='gptest@jabber.org/palatschinken-3' proto='prpl-jabber'>
+					<name>pdgsocmentor@gmail.com</name>
+					<alias>pdgsocmentor@gmail.com</alias>
+				</buddy>
+			</contact>
+			<contact>
+				<buddy account='gptest@jabber.org/palatschinken-3' proto='prpl-jabber'>
+					<name>guardiantest@jabber.org</name>
+					<alias>guardiantest@jabber.org</alias>
+				</buddy>
+			</contact>
+			<contact>
+				<buddy account='gptest@jabber.org/palatschinken-3' proto='prpl-jabber'>
+					<name>gptestlaptop@jabber.org</name>
+					<alias>gptestlaptop@jabber.org</alias>
+				</buddy>
+			</contact>
+		</group>
+	</blist>
+	<privacy>
+		<account proto='prpl-jabber' name='gptest@jabber.org/palatschinken-3' mode='1'/>
+		<account proto='prpl-jabber' name='gptest@slipjack.com/Adium' mode='1'/>
+	</privacy>
+</purple>
