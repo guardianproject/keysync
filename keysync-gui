@@ -19,6 +19,12 @@ from PIL import ImageTk, Image
 import tkFileDialog
 import tkMessageBox
 
+# if python < 2.7, get OrderedDict from a standalone lib
+if sys.version_info[0] == 2 and sys.version_info[1] < 7:
+    from ordereddict import OrderedDict
+else:
+    from collections import OrderedDict
+
 import otrapps
 from otrapps.chatsecure import ChatSecureProperties
 
@@ -439,6 +445,7 @@ class App(Tk):
                 self.show_error("Invalid app: %s" % ( app ))
                 return None
         if len(keydict.keys()) > 0:
+            keydict = OrderedDict(sorted(keydict.items(), key=lambda t: t[0]))
             otrapps.make_outdir(self.tofolder.get(), '')
             ChatSecureProperties.write(keydict, self.tofolder.get())
             if os.path.exists(os.path.join(self.tofolder.get(),

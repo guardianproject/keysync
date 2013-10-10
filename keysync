@@ -7,6 +7,7 @@ import os
 import platform
 import argparse
 from pyparsing import *
+from collections import OrderedDict
 
 import otrapps.util
 import otrapps
@@ -85,6 +86,7 @@ def main():
             otrapps.util.merge_keydicts(keydict, properties.parse())
 
     if keydict:
+        keydict = OrderedDict(sorted(keydict.items(), key=lambda t: t[0]))
         if not os.path.exists(args.output_folder):
             os.makedirs(args.output_folder)
         for app in args.output:

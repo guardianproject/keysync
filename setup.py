@@ -21,9 +21,10 @@ dependencies = [
         'six',
     ]
 
-# argparse is included in Python starting in 2.7
+# argparse and ordereddict are included in Python starting in 2.7
 if sys.version_info[0] == 2 and sys.version_info[1] < 7:
     dependencies.append('argparse')
+    dependencies.append('ordereddict')
 
 if sys.platform == 'darwin':
      dependencies.append('PIL')
