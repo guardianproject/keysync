@@ -157,6 +157,7 @@ Windows
 For Windows, you can download the binary app from our website:
 https://guardianproject.info
 
+Build instructions for Windows are in win32/README.md in the source folder.
 
 Fedora/Redhat/RPMs
 ------------------
@@ -180,6 +181,8 @@ Activate your virtual python environment then run pip to install the dependencie
 
 For a nice step-by-step HOWTO, see:
 http://exyr.org/2011/virtualenv-HOWTO/slides.html
+
+*Note*: Doesn't work on Windows! See win32/README.md
 
 
 =====
@@ -220,8 +223,8 @@ Pidgin
   ~/.purple/otr.private_key
   ~/.purple/otr.fingerprints
  Windows
-  ~/Application Data/.purple/otr.private_key
-  ~/Application Data/.purple/otr.fingerprints
+  %APPDATA%\.purple\otr.private_key
+  %APPDATA%\.purple\otr.fingerprints
 
   Uses the standard libotr files and overall file format for
   otr.private_key and otr.fingerprints. Account IDs are used directly
