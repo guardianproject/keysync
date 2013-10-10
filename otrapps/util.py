@@ -44,9 +44,17 @@ from potr.compatcrypto import DSAKey
 
 import errors
 
-if sys.platform == 'darwin':
+
+# gracefully handle it when pymtp doesn't exist
+class MTPDummy():
+    def detect_devices(self):
+        return []
+try:
     import pymtp
     mtp = pymtp.MTP()
+except:
+    mtp = MTPDummy()
+
 
 HLEN = sha1().digest_size  # length of the hash output
 
@@ -538,7 +546,7 @@ def mtp_is_mounted():
                 mtp.devicename = ''
                 return False
         except Exception as e:
-            print('except' + str(e))
+            print('except ' + str(e))
             return False
 
 

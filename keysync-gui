@@ -468,7 +468,7 @@ class App(Tk):
             savedir = otrapps.util.get_mtp_mount_path()
             self.tofolder.set(savedir)
             self.convert()
-            if sys.platform == 'darwin':
+            if otrapps.util.MTPDummy and not isinstance(otrapps.util.mtp, otrapps.util.MTPDummy):
                 source = os.path.join(savedir, ChatSecureProperties.encryptedkeyfile)
                 target = ChatSecureProperties.encryptedkeyfile
                 mtp = otrapps.util.mtp
