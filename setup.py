@@ -65,7 +65,7 @@ else:
 
 
 setup(name='keysync',
-    version='0.1.1',
+    version='0.2.0beta1',
     description='syncs OTR keys between different IM programs',
     long_description=read('README.md'),
     author='The Guardian Project',
