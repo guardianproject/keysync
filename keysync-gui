@@ -71,7 +71,6 @@ class App(Tk):
             self.option_add('*Menubutton.background', self.macgrey)
         self.setupwindow(self)
 
-        self.pollagain = True
         self.check_timer()
         if sys.platform == 'darwin':
             self.check_android_file_transfer()
@@ -95,10 +94,10 @@ class App(Tk):
 
 
     def check_timer(self):
+        print('check_timer')
         self.check_mtp_mount()
         self.check_android_file_transfer()
-        if self.pollagain:
-            self._pendingjob = self.after(5000, self.check_timer)
+        self._pendingjob = self.after(3000, self.check_timer)
 
 
     def check_mtp_mount(self):
@@ -140,7 +139,6 @@ class App(Tk):
             self.qrframe.pack_forget()
             self.syncframe.pack_forget()
         elif status == 'error':
-            self.pollagain = False
             self.after_cancel(self._pendingjob)
             self.androidfiletransferframe.pack_forget()
             self.bottomframe.pack_forget()
@@ -148,7 +146,6 @@ class App(Tk):
             self.qrframe.pack_forget()
             self.syncframe.pack_forget()
         elif status == 'qrcode':
-            self.pollagain = False
             self.after_cancel(self._pendingjob)
             self.androidfiletransferframe.pack_forget()
             self.bottomframe.pack_forget()
@@ -472,16 +469,18 @@ class App(Tk):
                 source = os.path.join(savedir, ChatSecureProperties.encryptedkeyfile)
                 target = ChatSecureProperties.encryptedkeyfile
                 mtp = otrapps.util.mtp
-                mtp.connect()
                 try:
+                    mtp.connect()
                     mtp.send_file_from_file(source, target, callback=self._mtp_callback)
+                    mtp.disconnect()
                     synced = True
                 except Exception as e:
                     synced = False
+                    self.show_error('Cannot connect to device, try again!')
+                    self.set_app_enabled_state(True)
+                    self.check_timer()
                     print('send_file_from_file failed with Exception: ', end=' ')
                     print(e)
-                finally:
-                    mtp.disconnect()
         if synced:
             self.show('qrcode')
         else:
