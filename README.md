@@ -181,7 +181,6 @@ Activate your virtual python environment then run pip to install the dependencie
 
     virtualenv ./env
     . env/bin/activate
-    pip install --pre python-potr
     pip install -e .
     ./keysync
 
