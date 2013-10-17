@@ -38,14 +38,14 @@ def main():
     # the default will ALWAYS appear in the actions.
     # this may or may not be an argparse bug.
     parser.add_argument('-i', '--input', action='append',
-                        choices=otrapps.apps_supported,
+                        choices=sorted(otrapps.apps_supported),
                         help="specify which programs to take as input. if multiple then they'll be merged (default: %s)" % (default_input))
     parser.add_argument('-o', '--output', action='append',
-                        choices=otrapps.apps_supported,
+                        choices=sorted(otrapps.apps_supported),
                         help="specify which format to write out. if multiple then each will be written out (default: %s)" % (default_output))
     # TODO add --input-folder option, it will conflict with '--input all'
     parser.add_argument('--output-folder', default=os.getcwd(),
-                        help='the folder to write the output files to (defaults to current folder)')
+                        help='write the output files to this folder (default: current folder)')
     parser.add_argument('--no-qrcode', action='store_true', default=False,
                         help='do not print the ChatSecure QR Code to the terminal')
     parser.add_argument('-q', '--quiet', action='store_true', default=False,
