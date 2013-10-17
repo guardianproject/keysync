@@ -87,8 +87,7 @@ def main():
 
     if keydict:
         keydict = OrderedDict(sorted(keydict.items(), key=lambda t: t[0]))
-        if not os.path.exists(args.output_folder):
-            os.makedirs(args.output_folder)
+        otrapps.make_outdir(args.output_folder, '')
         for app in args.output:
             # once again special case GB
             if 'chatsecure' in args.output:
