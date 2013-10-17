@@ -30,45 +30,48 @@ command.
 .\" TeX users may be more comfortable with the \fB<whatever>\fP and
 .\" \fI<whatever>\fP escape sequences to invode bold face and italics,
 .\" respectively.
-\fBkeysync\fP is a program for converting the various OTR
-file formats between each other.  We are focusing on two major
-versions: libotr format and otr4j, and then a few variants of those
-major formats.
+\fBkeysync\fP is a program for converting the various OTR file formats between
+each other.  KeySync works with the two major OTR keystore versions: libotr
+format and otr4j, and then a few variants of those major formats.  There is
+some preliminary support for pure-python-otr keystores.
 
-It reads Adium, IRSSI, Xchat, Jitsi, and Pidgin formats and converts to
-ChatSecure format.  It will produce an 'otr_keystore' file, that
-ChatSecure can use directly.  To install that file using adb, do:
+It can read and write the OTR keystore formats from Adium, ChatSecure, IRSSI,
+Jitsi, Pidgin, and XChat.  It can also read some data from Gajim and GnuPG,
+but that is not yet fully implemented.
 
-.nf
-adb push otr_keystore \\
-    /data/data/info.guardianproject.otr.app.im/files/otr_keystore
-.fi
+For syncing the OTR data to ChatSecure on an Android device, use
+\fBkeysync-gui\fP.
 
 .SH WARNING!
-This is very alpha software, do not rely on it for strong identity
-verification.  It is unlikely to mess up so bad as to produce
-compromised private keys, but anything is possible.  Also, keep in
-mind that program is handling your private OTR keys, so make sure that
-you don't leave the That said, testing and feedback is greatly
-appreciated, so we can get it to the point where we can trust it.
+This is beta software, do not rely on it for strong identity verification.  It
+is unlikely to mess up so bad as to produce compromised secret keys, but
+anything is possible.  Also, keep in mind that program is handling your
+private OTR keys, so careful with the files produced with keysync!  That said,
+testing and feedback is greatly appreciated, so we can get it to the point
+where it can be fully trusted.
 .SH OPTIONS
-One and only one option must be specified.  The option chooses which
-app's files will be converted to ChatSecure format.
 .TP
-.B \-\-adium
-Read files from Adium
+.B \-h, --help
+show this help message and exit
 .TP
-.B \-\-irssi
-Read files from IRSSI
+.B \-i, --input {adium,chatsecure,gajim,gpg,irssi,jitsi,pidgin,xchat}
+specify which programs to take as input. if multiple then they'll be merged (default: pidgin)
 .TP
-.B \-\-xchat
-Read files from Xchat
+.B \-o, --output {adium,chatsecure,gajim,irssi,jitsi,pidgin,xchat}
+specify which format to write out. if multiple then
+each will be written out (default: chatsecure)
 .TP
-.B \-\-jitsi
-Read files from Jitsi
+.B \--output-folder OUTPUT_FOLDER
+write the output files to this folder (default: current folder)
 .TP
-.B \-\-pidgin
-Read files from Pidgin
+.B \--no-qrcode
+do not print the ChatSecure QR Code to the terminal
+.TP
+.B \-q, --quiet
+do not print anything to the terminal
+.TP
+.B \--version
+show program's version number and exit
 .SH AUTHOR
 keysync was written by The Guardian Project <support@guardianproject.info>.
 .PP
