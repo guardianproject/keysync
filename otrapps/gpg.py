@@ -9,6 +9,7 @@ import plistlib
 import re
 
 import pgpdump
+import pprint
 
 from otr_private_key import OtrPrivateKeys
 from otr_fingerprints import OtrFingerprints
@@ -53,17 +54,17 @@ class GPGProperties():
                     values['verification'] = 'verified'
                     values['fingerprint'] = packet.fingerprint
             elif isinstance(packet, pgpdump.packet.UserIDPacket):
-                names.append(packet.user_email)
-                values['protocol'] = 'prpl-jabber' # assume XMPP for now
+                names.append(str(packet.user_email)) # everything is str, not unicode
             if 'fingerprint' in values.keys():
                 for name in names:
                     keydict[name] = values
                     keydict[name]['name'] = name
+                    keydict[name]['protocol'] = 'prpl-jabber' # assume XMPP for now
         return keydict
 
     @staticmethod
     def write(keys, savedir):
-        pass
+        print('Writing GPG output files is not yet supported!')
 
     @staticmethod
     def load_data(filename):
