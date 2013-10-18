@@ -204,7 +204,7 @@ class App(Tk):
         self.bottomframe = Frame(master)
         self.bottomframe.pack(expand=True, fill=X, anchor=S)
 
-        self.toframe = LabelFrame(self.bottomframe, text='Write ChatSecure Keystore')
+        self.toframe = LabelFrame(self.bottomframe, text='Save ChatSecure Keystore')
         self.toframe.pack(side=TOP, padx=15, pady=5, expand=True, fill=X)
         self.nosyncmessage = Text(self.toframe, borderwidth=0,
                                   background='pink', highlightbackground='pink',
@@ -213,7 +213,7 @@ class App(Tk):
         if sys.platform == 'win32':
             self.nosyncmessage.insert('1.0', """This version of KeySync cannot automatically sync to your Android device. Choose a folder below to save the keystore, then copy the file to your Android device by hand.""")
         else:
-            self.nosyncmessage.insert('1.0', """KeySync cannot find your Android device.  Make sure it is plugged into this computer's USB and visible in your file browser!  Otherwise, you can write the otr_keystore.ofcaes file to the folder that you choose below.""")
+            self.nosyncmessage.insert('1.0', """KeySync cannot find your Android device.  Make sure it is plugged into this computer's USB and visible in your file browser!  Otherwise, you can save the otr_keystore.ofcaes file to the folder that you choose below.""")
         self.nosyncmessage.configure(state=DISABLED, wrap='word')
         self.nosyncmessage.pack(side=TOP, expand=True, fill=X, anchor=NW, padx=5, pady=5)
         self.tofolder = StringVar()
@@ -228,7 +228,7 @@ class App(Tk):
         self.disableable.append(self.choosebutton)
 
         self.writebutton = Button(self.bottomframe, command=self.convert_to_local,
-                             text="Write to ChatSecure otr_keystore.ofcaes file")
+                             text="Save the ChatSecure keystore file")
         self.writebutton.pack(side=TOP, padx=15, pady=15)
         self.disableable.append(self.writebutton)
 
