@@ -55,7 +55,10 @@ try:
 except:
     mtp = MTPDummy()
 # GNOME GVFS mount point for MTP devices
-mtp.gvfs_mountpoint = os.path.join(os.getenv('HOME'), '.gvfs', 'mtp')
+
+if sys.platform != 'win32':
+    # this crashes windows in the ntpath sys lib
+    mtp.gvfs_mountpoint = os.path.join(os.getenv('HOME'), '.gvfs', 'mtp')
 
 
 HLEN = sha1().digest_size  # length of the hash output
