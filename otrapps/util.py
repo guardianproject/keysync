@@ -54,6 +54,8 @@ try:
     mtp = pymtp.MTP()
 except:
     mtp = MTPDummy()
+# GNOME GVFS mount point for MTP devices
+mtp.gvfs_mountpoint = os.path.join(os.getenv('HOME'), '.gvfs', 'mtp')
 
 
 HLEN = sha1().digest_size  # length of the hash output
@@ -530,10 +532,11 @@ def mtp_is_mounted():
     if sys.platform == 'win32':
         # TODO implement, probably using wmdlib
         pass
-    elif os.path.exists(os.path.join(os.getenv('HOME'), '.gvfs')):
+    elif os.path.exists(mtp.gvfs_mountpoint):
         # this assumes that gvfs is mounting the MTP device.  gvfs is
         # part of GNOME, but is probably included in other systems too
-        return os.path.exists(os.path.join(os.getenv('HOME'), '.gvfs', 'mtp'))
+        mtp.devicename = mtp.gvfs_mountpoint
+        return os.path.exists(mtp.gvfs_mountpoint)
     else:
         # if all else fails, try libmtp/pymtp, it works on Mac OS X at least!
         try:
@@ -555,33 +558,33 @@ def get_mtp_mount_path():
     if sys.platform == 'win32':
         # TODO implement!
         pass
-    elif sys.platform == 'darwin':
-        # Mac OS X does not have native MTP support, so no MTP
-        # mount. So a temp dir is created, and otr_keystore is written
-        # there, then copied into place using pymtp.
-        import tempfile
-        return tempfile.mkdtemp(prefix='.keysync-')
-    else:
+    elif os.path.exists(mtp.gvfs_mountpoint):
         foundit = False
         # this assumes that gvfs is mounting the MTP device
-        mtpbase = os.path.join(os.getenv('HOME'), '.gvfs', 'mtp')
-        if os.path.isdir(os.path.join(mtpbase, 'Internal storage')):
-            mtpdir = os.path.join(mtpbase, 'Internal storage')
+        if os.path.isdir(os.path.join(mtp.gvfs_mountpoint, 'Internal storage')):
+            mtpdir = os.path.join(mtp.gvfs_mountpoint, 'Internal storage')
             foundit = True
-        elif os.path.isdir(os.path.join(mtpbase, 'SD card')):
-            mtpdir = os.path.join(mtpbase, 'SD card')
+        elif os.path.isdir(os.path.join(mtp.gvfs_mountpoint, 'SD card')):
+            mtpdir = os.path.join(mtp.gvfs_mountpoint, 'SD card')
             foundit = True
         else:
             # if no standard names, try the first dir we find
-            files = os.listdir(mtpbase)
+            files = os.listdir(mtp.gvfs_mountpoint)
             if len(files) > 0:
                 for f in files:
-                    fp = os.path.join(mtpbase, f)
+                    fp = os.path.join(mtp.gvfs_mountpoint, f)
                     if os.path.isdir(fp):
                         mtpdir = fp
                         foundit = True
         if foundit:
             return mtpdir
+    else:
+        # For systems without native support for mounting MTP, we have to take
+        # a different approach, and transfer the file using MTP. A temp dir is
+        # created, and otr_keystore is written there, then copied to the
+        # device using pymtp.
+        import tempfile
+        return tempfile.mkdtemp(prefix='.keysync-')
 
 
 #------------------------------------------------------------------------------#

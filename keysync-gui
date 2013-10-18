@@ -94,7 +94,6 @@ class App(Tk):
 
 
     def check_timer(self):
-        print('check_timer')
         self.check_mtp_mount()
         self.check_android_file_transfer()
         self._pendingjob = self.after(3000, self.check_timer)
@@ -465,7 +464,15 @@ class App(Tk):
             savedir = otrapps.util.get_mtp_mount_path()
             self.tofolder.set(savedir)
             self.convert()
-            if otrapps.util.MTPDummy and not isinstance(otrapps.util.mtp, otrapps.util.MTPDummy):
+            # If savedir is not the Android device's mounted SD Card, we now
+            # have to copy the keystore over to the device using MTP. When the
+            # SD Card is mounted, mtp.devicename is set to the path, so its
+            # used as a hacky test condition for the case when pymtp is
+            # available on the system, but we don't need to use it because the
+            # system has mounted the MTP device as a normal path.
+            if otrapps.util.MTPDummy \
+                    and not isinstance(otrapps.util.mtp, otrapps.util.MTPDummy) \
+                    and not savedir.startswith(otrapps.util.mtp.gvfs_mountpoint):
                 source = os.path.join(savedir, ChatSecureProperties.encryptedkeyfile)
                 target = ChatSecureProperties.encryptedkeyfile
                 mtp = otrapps.util.mtp
