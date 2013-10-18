@@ -55,7 +55,7 @@ echo '========================================================================'
 echo "Run each python file's __main__ tests"
 echo '========================================================================'
 cd $projectbase/otrapps
-for app in adium chatsecure gajim gpg irssi jitsi pidgin xchat util; do
+for app in adium chatsecure gajim gnupg irssi jitsi pidgin xchat util; do
     echo ''
     echo ''
     echo '------------------------------------------------------------------------'
