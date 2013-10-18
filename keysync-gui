@@ -456,6 +456,13 @@ class App(Tk):
     def convert_to_local(self):
         '''write the result to a local file'''
         if self.convert():
+            if sys.platform == 'win32':
+                keystore_path = os.path.join(self.tofolder.get(), ChatSecureProperties.encryptedkeyfile)
+                # TODO: for some reason importing ctypes, way up top
+                # where we do the other platform conditional imports
+                # resulted in errors that the ctypes "global" wasn't found
+                import ctypes
+                ctypes.windll.shell32.ShellExecuteW(None, u'open', u'explorer.exe', u'/n,/select, ' + keystore_path, None, 1)
             self.show('qrcode')
         else:
             self.show('error')
