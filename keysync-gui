@@ -461,7 +461,7 @@ class App(Tk):
         device's MTP mount'''
         synced = False
         if otrapps.util.mtp_is_mounted():
-            savedir = otrapps.util.get_mtp_mount_path()
+            savedir = otrapps.util.get_keystore_savedir()
             self.tofolder.set(savedir)
             self.convert()
             # If savedir is not the Android device's mounted SD Card, we now

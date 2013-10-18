@@ -553,7 +553,7 @@ def mtp_is_mounted():
             return False
 
 
-def get_mtp_mount_path():
+def get_keystore_savedir():
     '''copy a file to the relevant MTP mount'''
     if sys.platform == 'win32':
         # TODO implement!
@@ -673,7 +673,7 @@ def main(argv):
     if sys.platform == 'darwin' and  mtp_is_mounted():
         print('\n---------------------------')
         print('MTP is mounted here:', end=' ')
-        print(get_mtp_mount_path())
+        print(get_keystore_savedir())
 
 
 
