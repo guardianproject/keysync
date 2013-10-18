@@ -209,7 +209,11 @@ class App(Tk):
         self.nosyncmessage = Text(self.toframe, borderwidth=0,
                                   background='pink', highlightbackground='pink',
                                   insertborderwidth=0, height=4)
-        self.nosyncmessage.insert('1.0', """KeySync cannot find your Android device.  Make sure it is plugged into this computer's USB and visible in your file browser!  Otherwise, you can write the otr_keystore.ofcaes file to the folder that you choose below.""")
+
+        if sys.platform == 'win32':
+            self.nosyncmessage.insert('1.0', """This version of KeySync cannot automatically sync to your Android device. Choose a folder below to save the keystore, then copy the file to your Android device by hand.""")
+        else:
+            self.nosyncmessage.insert('1.0', """KeySync cannot find your Android device.  Make sure it is plugged into this computer's USB and visible in your file browser!  Otherwise, you can write the otr_keystore.ofcaes file to the folder that you choose below.""")
         self.nosyncmessage.configure(state=DISABLED, wrap='word')
         self.nosyncmessage.pack(side=TOP, expand=True, fill=X, anchor=NW, padx=5, pady=5)
         self.tofolder = StringVar()
