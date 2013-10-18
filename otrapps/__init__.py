@@ -8,7 +8,7 @@ apps = { 'adium'     : adium.AdiumProperties,
          'jitsi'     : jitsi.JitsiProperties,
          'pidgin'    : pidgin.PidginProperties,
          'gajim'     : gajim.GajimProperties,
-         'gnupg'     : gnupg.GPGProperties,
+         'gnupg'     : gnupg.GnuPGProperties,
          'xchat'     : xchat.XchatProperties,
         }
 apps_supported = apps.keys()

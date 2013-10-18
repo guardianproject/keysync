@@ -14,7 +14,7 @@ import pprint
 from otr_private_key import OtrPrivateKeys
 from otr_fingerprints import OtrFingerprints
 
-class GPGProperties():
+class GnuPGProperties():
 
     path = os.path.expanduser('~/.gnupg')
     secring = 'secring.gpg'
@@ -24,10 +24,10 @@ class GPGProperties():
     @staticmethod
     def parse(settingsdir=None):
         if settingsdir == None:
-            settingsdir = GPGProperties.path
+            settingsdir = GnuPGProperties.path
 
-        secring_file = os.path.join(settingsdir, GPGProperties.secring)
-        rawdata = GPGProperties.load_data(secring_file)
+        secring_file = os.path.join(settingsdir, GnuPGProperties.secring)
+        rawdata = GnuPGProperties.load_data(secring_file)
         data = pgpdump.BinaryData(rawdata)
         packets = list(data.packets())
 
@@ -64,7 +64,7 @@ class GPGProperties():
 
     @staticmethod
     def write(keys, savedir):
-        print('Writing GPG output files is not yet supported!')
+        print('Writing GnuPG output files is not yet supported!')
 
     @staticmethod
     def load_data(filename):
@@ -77,12 +77,12 @@ if __name__ == '__main__':
 
     import pprint
 
-    print('GPG stores its files in ' + GPGProperties.path)
+    print('GnuPG stores its files in ' + GnuPGProperties.path)
 
     if len(sys.argv) == 2:
         settingsdir = sys.argv[1]
     else:
         settingsdir = '../tests/gnupg'
 
-    l = GPGProperties.parse(settingsdir)
+    l = GnuPGProperties.parse(settingsdir)
     pprint.pprint(l)
