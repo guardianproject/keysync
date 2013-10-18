@@ -17,7 +17,7 @@ dependencies = [
         'pyjavaproperties',
         'pyparsing',
         'pgpdump',
-        'qrcode',
+        'qrcode >= 4.0.1',
         'six',
     ]
 
