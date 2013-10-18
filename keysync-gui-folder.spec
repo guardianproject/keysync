@@ -11,10 +11,11 @@ exe = EXE(pyz,
           exclude_binaries=True,
           name='KeySync.exe',
           icon='icons/keysync.ico',
+          onefile=True,
           debug=False,
           strip=None,
           upx=True,
-          console=False )
+          console=True)
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,
