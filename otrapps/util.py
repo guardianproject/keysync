@@ -531,7 +531,7 @@ def mtp_is_mounted():
     '''checks if an MTP device is mounted, i.e. an Android 4.x device'''
     if sys.platform == 'win32':
         # TODO implement, probably using wmdlib
-        pass
+        return False
     elif os.path.exists(mtp.gvfs_mountpoint):
         # this assumes that gvfs is mounting the MTP device.  gvfs is
         # part of GNOME, but is probably included in other systems too
