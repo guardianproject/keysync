@@ -27,8 +27,14 @@ class GnuPGProperties():
             settingsdir = GnuPGProperties.path
 
         secring_file = os.path.join(settingsdir, GnuPGProperties.secring)
+        if not os.path.exists(secring_file):
+            return dict()
         rawdata = GnuPGProperties.load_data(secring_file)
-        data = pgpdump.BinaryData(rawdata)
+        try:
+            data = pgpdump.BinaryData(rawdata)
+        except pgpdump.utils.PgpdumpException, e:
+            print("gnupg: %s" % (e))
+            return dict()
         packets = list(data.packets())
 
         # TODO parse uids for standard otr key tag,
