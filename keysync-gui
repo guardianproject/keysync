@@ -436,6 +436,12 @@ class App(Tk):
         self.synclabel.configure(text='Sent ' + str(sent) + ' of ' + str(total) + 'bytes...')
         self.update_idletasks()
 
+
+    def _get_chatsecure_path(self):
+        return os.path.join(self.tofolder.get(),
+                            ChatSecureProperties.encryptedkeyfile)
+
+
     def convert(self):
         '''run the conversion from one file set to another'''
         ret = False
@@ -456,8 +462,7 @@ class App(Tk):
             keydict = OrderedDict(sorted(keydict.items(), key=lambda t: t[0]))
             otrapps.make_outdir(self.tofolder.get(), '')
             ChatSecureProperties.write(keydict, self.tofolder.get())
-            if os.path.exists(os.path.join(self.tofolder.get(),
-                                           ChatSecureProperties.encryptedkeyfile)):
+            if os.path.exists(self._get_chatsecure_path()):
                 ret = True
         return ret
 
@@ -475,8 +480,8 @@ class App(Tk):
         if otrapps.util.can_sync_to_device():
             mtp = otrapps.util.mtp
             savedir = otrapps.util.get_keystore_savedir()
-            keystore_path = os.path.join(savedir, ChatSecureProperties.encryptedkeyfile)
             self.tofolder.set(savedir)
+            cskeyfile_path = self._get_chatsecure_path()
             self.convert()
             # now the keystore must be copied over to the device using the
             # system's currently available sync method.
@@ -487,7 +492,7 @@ class App(Tk):
                 import ctypes
                 # TODO this is currently a fake sync method, implement me
                 synced = True
-                ctypes.windll.shell32.ShellExecuteW(None, u'open', u'explorer.exe', u'/n,/select, ' + keystore_path, None, 1)
+                ctypes.windll.shell32.ShellExecuteW(None, u'open', u'explorer.exe', u'/n,/select, ' + cskeyfile_path, None, 1)
             # When the SD Card is mounted, mtp.devicename is set to the path,
             # so its used as a hacky test condition for the case when pymtp is
             # available on the system, but we don't need to use it because the
@@ -495,10 +500,10 @@ class App(Tk):
             elif mtp.devicename.startswith(mtp.gvfs_mountpoint):
                 syncfile = os.path.join(otrapps.util.find_gvfs_destdir(),
                                         ChatSecureProperties.encryptedkeyfile)
-                otrapps.util._fullcopy(keystore_path, syncfile)
+                otrapps.util._fullcopy(cskeyfile_path, syncfile)
                 synced = True
             elif not isinstance(mtp, otrapps.util.MTPDummy):
-                source = os.path.join(savedir, ChatSecureProperties.encryptedkeyfile)
+                source = cskeyfile_path
                 target = ChatSecureProperties.encryptedkeyfile
                 try:
                     mtp.connect()
