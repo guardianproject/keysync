@@ -109,7 +109,7 @@ class App(Tk):
 
     def check_mtp_mount(self):
         '''this checks whether MTP is mounted on a regular timer'''
-        if otrapps.util.mtp_is_mounted():
+        if otrapps.util.can_sync_to_device():
             self.device_attached = True
             if hasattr(otrapps.util, 'mtp'):
                 self.synclabel.configure(text=otrapps.util.mtp.devicename)
@@ -248,7 +248,7 @@ class App(Tk):
         self.synclabel = Label(self.syncframe)
         self.synclabel.pack(padx=15, pady=15)
         self.syncbutton = Button(self.syncframe, width='25',
-                                 command=self.convert_and_copy,
+                                 command=self.convert_and_sync,
                                  text="Sync to ChatSecure")
         self.syncbutton.pack(padx=15, pady=15)
         self.disableable.append(self.syncbutton)
@@ -464,37 +464,42 @@ class App(Tk):
     def convert_to_local(self):
         '''write the result to a local file'''
         if self.convert():
-            if sys.platform == 'win32':
-                keystore_path = os.path.join(self.tofolder.get(), ChatSecureProperties.encryptedkeyfile)
-                # TODO: for some reason importing ctypes, way up top
-                # where we do the other platform conditional imports
-                # resulted in errors that the ctypes "global" wasn't found
-                import ctypes
-                ctypes.windll.shell32.ShellExecuteW(None, u'open', u'explorer.exe', u'/n,/select, ' + keystore_path, None, 1)
             self.show('qrcode')
         else:
             self.show('error')
 
-    def convert_and_copy(self):
+    def convert_and_sync(self):
         '''run the conversion and copy the ChatSecure file into place on the
         device's MTP mount'''
         synced = False
-        if otrapps.util.mtp_is_mounted():
+        if otrapps.util.can_sync_to_device():
+            mtp = otrapps.util.mtp
             savedir = otrapps.util.get_keystore_savedir()
+            keystore_path = os.path.join(savedir, ChatSecureProperties.encryptedkeyfile)
             self.tofolder.set(savedir)
             self.convert()
-            # If savedir is not the Android device's mounted SD Card, we now
-            # have to copy the keystore over to the device using MTP. When the
-            # SD Card is mounted, mtp.devicename is set to the path, so its
-            # used as a hacky test condition for the case when pymtp is
+            # now the keystore must be copied over to the device using the
+            # system's currently available sync method.
+            if sys.platform == 'win32':
+                # TODO: for some reason importing ctypes, way up top
+                # where we do the other platform conditional imports
+                # resulted in errors that the ctypes "global" wasn't found
+                import ctypes
+                # TODO this is currently a fake sync method, implement me
+                synced = True
+                ctypes.windll.shell32.ShellExecuteW(None, u'open', u'explorer.exe', u'/n,/select, ' + keystore_path, None, 1)
+            # When the SD Card is mounted, mtp.devicename is set to the path,
+            # so its used as a hacky test condition for the case when pymtp is
             # available on the system, but we don't need to use it because the
             # system has mounted the MTP device as a normal path.
-            if otrapps.util.MTPDummy \
-                    and not isinstance(otrapps.util.mtp, otrapps.util.MTPDummy) \
-                    and not savedir.startswith(otrapps.util.mtp.gvfs_mountpoint):
+            elif mtp.devicename.startswith(mtp.gvfs_mountpoint):
+                syncfile = os.path.join(otrapps.util.find_gvfs_destdir(),
+                                        ChatSecureProperties.encryptedkeyfile)
+                otrapps.util._fullcopy(keystore_path, syncfile)
+                synced = True
+            elif not isinstance(mtp, otrapps.util.MTPDummy):
                 source = os.path.join(savedir, ChatSecureProperties.encryptedkeyfile)
                 target = ChatSecureProperties.encryptedkeyfile
-                mtp = otrapps.util.mtp
                 try:
                     mtp.connect()
                     mtp.send_file_from_file(source, target, callback=self._mtp_callback)

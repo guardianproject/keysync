@@ -29,6 +29,7 @@ import psutil
 import re
 import signal
 import sys
+import tempfile
 try:
     # Import hashlib if Python >= 2.5
     from hashlib import sha1
@@ -530,38 +531,9 @@ def make_conffile_backup(filename):
     _fullcopy(realpath, realpath + '.' +  str(timestamp))
 
 
-def mtp_is_mounted():
-    '''checks if an MTP device is mounted, i.e. an Android 4.x device'''
-    if sys.platform == 'win32':
-        # TODO implement, probably using wmdlib
-        return False
-    elif os.path.exists(mtp.gvfs_mountpoint):
-        # this assumes that gvfs is mounting the MTP device.  gvfs is
-        # part of GNOME, but is probably included in other systems too
-        mtp.devicename = mtp.gvfs_mountpoint
-        return os.path.exists(mtp.gvfs_mountpoint)
-    else:
-        # if all else fails, try libmtp/pymtp, it works on Mac OS X at least!
-        try:
-            devices = mtp.detect_devices()
-            if len(devices) > 0:
-                e = devices[0].device_entry
-                mtp.devicename = e.vendor + ' ' + e.product
-                return True
-            else:
-                mtp.devicename = ''
-                return False
-        except Exception as e:
-            print('except ' + str(e))
-            return False
-
-
-def get_keystore_savedir():
-    '''copy a file to the relevant MTP mount'''
-    if sys.platform == 'win32':
-        # TODO implement!
-        pass
-    elif os.path.exists(mtp.gvfs_mountpoint):
+def find_gvfs_destdir():
+    '''find the MTP subfolder in gvfs to copy the keystore to'''
+    if os.path.exists(mtp.gvfs_mountpoint):
         foundit = False
         # this assumes that gvfs is mounting the MTP device
         if os.path.isdir(os.path.join(mtp.gvfs_mountpoint, 'Internal storage')):
@@ -581,13 +553,48 @@ def get_keystore_savedir():
                         foundit = True
         if foundit:
             return mtpdir
-    else:
-        # For systems without native support for mounting MTP, we have to take
-        # a different approach, and transfer the file using MTP. A temp dir is
-        # created, and otr_keystore is written there, then copied to the
-        # device using pymtp.
-        import tempfile
-        return tempfile.mkdtemp(prefix='.keysync-')
+
+
+def can_sync_to_device():
+    '''checks if an MTP device is mounted, i.e. an Android 4.x device'''
+    mtp.devicename = ''
+    if sys.platform == 'win32':
+        # TODO implement, probably using wmdlib. Right now the win32 'sync'
+        # method is to prompt the user to manually copy the file over, so we
+        # always return true
+        mtp.devicename = 'Copy the otr_keystore.ofcaes file to your device!'
+        return True
+
+    gvfs_destdir = find_gvfs_destdir()
+    if gvfs_destdir and os.path.exists(gvfs_destdir):
+        # this assumes that gvfs is mounting the MTP device.  gvfs is
+        # part of GNOME, but is probably included in other systems too
+        mtp.devicename = gvfs_destdir
+        return True
+
+    # if all else fails, try pymtp. works on GNU/Linux and Mac OS X at least
+    try:
+        devices = mtp.detect_devices()
+        if len(devices) > 0:
+            e = devices[0].device_entry
+            mtp.devicename = e.vendor + ' ' + e.product
+            return True
+        else:
+            return False
+    except Exception as e:
+        print('except ' + str(e))
+        return False
+
+
+def get_keystore_savedir():
+    '''get a temp place to write out the encrypted keystore'''
+    # first cache the encrypted file store in a local temp dir, then we can
+    # separately handle copying it via MTP, gvfs, wmdlib, KIO, etc.
+    return tempfile.mkdtemp(prefix='.keysync-')
+
+
+def sync_file_to_device(filename):
+    '''sync the keystore file to the device via whatever the relevant method is'''
 
 
 #------------------------------------------------------------------------------#
@@ -673,10 +680,10 @@ def main(argv):
     make_conffile_backup(testfile)
     print('Backed up "%s"' % testfile)
 
-    if sys.platform == 'darwin' and  mtp_is_mounted():
+    if can_sync_to_device():
         print('\n---------------------------')
         print('MTP is mounted here:', end=' ')
-        print(get_keystore_savedir())
+        print(mtp.devicename)
 
 
 
