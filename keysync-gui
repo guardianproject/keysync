@@ -60,6 +60,7 @@ class App(Tk):
         self.disableable = []
         menubar = MenuBar(self)
         self.config(menu=menubar)
+        self.file_for_user_to_copy = None
         if sys.platform == 'darwin':
             self.macgrey = '#E8E8E8'
             self.config(background=self.macgrey)
@@ -425,7 +426,10 @@ class App(Tk):
         img = qr.make_image()
         self.tkimg = ImageTk.PhotoImage(img)
         self.qrlabel.configure(image=self.tkimg)
-        pwtxt = ('Enter this password into ChatSecure: \n'
+        pwtxt = ''
+        if self.file_for_user_to_copy != None:
+            pwtxt += ('First copy your new keystore file onto your Android device. You\ncan find it here:\n' + self.file_for_user_to_copy + '\n\n')
+        pwtxt += ('Enter this password into ChatSecure: \n'
                  + ChatSecureProperties.password
                  + '\nor just scan this QRCode with ChatSecure:')
         self.pwlabel.configure(text=pwtxt)
@@ -469,6 +473,7 @@ class App(Tk):
     def convert_to_local(self):
         '''write the result to a local file'''
         if self.convert():
+            self.file_for_user_to_copy = self._get_chatsecure_path()
             self.show('qrcode')
         else:
             self.show('error')
@@ -493,6 +498,7 @@ class App(Tk):
                 # TODO this is currently a fake sync method, implement me
                 synced = True
                 ctypes.windll.shell32.ShellExecuteW(None, u'open', u'explorer.exe', u'/n,/select, ' + cskeyfile_path, None, 1)
+                self.file_for_user_to_copy = self._get_chatsecure_path()
             # When the SD Card is mounted, mtp.devicename is set to the path,
             # so its used as a hacky test condition for the case when pymtp is
             # available on the system, but we don't need to use it because the
