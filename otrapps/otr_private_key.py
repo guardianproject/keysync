@@ -55,7 +55,7 @@ class OtrPrivateKeys():
             return sexpr.asList()[0][1:]
         except ParseFatalException, pfe:
             print("Error:", pfe.msg)
-            print(line(pfe.loc, t))
+            print(pfe.loc)
             print(pfe.markInputline())
 
     @staticmethod
