@@ -1,3 +1,6 @@
+
+'''sets up the otrapps module with all of the currently supported apps'''
+
 import os
 import sys
 
@@ -26,9 +29,10 @@ apps = { 'adium'     : otrapps.adium.AdiumProperties,
 apps_supported = apps.keys()
 
 def make_outdir(output_folder, subdir):
-    dir = os.path.join(output_folder, subdir)
-    if not os.path.exists(dir):
-        os.makedirs(dir)
-    return dir
+    '''create the folder that the results will be written to'''
+    outdir = os.path.join(output_folder, subdir)
+    if not os.path.exists(outdir):
+        os.makedirs(outdir)
+    return outdir
 
 

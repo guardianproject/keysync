@@ -3,11 +3,8 @@
 
 from __future__ import print_function
 import os
-import platform
 import sys
 import pgpdump
-import plistlib
-import re
 
 
 class GnuPGProperties():

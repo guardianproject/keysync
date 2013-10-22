@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+'''keysync-gui is a GUI program'''
 
 from __future__ import print_function
 import functools
@@ -30,6 +31,7 @@ from otrapps.chatsecure import ChatSecureProperties
 
 
 def bind_close_window(toplevel, func):
+    '''binds standard keys to the method for closing the window'''
     toplevel.bind('<KeyPress-Escape>', func)
     if sys.platform == 'darwin':
         toplevel.bind('<Mod1-Key-w>', func)
@@ -42,11 +44,11 @@ class MenuBar(Menu):
     def __init__(self, parent):
         Menu.__init__(self, parent)
 
-        fileMenu = Menu(self, tearoff=False)
-        self.add_cascade(label="File",underline=0, menu=fileMenu)
-        fileMenu.add_command(label='Convert', underline=1, command=parent.convert_to_local)
-        fileMenu.add_separator()
-        fileMenu.add_command(label="Exit", underline=1, command=self.quit)
+        filemenu = Menu(self, tearoff=False)
+        self.add_cascade(label="File", underline=0, menu=filemenu)
+        filemenu.add_command(label='Convert', underline=1, command=parent.convert_to_local)
+        filemenu.add_separator()
+        filemenu.add_command(label="Exit", underline=1, command=self.quit)
 
     def quit(self):
         sys.exit(0)

@@ -1,10 +1,10 @@
 #!/usr/bin/env python2.6
 # -*- coding: utf-8 -*-
+'''a module for reading and writing Pidgin's OTR key data'''
 
 from __future__ import print_function
 import os
 import sys
-import plistlib
 from BeautifulSoup import BeautifulSoup
 
 if __name__ == '__main__':

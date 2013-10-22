@@ -1,5 +1,6 @@
 #!/usr/bin/env python2.6
 # -*- coding: utf-8 -*-
+'''a module for reading and writing ChatSecure's OTR key data'''
 
 from __future__ import print_function
 import hashlib
@@ -131,5 +132,4 @@ def main(argv):
     print('----------------------------------------')
 
 if __name__ == "__main__":
-    import sys
     main(sys.argv[1:])

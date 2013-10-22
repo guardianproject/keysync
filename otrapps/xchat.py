@@ -1,11 +1,10 @@
 #!/usr/bin/env python2.6
 # -*- coding: utf-8 -*-
+'''a module for reading and writing Xchat's OTR key data'''
 
 from __future__ import print_function
 import os
-import platform
 import sys
-import plistlib
 
 if __name__ == '__main__':
     sys.path.insert(0, "../") # so the main() test suite can find otrapps module

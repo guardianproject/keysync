@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+'''a module for reading and writing Jitsi's OTR key data'''
 
 from __future__ import print_function
 import os
@@ -207,5 +208,4 @@ def main(argv):
     print('----------------------------------------')
 
 if __name__ == "__main__":
-    import sys
     main(sys.argv[1:])

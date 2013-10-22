@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+'''a module for reading and writing libotr's secret key data'''
 
 from __future__ import print_function
 from pyparsing import *
@@ -28,17 +29,17 @@ class OtrPrivateKeys():
         # define punctuation literals
         LPAR, RPAR, LBRK, RBRK, LBRC, RBRC, VBAR = map(Suppress, "()[]{}|")
 
-        decimal = Word("123456789",nums).setParseAction(lambda t: int(t[0]))
+        decimal = Word("123456789", nums).setParseAction(lambda t: int(t[0]))
         bytes = Word(printables)
         raw = Group(decimal.setResultsName("len") + Suppress(":") + bytes).setParseAction(OtrPrivateKeys.verifyLen)
         token = Word(alphanums + "-./_:*+=")
-        base64_ = Group(Optional(decimal,default=None).setResultsName("len") + VBAR
+        base64_ = Group(Optional(decimal, default=None).setResultsName("len") + VBAR
             + OneOrMore(Word( alphanums +"+/=" )).setParseAction(lambda t: b64decode("".join(t)))
             + VBAR).setParseAction(OtrPrivateKeys.verifyLen)
 
         hexadecimal = ("#" + OneOrMore(Word(hexnums)) + "#")\
                         .setParseAction(lambda t: int("".join(t[1:-1]),16))
-        qString = Group(Optional(decimal,default=None).setResultsName("len") +
+        qString = Group(Optional(decimal, default=None).setResultsName("len") +
                                 dblQuotedString.setParseAction(removeQuotes)).setParseAction(OtrPrivateKeys.verifyLen)
         simpleString = raw | token | base64_ | hexadecimal | qString
 
@@ -54,7 +55,7 @@ class OtrPrivateKeys():
             return sexpr.asList()[0][1:]
         except ParseFatalException, pfe:
             print("Error:", pfe.msg)
-            print(line(pfe.loc,t))
+            print(line(pfe.loc, t))
             print(pfe.markInputline())
 
     @staticmethod
@@ -88,7 +89,7 @@ class OtrPrivateKeys():
                         key['protocol'] = element[1]
                     elif element[0] == "private-key":
                         if element[1][0] == 'dsa':
-                            key['type'] = 'dsa';
+                            key['type'] = 'dsa'
                             for num in element[1][1:6]:
                                 key[num[0]] = num[1]
                 keytuple = (key['y'], key['g'], key['p'], key['q'])

@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+'''a module for reading and writing Gajim's OTR key data'''
 
 from __future__ import print_function
 import os
 import glob
 import platform
-import re
 import sys
 
 if __name__ == '__main__':
@@ -60,5 +60,4 @@ def main(argv):
     GajimProperties.write(keydict, '/tmp')
 
 if __name__ == "__main__":
-    import sys
     main(sys.argv[1:])

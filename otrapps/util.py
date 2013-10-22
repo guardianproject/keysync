@@ -619,7 +619,7 @@ def main(argv):
 
     key2 = dict()
     key2['name'] = 'key'
-    key2['yat'] = 'yet another test';
+    key2['yat'] = 'yet another test'
     merge_keys(key, key2)
     print('key: ', end=' ')
     pprint.pprint(key)
@@ -674,7 +674,6 @@ def main(argv):
 
     print('\n---------------------------')
     print('make backup conf file: ')
-    import tempfile
     tmpdir = tempfile.mkdtemp(prefix='.keysync-util-test-')
     testfile = os.path.join(tmpdir, 'keysync-util-conffile-backup-test')
     with open(testfile, 'w') as f:
@@ -690,5 +689,4 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    import sys
     main(sys.argv[1:])
