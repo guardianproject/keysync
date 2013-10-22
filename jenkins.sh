@@ -47,7 +47,7 @@ keysync=$WORKSPACE/env/bin/keysync $WORKSPACE/tests/run-tests.sh
 # run pylint
 
 cd $WORKSPACE
-for f in keysync keysync-gui otrapps/*.py; do
+for f in otrapps/*.py keysync keysync-gui; do
     PYTHONPATH=$WORKSPACE/.pylint-plugins \
         pylint --errors-only --output-format=parseable \
         --load-plugins astng_hashlib $f > $WORKSPACE/pylint.parseable
