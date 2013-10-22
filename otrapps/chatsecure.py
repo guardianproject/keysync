@@ -8,7 +8,10 @@ import sys
 import pyjavaproperties
 import subprocess
 import tempfile
-import util
+
+if __name__ == '__main__':
+    sys.path.insert(0, "../") # so the main() test suite can find otrapps module
+import otrapps.util
 
 class ChatSecureProperties():
 
@@ -51,20 +54,20 @@ class ChatSecureProperties():
                 keydict[name]['protocol'] = 'prpl-jabber'
             if keydata[0] == 'private-key':
                 cleaned = keydata[2].replace('\\n', '')
-                numdict = util.ParsePkcs8(cleaned)
+                numdict = otrapps.util.ParsePkcs8(cleaned)
                 for num in ('g', 'p', 'q', 'x'):
                     keydict[name][num] = numdict[num]
             elif keydata[0] == 'verified':
                 keydict[name]['verification'] = 'verified'
                 fingerprint = keydata[2].lower()
-                util.check_and_set(keydict[name], 'fingerprint', fingerprint)
+                otrapps.util.check_and_set(keydict[name], 'fingerprint', fingerprint)
             elif keydata[0] == 'public-key':
                 cleaned = keydata[2].replace('\\n', '')
-                numdict = util.ParseX509(cleaned)
+                numdict = otrapps.util.ParseX509(cleaned)
                 for num in ('y', 'g', 'p', 'q'):
                     keydict[name][num] = numdict[num]
-                fingerprint = util.fingerprint((numdict['y'], numdict['g'], numdict['p'], numdict['q']))
-                util.check_and_set(keydict[name], 'fingerprint', fingerprint)
+                fingerprint = otrapps.util.fingerprint((numdict['y'], numdict['g'], numdict['p'], numdict['q']))
+                otrapps.util.check_and_set(keydict[name], 'fingerprint', fingerprint)
         return keydict
 
     @staticmethod
@@ -76,14 +79,14 @@ class ChatSecureProperties():
             # accounts, so we avoid spreading private keys around
             if key['protocol'] == 'prpl-jabber' or key['protocol'] == 'prpl-bonjour':
                 if 'y' in key:
-                    p.setProperty(key['name'] + '.publicKey', util.ExportDsaX509(key))
+                    p.setProperty(key['name'] + '.publicKey', otrapps.util.ExportDsaX509(key))
                 if 'x' in key:
                     if not password:
                         h = hashlib.sha256()
                         h.update(os.urandom(16)) # salt
                         h.update(bytes(key['x']))
                         password = h.digest().encode('base64')
-                    p.setProperty(key['name'] + '.privateKey', util.ExportDsaPkcs8(key))
+                    p.setProperty(key['name'] + '.privateKey', otrapps.util.ExportDsaPkcs8(key))
             if 'fingerprint' in key:
                 p.setProperty(key['name'] + '.fingerprint', key['fingerprint'])
             if 'verification' in key and key['verification'] != None:

@@ -43,7 +43,9 @@ from pyasn1.type import univ
 from potr.utils import bytes_to_long
 from potr.compatcrypto import DSAKey
 
-import errors
+if __name__ == '__main__':
+    sys.path.insert(0, "../") # so the main() test suite can find otrapps module
+import otrapps.errors as errors
 
 
 # gracefully handle it when pymtp doesn't exist

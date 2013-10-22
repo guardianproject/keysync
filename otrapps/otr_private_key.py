@@ -4,7 +4,11 @@
 from __future__ import print_function
 from pyparsing import *
 from base64 import b64decode
-import util
+import sys
+
+if __name__ == '__main__':
+    sys.path.insert(0, "../") # so the main() test suite can find otrapps module
+import otrapps.util
 
 class OtrPrivateKeys():
 
@@ -88,7 +92,7 @@ class OtrPrivateKeys():
                             for num in element[1][1:6]:
                                 key[num[0]] = num[1]
                 keytuple = (key['y'], key['g'], key['p'], key['q'])
-                key['fingerprint'] = util.fingerprint(keytuple)
+                key['fingerprint'] = otrapps.util.fingerprint(keytuple)
                 keydict[name] = key
         return keydict
 

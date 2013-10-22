@@ -1,15 +1,27 @@
 import os
+import sys
+
 __all__ = ['adium', 'chatsecure', 'irssi', 'jitsi', 'pidgin', 'gajim', 'gnupg', 'xchat',]
 
-import adium, chatsecure, irssi, jitsi, pidgin, gajim, gnupg, xchat
-apps = { 'adium'     : adium.AdiumProperties,
-         'chatsecure' : chatsecure.ChatSecureProperties,
-         'irssi'     : irssi.IrssiProperties,
-         'jitsi'     : jitsi.JitsiProperties,
-         'pidgin'    : pidgin.PidginProperties,
-         'gajim'     : gajim.GajimProperties,
-         'gnupg'     : gnupg.GnuPGProperties,
-         'xchat'     : xchat.XchatProperties,
+if __name__ == '__main__':
+    sys.path.insert(0, "../") # so the main() test suite can find otrapps module
+import otrapps.adium
+import otrapps.chatsecure
+import otrapps.irssi
+import otrapps.jitsi
+import otrapps.pidgin
+import otrapps.gajim
+import otrapps.gnupg
+import otrapps.xchat
+
+apps = { 'adium'     : otrapps.adium.AdiumProperties,
+         'chatsecure': otrapps.chatsecure.ChatSecureProperties,
+         'irssi'     : otrapps.irssi.IrssiProperties,
+         'jitsi'     : otrapps.jitsi.JitsiProperties,
+         'pidgin'    : otrapps.pidgin.PidginProperties,
+         'gajim'     : otrapps.gajim.GajimProperties,
+         'gnupg'     : otrapps.gnupg.GnuPGProperties,
+         'xchat'     : otrapps.xchat.XchatProperties,
         }
 apps_supported = apps.keys()
 

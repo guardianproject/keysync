@@ -8,7 +8,10 @@ import re
 import sys
 from pyjavaproperties import Properties
 from BeautifulSoup import BeautifulSoup
-import util
+
+if __name__ == '__main__':
+    sys.path.insert(0, "../") # so the main() test suite can find otrapps module
+import otrapps.util
 
 
 # the accounts, private/public keys, and fingerprints are in sip-communicator.properties
@@ -83,12 +86,12 @@ class JitsiProperties():
                                 + re.sub('[^a-zA-Z0-9_]', '_', item[1]))
                 private_key = p.getProperty(propkey_base + '_privateKey').strip()
                 public_key = p.getProperty(propkey_base + '_publicKey').strip()
-                numdict = util.ParsePkcs8(private_key)
+                numdict = otrapps.util.ParsePkcs8(private_key)
                 key['x'] = numdict['x']
-                numdict = util.ParseX509(public_key)
+                numdict = otrapps.util.ParseX509(public_key)
                 for num in ('y', 'g', 'p', 'q'):
                     key[num] = numdict[num]
-                key['fingerprint'] = util.fingerprint((key['y'], key['g'], key['p'], key['q']))
+                key['fingerprint'] = otrapps.util.fingerprint((key['y'], key['g'], key['p'], key['q']))
                 verifiedkey = ('net.java.sip.communicator.plugin.otr.'
                                + re.sub('[^a-zA-Z0-9_]', '_', key['name'])
                                + '_publicKey_verified')
@@ -113,10 +116,10 @@ class JitsiProperties():
                     key['name'] = name
                     key['protocol'] = 'prpl-jabber'
                     keydict[name] = key
-                numdict = util.ParseX509(item[1])
+                numdict = otrapps.util.ParseX509(item[1])
                 for num in ('y', 'g', 'p', 'q'):
                     key[num] = numdict[num]
-                key['fingerprint'] = util.fingerprint((key['y'], key['g'], key['p'], key['q']))
+                key['fingerprint'] = otrapps.util.fingerprint((key['y'], key['g'], key['p'], key['q']))
         return keydict
 
     @staticmethod
@@ -142,7 +145,7 @@ class JitsiProperties():
             if 'y' in key:
                 pubkey = (propkey_base + re.sub('[^a-zA-Z0-9_]', '_', key['name'])
                           + '_publicKey')
-                p.setProperty(pubkey, util.ExportDsaX509(key))
+                p.setProperty(pubkey, otrapps.util.ExportDsaX509(key))
             if 'x' in key:
                 protocol_id = 'UNKNOWN_'
                 domain_id = 'unknown'
@@ -169,18 +172,18 @@ class JitsiProperties():
                 # Writing
                 pubkey = (propkey_base + protocol_id + re.sub('[^a-zA-Z0-9_]', '_', key['name'])
                           + '_' + domain_id + '_publicKey')
-                p.setProperty(pubkey, util.ExportDsaX509(key))
+                p.setProperty(pubkey, otrapps.util.ExportDsaX509(key))
                 privkey = (propkey_base + protocol_id + re.sub('[^a-zA-Z0-9_]', '_', key['name'])
                            + '_' + domain_id + '_privateKey')
-                p.setProperty(privkey, util.ExportDsaPkcs8(key))
+                p.setProperty(privkey, otrapps.util.ExportDsaPkcs8(key))
 		   
                 if servername:
                     pubkey = (propkey_base + protocol_id + re.sub('[^a-zA-Z0-9_]', '_', key['name'])
                               + '_' + servername + '_publicKey')
-                    p.setProperty(pubkey, util.ExportDsaX509(key))
+                    p.setProperty(pubkey, otrapps.util.ExportDsaX509(key))
                     privkey = (propkey_base + protocol_id + re.sub('[^a-zA-Z0-9_]', '_', key['name'])
                                + '_' + servername + '_privateKey')
-                    p.setProperty(privkey, util.ExportDsaPkcs8(key))	
+                    p.setProperty(privkey, otrapps.util.ExportDsaPkcs8(key))
 		   		
         p.store(open(savefile, 'w'))
 

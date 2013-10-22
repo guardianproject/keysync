@@ -5,11 +5,13 @@ from __future__ import print_function
 import os
 import sys
 import plistlib
-import util
 from BeautifulSoup import BeautifulSoup
 
-from otr_private_key import OtrPrivateKeys
-from otr_fingerprints import OtrFingerprints
+if __name__ == '__main__':
+    sys.path.insert(0, "../") # so the main() test suite can find otrapps module
+import otrapps.util
+from otrapps.otr_private_key import OtrPrivateKeys
+from otrapps.otr_fingerprints import OtrFingerprints
 
 class PidginProperties():
 
@@ -55,7 +57,7 @@ class PidginProperties():
 
         fpf = os.path.join(settingsdir, PidginProperties.fingerprintfile)
         if os.path.exists(fpf):
-            util.merge_keydicts(keydict, OtrFingerprints.parse(fpf))
+            otrapps.util.merge_keydicts(keydict, OtrFingerprints.parse(fpf))
 
         resources = PidginProperties._get_resources(settingsdir)
         for name, key in keydict.items():

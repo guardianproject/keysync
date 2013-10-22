@@ -7,9 +7,11 @@ import glob
 import platform
 import re
 import sys
-import util
 
-from otr_fingerprints import OtrFingerprints
+if __name__ == '__main__':
+    sys.path.insert(0, "../") # so the main() test suite can find otrapps module
+import otrapps.util
+from otrapps.otr_fingerprints import OtrFingerprints
 
 # the private key is stored in ~/.local/share/gajim/_SERVERNAME_.key3
 # the fingerprints are stored in ~/.local/share/gajim/_SERVERNAME_.fpr
@@ -29,7 +31,7 @@ class GajimProperties():
         keydict = dict()
         for fpf in glob.glob(os.path.join(settingsdir, '*.fpr')):
             print('Reading in ' + fpf)
-            util.merge_keydicts(keydict, OtrFingerprints.parse(fpf))
+            otrapps.util.merge_keydicts(keydict, OtrFingerprints.parse(fpf))
         return keydict
 
     @staticmethod

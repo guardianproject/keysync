@@ -6,10 +6,12 @@ import os
 import platform
 import sys
 import plistlib
-import util
 
-from otr_private_key import OtrPrivateKeys
-from otr_fingerprints import OtrFingerprints
+if __name__ == '__main__':
+    sys.path.insert(0, "../") # so the main() test suite can find otrapps module
+import otrapps.util
+from otrapps.otr_private_key import OtrPrivateKeys
+from otrapps.otr_fingerprints import OtrFingerprints
 
 class IrssiProperties():
 
@@ -31,7 +33,7 @@ class IrssiProperties():
 
         fpf = os.path.join(settingsdir, IrssiProperties.fingerprintfile)
         if os.path.exists(fpf):
-            util.merge_keydicts(keydict, OtrFingerprints.parse(fpf))
+            otrapps.util.merge_keydicts(keydict, OtrFingerprints.parse(fpf))
 
         return keydict
 
