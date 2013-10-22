@@ -41,3 +41,12 @@ pip install -e $WORKSPACE
 # run tests in new pip+virtualenv install
 . $WORKSPACE/env/bin/activate
 keysync=$WORKSPACE/env/bin/keysync $WORKSPACE/tests/run-tests.sh
+
+
+#------------------------------------------------------------------------------#
+# run pylint
+
+cd $WORKSPACE
+for f in keysync keysync-gui otrapps/*.py; do
+    pylint --errors-only $f
+done
