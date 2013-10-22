@@ -104,18 +104,22 @@ class JitsiProperties():
             elif (re.match('net\.java\.sip\.communicator\.plugin\.otr\..*_publicKey_verified', propkey)):
                 name, protocol = JitsiProperties._parse_account_from_propkey(settingsdir, propkey)
                 if name != None:
-                    if name not in keydict:
+                    if name in keydict:
+                        key = keydict[name]
+                    else:
                         key = dict()
                         key['name'] = name
                         keydict[name] = key
                     if protocol and 'protocol' not in keydict[name]:
-                        keydict[name]['protocol'] = protocol
-                    keydict[name]['verification'] = 'verified'
+                        key['protocol'] = protocol
+                    key['verification'] = 'verified'
             # if the protocol name is included in the property name, its a local account with private key
             elif (re.match('net\.java\.sip\.communicator\.plugin\.otr\..*_publicKey', propkey) and not
                   re.match('net\.java\.sip\.communicator\.plugin\.otr\.(Jabber_|Google_Talk_)', propkey)):
                 name, ignored = JitsiProperties._parse_account_from_propkey(settingsdir, propkey)
-                if name not in keydict:
+                if name in keydict:
+                    key = keydict[name]
+                else:
                     key = dict()
                     key['name'] = name
                     key['protocol'] = 'prpl-jabber'
