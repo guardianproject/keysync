@@ -39,6 +39,9 @@ class JitsiProperties():
     def _convert_protocol_name(protocol):
         if protocol == 'Jabber':
             return 'prpl-jabber'
+        elif protocol == 'Google Talk':
+            # this should also mark it as the gtalk variant
+            return 'prpl-jabber'
         else:
             return 'IMPLEMENTME'
 
