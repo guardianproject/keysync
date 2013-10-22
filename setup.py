@@ -79,7 +79,7 @@ setup(name='keysync',
         ('share/icons/hicolor/256x256/apps', ['icons/keysync.png']),
         ('share/keysync',
          ['icons/add.png', 'icons/adium.png', 'icons/chatsecure.png',
-          'icons/gajim.png', 'icons/irssi.png', 'icons/jitsi.png',
+          'icons/gajim.png', 'icons/gnupg.png', 'icons/irssi.png', 'icons/jitsi.png',
           'icons/pidgin.png', 'icons/xchat.png']),
         ('share/applications', ['keysync.desktop'])
     ],
