@@ -538,13 +538,13 @@ windowingsystem = root.tk.call('tk', 'windowingsystem')
 root.title('KeySync')
 root.minsize(450, 300)
 
-# set the icon used in title bars and the system tray
-app_icon = ''
-if sys.platform == 'win32':
-    app_icon = os.path.join(root.find_iconsdir(), 'keysync.ico')
-#TODO implement darwin and unix
-
-if len(app_icon) > 0 :
-    root.tk.call('wm', 'iconbitmap', root, '-default', app_icon)
+# set the icon used in title bars and the system tray, mostly viewable in
+# Alt-Tab.  As of writing this code, "wm iconphoto" is ignored by Mac OS X,
+# and the icon is instead handled in the standard Mac OS X app wrapper in
+# Info.plist
+if sys.platform != 'darwin':
+    img = Image.open(os.path.join(root.find_iconsdir(), 'keysync.png'))
+    app_icon = ImageTk.PhotoImage(img)
+    root.tk.call('wm', 'iconphoto', root, '-default', app_icon)
 
 root.mainloop()
