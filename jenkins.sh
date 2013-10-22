@@ -20,15 +20,24 @@ fi
 cd $WORKSPACE/tests
 ./run-tests.sh
 
-# test install
+#------------------------------------------------------------------------------#
+# test install using site packages
 rm -rf $WORKSPACE/env
 virtualenv --system-site-packages $WORKSPACE/env
 . $WORKSPACE/env/bin/activate
 pip install -e $WORKSPACE
 
-# test new install
-$WORKSPACE/env/bin/keysync
+# run tests in new pip+virtualenv install
+. $WORKSPACE/env/bin/activate
+keysync=$WORKSPACE/env/bin/keysync $WORKSPACE/tests/run-tests.sh
 
-# run tests in new install
+#------------------------------------------------------------------------------#
+# test install using packages from pypi
+rm -rf $WORKSPACE/env
+virtualenv --no-site-packages $WORKSPACE/env
+. $WORKSPACE/env/bin/activate
+pip install -e $WORKSPACE
+
+# run tests in new pip+virtualenv install
 . $WORKSPACE/env/bin/activate
 keysync=$WORKSPACE/env/bin/keysync $WORKSPACE/tests/run-tests.sh
