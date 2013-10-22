@@ -51,9 +51,9 @@ def main():
     args = parser.parse_args()
 
     # manually set defaults, see Note above
-    if len(args.input) == 0:
+    if args.input == None or len(args.input) == 0:
         args.input = [default_input]
-    if len(args.output) == 0:
+    if args.output == None or len(args.output) == 0:
         args.output = [default_output]
 
     # downcase all names to be a little more friendly
