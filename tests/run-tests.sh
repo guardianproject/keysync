@@ -82,7 +82,7 @@ for app in adium chatsecure gajim irssi jitsi pidgin xchat; do
     mkdir $outdir
     copy_accounts_files $app $tests $outdir
     $keysync --test $tests \
-        -i adium -i irssi -i jitsi -i pidgin -i xchat \
+        -i adium -i gnupg -i irssi -i jitsi -i pidgin -i xchat \
         -o $app \
         --output-folder $outdir
 done
