@@ -23,6 +23,11 @@ tmpdir=`mktemp -d /tmp/keysync-XXXXXXXXXXXXXX`
 testbase=`pwd`
 projectbase=$(dirname $testbase)
 
+# allow the location of the script to be overridden
+if [ -z $keysync ]; then
+    keysync="./keysync"
+fi
+
 
 echo '========================================================================'
 echo "Run each SAMENESS test"
@@ -38,7 +43,7 @@ for inapp in adium pidgin; do
         tests=$testbase/SAMENESS
         outdir=$tmpdir/SAMENESS-$inapp-$outapp
         copy_accounts_files $outapp $tests $outdir
-        ./keysync --test $tests -i $inapp -o $outapp --output-folder $outdir
+        $keysync --test $tests -i $inapp -o $outapp --output-folder $outdir
         for f in $tests/$outapp/*; do
             echo '--------------------------------'
             echo $f
@@ -76,7 +81,7 @@ for app in adium chatsecure gajim irssi jitsi pidgin xchat; do
     outdir=$tmpdir/merge-into-$app
     mkdir $outdir
     copy_accounts_files $app $tests $outdir
-    ./keysync --test $tests \
+    $keysync --test $tests \
         -i adium -i irssi -i jitsi -i pidgin -i xchat \
         -o $app \
         --output-folder $outdir

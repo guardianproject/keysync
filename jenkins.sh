@@ -21,3 +21,7 @@ pip install -e $WORKSPACE
 
 # test new install
 $WORKSPACE/env/bin/keysync
+
+# run tests in new install
+. $WORKSPACE/env/bin/activate
+keysync=$WORKSPACE/env/bin/keysync $WORKSPACE/tests/run-tests.sh
