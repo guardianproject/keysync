@@ -1,6 +1,13 @@
 #!/bin/sh
 #
-# this is the script run by the Jenkins server to run the build and tests
+# this is the script run by the Jenkins server to run the build and tests.  Be
+# sure to always run it in its dir, i.e. ./run-tests.sh, otherwise it might
+# remove things that you don't want it to.
+
+if [ `dirname $0` != "." ]; then
+    echo "only run this script like ./`basename $0`"
+    exit
+fi
 
 set -e
 set -x
