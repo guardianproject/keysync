@@ -16,9 +16,12 @@ if [ -z $WORKSPACE ]; then
     WORKSPACE=`pwd`
 fi
 
-# run tests
+
+#------------------------------------------------------------------------------#
+# run local tests
 cd $WORKSPACE/tests
 ./run-tests.sh
+
 
 #------------------------------------------------------------------------------#
 # test install using site packages
@@ -30,6 +33,7 @@ pip install -e $WORKSPACE
 # run tests in new pip+virtualenv install
 . $WORKSPACE/env/bin/activate
 keysync=$WORKSPACE/env/bin/keysync $WORKSPACE/tests/run-tests.sh
+
 
 #------------------------------------------------------------------------------#
 # test install using packages from pypi
@@ -47,8 +51,17 @@ keysync=$WORKSPACE/env/bin/keysync $WORKSPACE/tests/run-tests.sh
 # run pylint
 
 cd $WORKSPACE
-for f in otrapps/*.py keysync keysync-gui; do
-    PYTHONPATH=$WORKSPACE/.pylint-plugins \
-        pylint --errors-only --output-format=parseable \
-        --load-plugins astng_hashlib $f > $WORKSPACE/pylint.parseable
-done
+set +e
+# disable E1101 until there is a plugin to handle this properly:
+#   Module 'sys' has no '_MEIPASS' member
+# disable F0401 until there is a plugin to handle this properly:
+#   keysync-gui:25: [F] Unable to import 'ordereddict'
+PYTHONPATH=$WORKSPACE/.pylint-plugins \
+    pylint --output-format=parseable --reports=n \
+    --disable=E1101,F0401 \
+    --load-plugins astng_hashlib \
+    otrapps/*.py keysync keysync-gui > $WORKSPACE/pylint.parseable
+# only tell jenkins there was an error if we got ERROR or FATAL
+[ $(($? & 1)) = "1" ] && exit 1
+[ $(($? & 2)) = "2" ] && exit 2
+set -e

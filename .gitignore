@@ -4,6 +4,7 @@
 output/
 tests/openssl/*.pem
 tests/openssl/*.properties
+pylint.parseable
 #
 win32/files/*
 #
