@@ -35,8 +35,8 @@ class AdiumProperties():
             else:
                 print('Adium ERROR: No usable Accounts.plist file found, cannot create Adium files!')
                 return []
-        # TODO convert this to use python-biplist
-        # make sure the plist is in XML format, not binary
+        # make sure the plist is in XML format, not binary,
+        # this should be converted to use python-biplist.
         if platform.system() == 'Darwin':
             os.system("plutil -convert xml1 '" + accountsfile + "'")
         return plistlib.readPlist(accountsfile)['Accounts']

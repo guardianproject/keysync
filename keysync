@@ -13,10 +13,6 @@ import otrapps.util
 import otrapps
 from otrapps.chatsecure import ChatSecureProperties
 
-# TODO merge duplicates in the final keys
-# TODO convert protocol names to a standard format, i.e. prpl-jabber vs. libpurple-Jabber
-# TODO use python-potr's convertkey.py to convert old libotr files
-
 # no argv passed in here because argparse just checks sys.argv directly
 def main():
 
@@ -43,7 +39,6 @@ def main():
     parser.add_argument('-o', '--output', action='append',
                         choices=sorted(otrapps.apps_supported),
                         help="specify which format to write out. if multiple then each will be written out (default: %s)" % (default_output))
-    # TODO add --input-folder option, it will conflict with '--input all'
     parser.add_argument('--output-folder', default=os.getcwd(),
                         help='write the output files to this folder (default: current folder)')
     parser.add_argument('--no-qrcode', action='store_true', default=False,

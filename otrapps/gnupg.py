@@ -37,14 +37,6 @@ class GnuPGProperties():
             return dict()
         packets = list(data.packets())
 
-        # TODO parse uids for standard otr key tag,
-        # also TODO invent that standard
-
-        # possible regex for uid otr detect:
-        # finds "otr: keyid"
-        #    otr_key = re.search(r'otr\\x3a(.{8})', uid ).group(1)
-        # until then we assume all dsa private subkeys are otr keys
-
         names = []
         keydict = dict()
         for packet in packets:

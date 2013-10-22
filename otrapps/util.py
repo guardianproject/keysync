@@ -559,9 +559,9 @@ def can_sync_to_device():
     '''checks if an MTP device is mounted, i.e. an Android 4.x device'''
     mtp.devicename = ''
     if sys.platform == 'win32':
-        # TODO implement, probably using wmdlib. Right now the win32 'sync'
-        # method is to prompt the user to manually copy the file over, so we
-        # always return true
+        # Right now the win32 'sync' method is to prompt the user to manually
+        # copy the file over, so we always return true.
+        # https://dev.guardianproject.info/issues/2126
         mtp.devicename = 'Copy the otr_keystore.ofcaes file to your device!'
         return True
 

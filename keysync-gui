@@ -181,7 +181,6 @@ class App(Tk):
         self.addbutton = Button(self.addframe, text="add other...",
                                 image=self.addimage, command=self.show_otherwindow)
         self.disableable.append(self.addbutton)
-        # TODO add a command to the Button here, i.e.  command=self.dosomething
         self.addbutton.pack(side=TOP, padx=16)
         self.addlabel = Label(self.addframe, text='other...')
         self.addlabel.pack(side=BOTTOM, padx=16)
@@ -491,11 +490,11 @@ class App(Tk):
             # now the keystore must be copied over to the device using the
             # system's currently available sync method.
             if sys.platform == 'win32':
-                # TODO: for some reason importing ctypes, way up top
+                # for some reason importing ctypes, way up top
                 # where we do the other platform conditional imports
                 # resulted in errors that the ctypes "global" wasn't found
                 import ctypes
-                # TODO this is currently a fake sync method, implement me
+                # this is currently a fake sync method, implement me
                 synced = True
                 ctypes.windll.shell32.ShellExecuteW(None, u'open', u'explorer.exe', u'/n,/select, ' + cskeyfile_path, None, 1)
                 self.file_for_user_to_copy = self._get_chatsecure_path()
