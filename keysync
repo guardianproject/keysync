@@ -7,7 +7,12 @@ import sys
 import os
 import platform
 import argparse
-from collections import OrderedDict
+
+# if python < 2.7, get OrderedDict from a standalone lib
+if sys.version_info[0] == 2 and sys.version_info[1] < 7:
+    from ordereddict import OrderedDict
+else:
+    from collections import OrderedDict
 
 import otrapps.util
 import otrapps
