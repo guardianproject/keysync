@@ -79,7 +79,7 @@ class App(Tk):
             # viewable in Alt-Tab.  As of writing this code, "wm iconphoto" is
             # ignored by Mac OS X, and the icon is instead handled in the
             # standard Mac OS X app wrapper in Info.plist
-            img = Image.open(os.path.join(ROOT.find_iconsdir(), 'keysync.png'))
+            img = Image.open(os.path.join(self.find_iconsdir(), 'keysync.png'))
             app_icon = ImageTk.PhotoImage(img)
             self.tk.call('wm', 'iconphoto', self, '-default', app_icon)
 
@@ -350,7 +350,7 @@ class App(Tk):
         if sys.platform == 'darwin':
             self.otherwindow.configure(background=self.macgrey)
         self.otherwindow.title('Choose an OTR app to read from')
-        self.otherwindow.transient(root)
+        self.otherwindow.transient(self)
         self.otherwindow.resizable(False, False)
         self.otherwindow.minsize(400, 150)
 
@@ -370,7 +370,7 @@ class App(Tk):
         self.appframe.pack(side=TOP, fill=X, padx=15, pady=15)
         self.applabel = Label(self.appframe, text='App:')
         self.applabel.pack(side=LEFT)
-        self.fromapp = StringVar(root)
+        self.fromapp = StringVar(self)
         self.fromapp.set(optionslist[0]) # initial value
         self.option = OptionMenu(self.appframe, self.fromapp, *optionslist,
                                  command=self.select_app)
