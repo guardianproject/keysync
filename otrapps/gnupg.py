@@ -5,14 +5,10 @@ from __future__ import print_function
 import os
 import platform
 import sys
+import pgpdump
 import plistlib
 import re
 
-import pgpdump
-import pprint
-
-from otr_private_key import OtrPrivateKeys
-from otr_fingerprints import OtrFingerprints
 
 class GnuPGProperties():
 
