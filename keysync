@@ -91,9 +91,9 @@ def main():
                     if not args.no_qrcode and sys.stdout.isatty():
                         print('\nScan this QR Code:')
                         import qrcode
-                        qr = qrcode.QRCode()
-                        qr.add_data(ChatSecureProperties.password)
-                        qr.print_tty()
+                        pwqr = qrcode.QRCode()
+                        pwqr.add_data(ChatSecureProperties.password)
+                        pwqr.print_tty()
                     print(('\nor enter this password into ChatSecure: \n\t' + ChatSecureProperties.password))
                 break
 

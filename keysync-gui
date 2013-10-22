@@ -419,10 +419,10 @@ class App(Tk):
         return haveapps
 
     def setup_qrframe(self):
-        qr = qrcode.QRCode(border=4)
-        qr.add_data(ChatSecureProperties.password)
-        qr.make(fit=True)
-        img = qr.make_image()
+        pwqr = qrcode.QRCode(border=4)
+        pwqr.add_data(ChatSecureProperties.password)
+        pwqr.make(fit=True)
+        img = pwqr.make_image()
         self.tkimg = ImageTk.PhotoImage(img)
         self.qrlabel.configure(image=self.tkimg)
         pwtxt = ''
