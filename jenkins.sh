@@ -48,5 +48,6 @@ keysync=$WORKSPACE/env/bin/keysync $WORKSPACE/tests/run-tests.sh
 
 cd $WORKSPACE
 for f in keysync keysync-gui otrapps/*.py; do
-    pylint --errors-only $f
+    PYTHONPATH=$WORKSPACE/.pylint-plugins \
+        pylint --errors-only --load-plugins astng_hashlib $f
 done
