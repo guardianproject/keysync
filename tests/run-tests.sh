@@ -87,5 +87,23 @@ for app in adium chatsecure gajim irssi jitsi pidgin xchat; do
         --output-folder $outdir
 done
 
+
+echo '========================================================================'
+echo "Convert each app to each other app"
+echo '========================================================================'
+cd $projectbase
+for inapp in adium chatsecure gajim gnupg irssi jitsi pidgin xchat; do
+    for outapp in adium chatsecure gajim gnupg irssi jitsi pidgin xchat; do
+	echo '------------------------------------------------------------------------'
+	echo "Convert $inapp to $outapp "
+	echo '------------------------------------------------------------------------'
+	tests=$testbase
+	outdir=$tmpdir/each-$inapp-to-$outapp
+	mkdir $outdir
+	copy_accounts_files $outapp $tests $outdir
+	$keysync --test $tests --input $inapp --output $outapp --output-folder $outdir
+    done
+done
+
 echo $tmpdir
 ls -l $tmpdir
