@@ -544,5 +544,5 @@ class App(Tk):
 #------------------------------------------------------------------------------#
 # main
 
-root = App()
-root.mainloop()
+ROOT = App()
+ROOT.mainloop()
