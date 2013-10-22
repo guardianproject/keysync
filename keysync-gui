@@ -56,11 +56,15 @@ class App(Tk):
 
     def __init__(self):
         Tk.__init__(self)
+        self.title('KeySync')
+        self.minsize(450, 300)
+
         self.iconsdir = self.find_iconsdir()
         self.disableable = []
         menubar = MenuBar(self)
         self.config(menu=menubar)
         self.file_for_user_to_copy = None
+
         if sys.platform == 'darwin':
             self.macgrey = '#E8E8E8'
             self.config(background=self.macgrey)
@@ -70,6 +74,15 @@ class App(Tk):
             self.option_add('*Label.background', self.macgrey)
             self.option_add('*Labelframe.background', self.macgrey)
             self.option_add('*Menubutton.background', self.macgrey)
+        else:
+            # set the icon used in title bars and the system tray, mostly
+            # viewable in Alt-Tab.  As of writing this code, "wm iconphoto" is
+            # ignored by Mac OS X, and the icon is instead handled in the
+            # standard Mac OS X app wrapper in Info.plist
+            img = Image.open(os.path.join(ROOT.find_iconsdir(), 'keysync.png'))
+            app_icon = ImageTk.PhotoImage(img)
+            self.tk.call('wm', 'iconphoto', self, '-default', app_icon)
+
         self.setupwindow(self)
 
         self.check_timer()
@@ -532,18 +545,4 @@ class App(Tk):
 # main
 
 root = App()
-windowingsystem = root.tk.call('tk', 'windowingsystem')
-
-root.title('KeySync')
-root.minsize(450, 300)
-
-# set the icon used in title bars and the system tray, mostly viewable in
-# Alt-Tab.  As of writing this code, "wm iconphoto" is ignored by Mac OS X,
-# and the icon is instead handled in the standard Mac OS X app wrapper in
-# Info.plist
-if sys.platform != 'darwin':
-    img = Image.open(os.path.join(root.find_iconsdir(), 'keysync.png'))
-    app_icon = ImageTk.PhotoImage(img)
-    root.tk.call('wm', 'iconphoto', root, '-default', app_icon)
-
 root.mainloop()
