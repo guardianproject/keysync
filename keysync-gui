@@ -119,7 +119,8 @@ class App(Tk):
 
     def check_timer(self):
         self.check_mtp_mount()
-        self.check_android_file_transfer()
+        if sys.platform == 'darwin':
+            self.check_android_file_transfer()
         self._pendingjob = self.after(3000, self.check_timer)
 
 
