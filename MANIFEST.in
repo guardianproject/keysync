@@ -1,6 +1,41 @@
 include README.md
 include LICENSE.txt
-include keysync
-include keysync-gui
-recursive-include icons
-recursive-include tests
+include jenkins.sh
+include keysync.desktop
+include keysync-gui-folder.spec
+include keysync-gui-onefile.spec
+include man/keysync.1
+include py2app-python2.6.patch
+include pylint.parseable
+include icons/128x128/keysync.png
+include icons/add.png
+include icons/adium.png
+include icons/chatsecure.png
+include icons/gajim.png
+include icons/gnupg.png
+include icons/irssi.png
+include icons/jitsi.png
+include icons/keysync.icns
+include icons/keysync.ico
+include icons/keysync.png
+include icons/pidgin.png
+include icons/xchat.png
+include tests/run-tests.sh
+include tests/chatsecure/otr_keystore
+recursive-include tests/adium *.*
+recursive-include tests/gajim *.*
+recursive-include tests/gnupg *.*
+recursive-include tests/irssi *.*
+recursive-include tests/jitsi *.*
+recursive-include tests/keyczar *.*
+recursive-include tests/openssl *.*
+recursive-include tests/pidgin *.*
+recursive-include tests/SAMENESS *.*
+recursive-include tests/xchat *.*
+include win32/cypherpunks-otr-pubkey.asc
+include win32/fetch-and-verify.sh
+include win32/pidgin-windows-pubkeys.asc
+include win32/pycrypto-pubkey.asc
+include win32/python-pubkeys.asc
+include win32/README.md
+include win32/w32-screenshot.png
