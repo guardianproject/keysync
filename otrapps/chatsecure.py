@@ -113,6 +113,24 @@ class ChatSecureProperties():
         ChatSecureProperties.password = password
         print((p.communicate(password)))
 
+    @staticmethod
+    def _decrypt_ofcaes(ofcaes_filename, password):
+        ''' Decrypt an encrypted key file (with user-supplied password).'''
+        # It might be a bad idea to write out this unencrypted file.
+
+        # get a tmp place to put the decrypted file
+        fd, filename = tempfile.mkstemp()
+        f = os.fdopen(fd, 'w')
+        f.close()
+
+        # same as above, but with the -d flag to decrypt
+        cmd = ['openssl', 'aes-256-cbc', '-d', '-pass', 'stdin', '-in', ofcaes_filename,
+       '-out', filename]
+        p = subprocess.Popen(cmd, stdin=subprocess.PIPE,
+                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        p.communicate(password)
+        return filename
+
 
 #------------------------------------------------------------------------------#
 # for testing from the command line:

@@ -74,8 +74,18 @@ def main():
             if os.path.exists(keyfile):
                 otrapps.util.merge_keydicts(keydict, ChatSecureProperties.parse(keyfile))
             else:
-                print(('ChatSecure WARNING: No usable "' + ChatSecureProperties.keyfile +
-                    '" file found, not reading keys from ChatSecure!'))
+                encrypted_keyfile = os.path.join(args.output_folder, ChatSecureProperties.encryptedkeyfile)
+                if os.path.exists(encrypted_keyfile):
+                    if sys.version_info[0] == 2:
+                        password = raw_input("What is the encryption password for keystore \"otr_keystore.ofcaes\"?\n")
+                    else:
+                        password = input("What is the encryption password for keystore \"otr_keystore.ofcaes\"?\n")
+                    keyfile = ChatSecureProperties._decrypt_ofcaes(encrypted_keyfile, password)
+                    otrapps.util.merge_keydicts(keydict, ChatSecureProperties.parse(keyfile))
+                else:
+                    print(('ChatSecure WARNING: No usable "' + ChatSecureProperties.keyfile +
+                        '" or "' + ChatSecureProperties.encryptedkeyfile + 
+                        '" file found, not reading keys from ChatSecure!'))
             break
 
         properties = otrapps.apps[app]
