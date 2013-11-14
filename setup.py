@@ -80,7 +80,7 @@ setup(name='keysync',
         ('share/keysync',
          ['icons/add.png', 'icons/adium.png', 'icons/chatsecure.png',
           'icons/gajim.png', 'icons/gnupg.png', 'icons/irssi.png', 'icons/jitsi.png',
-          'icons/pidgin.png', 'icons/xchat.png']),
+          'icons/keysync.png', 'icons/pidgin.png', 'icons/xchat.png']),
         ('share/applications', ['keysync.desktop'])
     ],
     license='GPLv3+',
