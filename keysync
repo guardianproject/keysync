@@ -52,7 +52,7 @@ def main():
     parser.add_argument('-q', '--quiet', action='store_true', default=False,
                         help='do not print anything to the terminal')
     parser.add_argument('-t', '--test', help=argparse.SUPPRESS, default=None)
-    parser.add_argument('--version', action='version', version='%(prog)s 0.1')
+    parser.add_argument('--version', action='version', version='%(prog)s {v}'.format(v=otrapps.__version__))
     args = parser.parse_args()
 
     # manually set defaults, see Note above

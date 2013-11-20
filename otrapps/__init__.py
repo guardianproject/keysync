@@ -4,6 +4,18 @@
 import os
 import sys
 
+from pkg_resources import get_distribution, DistributionNotFound
+try:
+    _dist = get_distribution('keysync')
+    if not __file__.startswith(os.path.join(_dist.location, 'otrapps')):
+        raise DistributionNotFound
+except DistributionNotFound:
+    # probably running from source repo or another version is installed
+    __version__ = '(local version)'
+else:
+    __version__ = _dist.version
+
+
 __all__ = ['adium', 'chatsecure', 'irssi', 'jitsi', 'pidgin', 'gajim', 'gnupg', 'xchat',]
 
 if __name__ == '__main__':
