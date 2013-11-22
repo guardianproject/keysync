@@ -9,7 +9,7 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 dependencies = [
-        'BeautifulSoup',
+        'BeautifulSoup4',
         'psutil',
         'python-potr',
         'pyasn1',

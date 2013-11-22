@@ -8,7 +8,7 @@ import platform
 import re
 import sys
 from pyjavaproperties import Properties
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 
 if __name__ == '__main__':
     sys.path.insert(0, "../") # so the main() test suite can find otrapps module
@@ -58,7 +58,7 @@ class JitsiProperties():
             xml += line
         name = None
         protocol = None
-        for e in BeautifulSoup(xml).findAll('contact'):
+        for e in BeautifulSoup(xml).find_all('contact'):
             if re.match(name_from_prop, e['address']):
                 name = e['address']
                 protocol = JitsiProperties._convert_protocol_name(e['account-id'].split(':')[0])

@@ -86,7 +86,7 @@ experience.  To see a complete list of python modules used on your
 platform, see the `dependencies` list in setup.py.  Here are some of
 the key libraries:
 
-* BeautifulSoup 3 - http://www.crummy.com/software/BeautifulSoup
+* BeautifulSoup 4 - http://www.crummy.com/software/BeautifulSoup
 * psutil - https://code.google.com/p/psutil
 * pure-python-otr - https://github.com/afflux/pure-python-otr
 * pyasn1 - http://pyasn1.sourceforge.net/

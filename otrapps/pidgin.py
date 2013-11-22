@@ -5,7 +5,7 @@
 from __future__ import print_function
 import os
 import sys
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 
 if __name__ == '__main__':
     sys.path.insert(0, "../") # so the main() test suite can find otrapps module
