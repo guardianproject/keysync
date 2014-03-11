@@ -171,7 +171,7 @@ Fedora/Redhat/RPMs
 Install these build dependencies locally, then follow the instructions for
 pip+virtualenv below:
 
-    sudo yum install gmp-devel tk
+    sudo yum install gmp-devel tk tkinter python-pillow python-pillow-tk
 
 
 pip+virtualenv install
