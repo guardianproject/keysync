@@ -68,7 +68,14 @@ class GajimProperties():
         keydict = dict()
         for fpf in glob.glob(os.path.join(settingsdir, '*.fpr')):
             print('Reading in ' + fpf)
-            otrapps.util.merge_keydicts(keydict, OtrFingerprints.parse(fpf))
+            keys = OtrFingerprints.parse(fpf)
+
+            # replace gajim's 'xmpp' protocol with 'prpl-jabber' that we use in keysync
+            for key, value in keys.items():
+                value['protocol'] = 'prpl-jabber'
+                keys[key] = value
+
+            otrapps.util.merge_keydicts(keydict, keys)
 
         accounts = GajimProperties._parse_account_config(accounts_config)
 
