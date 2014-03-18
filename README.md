@@ -296,6 +296,10 @@ Gajim:
   Windows:
     ~/Application Data/Gajim/
 
+The private key is serialized in a custom format: p, q, g, y, x, written
+consecutively to a file as MPIs. See
+[potr/compatcrypto/pycrypto.py](https://github.com/afflux/pure-python-otr/blob/master/src/potr/compatcrypto/pycrypto.py).
+
 
 keyczar
 -------
