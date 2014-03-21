@@ -58,12 +58,12 @@ class GajimProperties():
         return accounts
 
     @staticmethod
-    def parse(settingsdir=None, accounts_config=None):
+    def parse(settingsdir):
         if settingsdir is None:
             settingsdir = GajimProperties.path
-
-        if accounts_config is None:
             accounts_config = GajimProperties.accounts_path
+        else:
+            accounts_config = settingsdir
 
         keydict = dict()
         for fpf in glob.glob(os.path.join(settingsdir, '*.fpr')):
@@ -125,7 +125,7 @@ def main(argv):
     else:
         settingsdir = '../tests/gajim'
 
-    keydict = GajimProperties.parse(settingsdir, settingsdir)
+    keydict = GajimProperties.parse(settingsdir)
     print('----------------------------------------')
     pprint.pprint(keydict)
     print('----------------------------------------')
