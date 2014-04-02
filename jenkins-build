@@ -48,6 +48,13 @@ keysync=$WORKSPACE/env/bin/keysync $WORKSPACE/tests/run-tests.sh
 
 
 #------------------------------------------------------------------------------#
+# run pyflakes
+
+cd $WORKSPACE
+pyflakes keysync keysync-gui otrapps/*.py setup.py
+
+
+#------------------------------------------------------------------------------#
 # run pylint
 
 cd $WORKSPACE
