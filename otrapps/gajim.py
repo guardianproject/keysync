@@ -58,7 +58,7 @@ class GajimProperties():
         return accounts
 
     @staticmethod
-    def parse(settingsdir):
+    def parse(settingsdir=None):
         if settingsdir is None:
             settingsdir = GajimProperties.path
             accounts_config = GajimProperties.accounts_path
