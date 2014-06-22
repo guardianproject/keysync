@@ -60,7 +60,7 @@ echo '========================================================================'
 echo "Run each python file's __main__ tests"
 echo '========================================================================'
 cd $projectbase/otrapps
-for app in adium chatsecure gajim gnupg irssi jitsi pidgin xchat util; do
+for app in adium chatsecure gajim gnupg irssi jitsi kopete pidgin xchat util; do
     echo ''
     echo ''
     echo '------------------------------------------------------------------------'
@@ -73,7 +73,7 @@ echo '========================================================================'
 echo "Merge all test files into an app's format"
 echo '========================================================================'
 cd $projectbase
-for app in adium chatsecure gajim irssi jitsi pidgin xchat; do
+for app in adium chatsecure gajim irssi jitsi kopete pidgin xchat; do
     echo '------------------------------------------------------------------------'
     echo "Merge all test files into $app's format"
     echo '------------------------------------------------------------------------'
@@ -92,8 +92,8 @@ echo '========================================================================'
 echo "Convert each app to each other app"
 echo '========================================================================'
 cd $projectbase
-for inapp in adium chatsecure gajim gnupg irssi jitsi pidgin xchat; do
-    for outapp in adium chatsecure gajim gnupg irssi jitsi pidgin xchat; do
+for inapp in adium chatsecure gajim gnupg irssi jitsi kopete pidgin xchat; do
+    for outapp in adium chatsecure gajim gnupg irssi jitsi kopete pidgin xchat; do
 	echo '------------------------------------------------------------------------'
 	echo "Convert $inapp to $outapp "
 	echo '------------------------------------------------------------------------'

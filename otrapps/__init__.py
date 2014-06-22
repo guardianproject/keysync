@@ -16,7 +16,7 @@ else:
     __version__ = _dist.version
 
 
-__all__ = ['adium', 'chatsecure', 'irssi', 'jitsi', 'pidgin', 'gajim', 'gnupg', 'xchat',]
+__all__ = ['adium', 'chatsecure', 'irssi', 'jitsi', 'pidgin', 'gajim', 'gnupg', 'xchat', 'kopete',]
 
 if __name__ == '__main__':
     sys.path.insert(0, "../") # so the main() test suite can find otrapps module
@@ -28,6 +28,7 @@ import otrapps.pidgin
 import otrapps.gajim
 import otrapps.gnupg
 import otrapps.xchat
+import otrapps.kopete
 
 apps = { 'adium'     : otrapps.adium.AdiumProperties,
          'chatsecure': otrapps.chatsecure.ChatSecureProperties,
@@ -37,6 +38,7 @@ apps = { 'adium'     : otrapps.adium.AdiumProperties,
          'gajim'     : otrapps.gajim.GajimProperties,
          'gnupg'     : otrapps.gnupg.GnuPGProperties,
          'xchat'     : otrapps.xchat.XchatProperties,
+         'kopete'    : otrapps.kopete.KopeteProperties,
         }
 apps_supported = apps.keys()
 
