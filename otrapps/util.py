@@ -33,6 +33,7 @@ import tempfile
 try:
     # Import hashlib if Python >= 2.5
     from hashlib import sha1
+    assert sha1 # silence pyflakes
 except ImportError:
     from sha import sha as sha1
 
@@ -495,7 +496,6 @@ def killall(app):
     '''
     terminates all instances of an app
     '''
-    running = []
     for pid in psutil.get_pid_list():
         p = psutil.Process(pid)
         if app == p.name:

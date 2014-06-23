@@ -7,7 +7,6 @@ import functools
 import os
 import qrcode
 import sys
-import tempfile
 from Tkinter import *
 # Mac OS X 10.6's python doesn't ship with ttk because its 2.6 not 2.7 :-(
 if sys.platform != 'darwin':
@@ -16,6 +15,7 @@ if sys.platform != 'darwin':
 # to appease pyinstaller
 elif sys.platform == 'win32':
     import pkg_resources
+    assert pkg_resources # silence pyflakes
 from PIL import ImageTk, Image
 import tkFileDialog
 import tkMessageBox

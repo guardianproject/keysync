@@ -3,7 +3,9 @@
 '''a module for reading and writing libotr's secret key data'''
 
 from __future__ import print_function
-from pyparsing import *
+from pyparsing import Forward, Group, OneOrMore, Optional, ParseFatalException, \
+    Suppress, Word, ZeroOrMore, alphanums, dblQuotedString, hexnums, nums, \
+    printables, removeQuotes
 from base64 import b64decode
 import sys
 
