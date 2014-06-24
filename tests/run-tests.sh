@@ -105,5 +105,25 @@ for inapp in adium chatsecure gajim gnupg irssi jitsi kopete pidgin xchat; do
     done
 done
 
+
+echo '========================================================================'
+echo "decrypt ChatSecure file to all apps"
+echo '========================================================================'
+cd $projectbase
+inapp=chatsecure
+for outapp in adium gajim gnupg irssi jitsi kopete pidgin xchat; do
+	echo '------------------------------------------------------------------------'
+	echo "Convert $inapp to $outapp "
+	echo '------------------------------------------------------------------------'
+	tests=$testbase
+	outdir=$tmpdir/decrypt-$inapp-to-$outapp
+	mkdir $outdir
+    cp $testbase/chatsecure/otr_keystore.ofcaes $outdir/
+	copy_accounts_files $outapp $tests $outdir
+    echo "6QpT40Omhp6YRX73BzxnPlSvvr7ZsPP6VaS4aqWOyqE=" | \
+	    $keysync --test $tests --input $inapp --output $outapp --output-folder $outdir
+done
+
+
 echo $tmpdir
 ls -l $tmpdir
