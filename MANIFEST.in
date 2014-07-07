@@ -18,6 +18,7 @@ include icons/jitsi.png
 include icons/keysync.icns
 include icons/keysync.ico
 include icons/keysync.png
+include icons/kopete.png
 include icons/pidgin.png
 include icons/xchat.png
 include tests/run-tests.sh

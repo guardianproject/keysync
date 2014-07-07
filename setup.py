@@ -65,7 +65,7 @@ else:
 
 
 setup(name='keysync',
-    version='0.2.1',
+    version='0.2.1.1',
     description='syncs OTR keys between different IM programs',
     long_description=read('README.md'),
     author='The Guardian Project',
@@ -79,8 +79,9 @@ setup(name='keysync',
         ('share/icons/hicolor/256x256/apps', ['icons/keysync.png']),
         ('share/keysync',
          ['icons/add.png', 'icons/adium.png', 'icons/chatsecure.png',
-          'icons/gajim.png', 'icons/gnupg.png', 'icons/irssi.png', 'icons/jitsi.png',
-          'icons/keysync.png', 'icons/pidgin.png', 'icons/xchat.png']),
+          'icons/gajim.png', 'icons/gnupg.png', 'icons/irssi.png',
+          'icons/jitsi.png', 'icons/keysync.png', 'icons/kopete.png',
+          'icons/pidgin.png', 'icons/xchat.png']),
         ('share/applications', ['keysync.desktop'])
     ],
     license='GPLv3+',
