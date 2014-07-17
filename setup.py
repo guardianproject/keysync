@@ -59,7 +59,7 @@ elif sys.platform == 'win32':
      dependencies.append('Pillow==2.1.0')
      extra_options = dict()
 else:
-     dependencies.append('PIL')
+     dependencies.append('Pillow>=2.1.0')
      dependencies.append('pymtp>=0.0.6')
      extra_options = dict()
 
