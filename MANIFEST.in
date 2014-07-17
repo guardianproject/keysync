@@ -1,6 +1,6 @@
 include README.md
 include LICENSE.txt
-include jenkins.sh
+include jenkins-build
 include keysync.desktop
 include keysync-gui-folder.spec
 include keysync-gui-onefile.spec
