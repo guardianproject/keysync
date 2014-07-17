@@ -18,6 +18,12 @@ fi
 
 
 #------------------------------------------------------------------------------#
+# cache pypi downloads
+if [ -z $PIP_DOWNLOAD_CACHE ]; then
+    export PIP_DOWNLOAD_CACHE=$HOME/.pip_download_cache
+fi
+
+#------------------------------------------------------------------------------#
 # run local tests
 cd $WORKSPACE/tests
 ./run-tests.sh
