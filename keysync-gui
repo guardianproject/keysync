@@ -187,8 +187,11 @@ class App(Tk):
 
 
     def setupwindow(self, master):
-        self.fromframe = Frame(master)
-        self.fromframe.pack(side=TOP, padx=15, pady=15)
+        self.topframe = Frame(master)
+        self.topframe.pack(side=TOP, padx=15, pady=15)
+
+        self.fromframe = LabelFrame(self.topframe, text='Select Sources')
+        self.fromframe.pack(side=TOP, padx=15, pady=5, expand=True, fill=X)
 
         img = Image.open(os.path.join(self.iconsdir, 'add.png'))
         self.addimage = ImageTk.PhotoImage(img.resize((32, 32), Image.ANTIALIAS))
@@ -215,7 +218,7 @@ class App(Tk):
         self.app_labels = dict()
         for app in self.detectfiles():
             frame = Frame(self.fromframe)
-            frame.pack(side=RIGHT)
+            frame.pack(side=RIGHT, padx=10)
             button = Button(frame, text=app, image=self.app_icons[app],
                             command=functools.partial(self.toggle_app_button, app))
             button.pack(side=TOP)
