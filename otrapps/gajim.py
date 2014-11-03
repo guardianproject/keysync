@@ -9,6 +9,7 @@ import platform
 import sys
 import re
 import collections
+import shutil
 
 import potr
 
@@ -29,6 +30,7 @@ class GajimProperties():
         path = os.path.expanduser('~/Application Data/Gajim')
         accounts_path = '???'
     else:
+        accounts_file = 'config'
         path = os.path.expanduser('~/.local/share/gajim')
         accounts_path = os.path.expanduser('~/.config/gajim')
 
@@ -40,7 +42,7 @@ class GajimProperties():
         if accounts_path is None:
             accounts_path = GajimProperties.accounts_path
 
-        accounts_config = os.path.join(accounts_path, 'config')
+        accounts_config = os.path.join(accounts_path, GajimProperties.accounts_file)
 
         keys = ['name', 'hostname', 'resource']
         patterns = []
@@ -111,6 +113,50 @@ class GajimProperties():
     def write(keys, savedir):
         if not os.path.exists(savedir):
             raise Exception('"' + savedir + '" does not exist!')
+        
+        # get existing accounts, we need that to figure out how to call the keys
+        if os.path.exists(os.path.join(savedir, GajimProperties.accounts_file)):
+            accountsdir = savedir
+        elif os.path.exists(os.path.join(GajimProperties.accounts_path,
+                                         GajimProperties.accounts_file)):
+            accountsdir = GajimProperties.accounts_path
+        else:
+            raise Exception('Cannot find "' + GajimProperties.accounts_file
+                            + '" in "' + savedir + '"')
+        accounts = GajimProperties._parse_account_config(accountsdir)
+        
+        # now for each account, write the fingerprints and key
+        accounts_written = set()
+        for account_name in accounts:
+            xmpp_name = accounts[account_name]['name'] + '@' + accounts[account_name]['hostname']
+            if not xmpp_name in keys:
+                # no private key for this account, skip it
+                continue
+            key = keys[xmpp_name]
+            if not 'y' in key:
+                # this is not a private key, nothing to do here
+                continue
+            
+            # write fingerprints. We do this ourselves to make sure we get the right line-endings.
+            with open(os.path.join(savedir, account_name + '.fpr'), 'w') as fp_file:
+                for fp_name, fp_key in keys.items():
+                    if 'fingerprint' in fp_key and 'verification' in fp_key:
+                        row = [fp_name, xmpp_name, 'xmpp', fp_key['fingerprint'], fp_key['verification']]
+                        fp_file.write('\t'.join(row)+'\n')
+            
+            # write private key
+            private_key = potr.compatcrypto.DSAKey((key['y'], key['g'], key['p'], key['q'], key['x']), private=True)
+            with open(os.path.join(savedir, account_name + '.key3'), 'wb') as key_file:
+                key_file.write(private_key.serializePrivateKey())
+            
+            print("Wrote key for Gajim:",xmpp_name)
+            accounts_written.add(xmpp_name)
+        
+        # check for unwritten keys
+        for key_name in keys.keys():
+            if 'y' in keys[key_name]:
+                if key_name not in accounts_written:
+                    print("No Gajim accont found for",key_name+", key has not been written.")
 
 
 #------------------------------------------------------------------------------#
@@ -129,6 +175,8 @@ def main(argv):
     print('----------------------------------------')
     pprint.pprint(keydict)
     print('----------------------------------------')
+    if not os.path.exists(os.path.join('/tmp', GajimProperties.accounts_file)):
+        shutil.copy(os.path.join(settingsdir, GajimProperties.accounts_file), '/tmp')
     GajimProperties.write(keydict, '/tmp')
 
 if __name__ == "__main__":
