@@ -133,7 +133,7 @@ class GajimProperties():
                 # no private key for this account, skip it
                 continue
             key = keys[xmpp_name]
-            if not 'y' in key:
+            if not 'x' in key:
                 # this is not a private key, nothing to do here
                 continue
             
@@ -154,7 +154,7 @@ class GajimProperties():
         
         # check for unwritten keys
         for key_name in keys.keys():
-            if 'y' in keys[key_name]:
+            if 'x' in keys[key_name]:
                 if key_name not in accounts_written:
                     print("No Gajim accont found for",key_name+", key has not been written.")
 
