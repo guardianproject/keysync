@@ -15,6 +15,8 @@ copy_accounts_files () {
             $outdir/
     elif [ $app = 'pidgin' ]; then
         cp $tests/pidgin/accounts.xml $outdir/
+    elif [ $app = 'gajim' ]; then
+        cp $tests/gajim/config $outdir/
     fi
 }
 
