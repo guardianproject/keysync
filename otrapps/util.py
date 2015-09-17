@@ -463,13 +463,21 @@ def merge_keydicts(kd1, kd2):
             kd1[name] = key
 
 
+def _get_pids():
+    '''python-psutil's API changed in v3.0'''
+    try:
+        return psutil.pids()  # v3.0+
+    except AttributeError:
+        return psutil.get_pid_list()  # <= 2.2.1
+
+
 def which_apps_are_running(apps):
     '''
     Check the process list to see if any of the specified apps are running.
     It returns a tuple of running apps.
     '''
     running = []
-    for pid in psutil.get_pid_list():
+    for pid in _get_pids():
         try:
             p = psutil.Process(pid)
         except Exception as e:
@@ -496,7 +504,7 @@ def killall(app):
     '''
     terminates all instances of an app
     '''
-    for pid in psutil.get_pid_list():
+    for pid in _get_pids():
         p = psutil.Process(pid)
         if app == p.name:
             print('killing: ' + p.name)
