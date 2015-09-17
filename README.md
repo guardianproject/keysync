@@ -12,7 +12,7 @@ trust relationships for each app that you use.
 KeySync addresses this problem by allowing you to sync your OTR identity and
 trust relationships between multiple apps, which eliminates the need to
 re-establish those relationships on each new client/device. It currently works
-with ChatSecure on Android, and Pidgin, Adium, and Jitsi on desktop.
+with [ChatSecure] on Android, and [Pidgin], [Adium], and [Jitsi] on desktop.
 
 Please note: KeySync does not make it easier to have simultaneous encrypted
 chats with the same account logged into multiple clients or devices.  There
@@ -55,7 +55,7 @@ Adding apps to KeySync
 ----------------------
 
 This project has libraries for converting the various OTR file formats between
-each other.  We have focused on the two major versions: libotr format and otr4j,
+each other.  We have focused on the two major versions: [libotr] format and [otr4j],
 and then a few variants of those major formats.  All OTR implementations can
 be supported as long as they can be read and parsed by Python.
 
@@ -259,7 +259,7 @@ ChatSecure:
   All OTR information is stored in a single Java .properties
   file. Private keys, public key fingerprints, and verification status
   are each individual properties.  This format also includes the
-  storage of the remote public keys, unlike libotr.  otr4j
+  storage of the remote public keys, unlike libotr.  [otr4j]
   implementations load the remote public key from the store rather
   than always getting it from the OTR session.
 
@@ -286,7 +286,7 @@ pure-python-otr is pure python implementation of the OTR spec.  It
 includes newer features like Socialist Millionaire's Protocol.  The
 private key is stored in a separate file per-account.  The
 fingerprints are stored in the same tab-separated-value format as
-libotr but with a fingerprint file per-account.
+[libotr] but with a fingerprint file per-account.
 
 Gajim:
   GNU/Linux:
@@ -402,3 +402,11 @@ prpl-jabber   XMPP (Jabber)
 
 Here is the full list of IDs from Pidgin:
 https://developer.pidgin.im/wiki/prpl_id
+
+
+[Adium]: https://adium.im/
+[ChatSecure]: https://chatsecure.org/
+[jitsi]: https://jitsi.org/
+[libotr]: https://otr.cypherpunks.ca/
+[otr4j]: https://github.com/otr4j/otr4j
+[pidgin]: https://pidgin.im/
